@@ -1,0 +1,17 @@
+@startuml
+
+class User{}
+
+class SocialIdentity{}
+
+class Ingrediente{}
+
+class CategoriaIngrediente{}
+
+class Receta{}
+
+class Componente{}
+
+class Accion{}
+
+@enduml

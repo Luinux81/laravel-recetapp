@@ -1,0 +1,41 @@
+@startuml
+
+class Ingrediente{
+    int user_id
+    int cat_id
+
+    String nombre
+    String descripcion
+    String marca 
+    String barcode
+    String imagen
+    String url
+    .. Info nutricional ..
+    Decimal calorias                
+    Decimal fat_total
+    Decimal fat_saturadas
+    Decimal fat_poliinsaturadas
+    Decimal fat_monoinsaturadas
+    Decimal fat_trans
+    Decimal colesterol
+    Decimal sodio
+    Decimal potasio
+    Decimal fibra
+    Decimal carb_total
+    Decimal carb_azucar
+    Decimal proteina
+    ____
+    Integer getCalorias()
+}
+
+class CategoriaIngrediente{
+    String nombre
+    String descripcion
+    int user_id
+    int catParent_id
+
+    User user()
+    CategoriaIngrediente categoriaPadre()
+}
+
+@enduml
