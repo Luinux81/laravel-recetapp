@@ -1874,7 +1874,25 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(156, 163, 175, var(--tw-bg-opacity));
 }
+.tabs__boton:active {
+	--tw-bg-opacity: 1;
+	background-color: rgba(96, 165, 250, var(--tw-bg-opacity));
+}
 .tabs__boton{
+    gap: 10px;
+}
+.tabs__boton--activo {
+	display: flex;
+	flex-direction: row-reverse;
+	--tw-bg-opacity: 1;
+	background-color: rgba(96, 165, 250, var(--tw-bg-opacity));
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	font-weight: 700;
+	--tw-text-opacity: 1;
+	color: rgba(31, 41, 55, var(--tw-text-opacity));
     gap: 10px;
 }
 .hover\:border-gray-300:hover {
@@ -2301,3 +2319,5 @@ select {
 		padding-right: 2rem;
 	}
 }
+
+
