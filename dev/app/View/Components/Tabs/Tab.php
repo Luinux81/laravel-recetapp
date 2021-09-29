@@ -8,16 +8,18 @@ class Tab extends Component
 {
     public $nombre;
     public $titulo;
+    public $icono;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($nombre,$titulo)
+    public function __construct($nombre,$titulo,$icono)
     {
         $this->nombre = $nombre;
         $this->titulo = $titulo;
+        $this->icono = $icono;
     }
 
     /**
