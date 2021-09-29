@@ -44,6 +44,8 @@ document.addEventListener("DOMContentLoaded",()=>{
             componente.dataset.activa = nombrePanel;
             togglePanel();
         });
+
+        index++;
     });
 
     togglePanel();
@@ -53,14 +55,24 @@ document.addEventListener("DOMContentLoaded",()=>{
 function togglePanel(){
     const componente = document.getElementById('{{ $id }}');
     let tabs = document.getElementById('{{ $id }}-content');
+    let index = 0;
+    let botonAsociado;
 
     Array.from(tabs.children).forEach((element)=>{
+        botonAsociado = document.getElementById('{{ $id }}-boton-'+index);
+
         if(element.dataset.nombre == componente.dataset.activa){
             element.style.display = "block";
+            botonAsociado.classList.add("tabs__boton--activo");
+            botonAsociado.classList.remove("tabs__boton");
         }
         else{
             element.style.display = "none";
+            botonAsociado.classList.add("tabs__boton");
+            botonAsociado.classList.remove("tabs__boton--activo");            
         }
+
+        index++;
     });
 }
 
