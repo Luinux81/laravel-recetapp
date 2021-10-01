@@ -42,5 +42,16 @@
         @stack('modals')
 
         @livewireScripts
+
+        <script>
+            if(Livewire){
+                Livewire.on("msg-ok",(msg)=>{
+                    console.log("OK: "+msg);
+                });
+                Livewire.on("msg-err",(msg)=>{
+                    console.log("Error: "+msg);
+                });
+            }
+        </script>
     </body>
 </html>
