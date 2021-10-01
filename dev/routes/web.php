@@ -21,4 +21,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::view('permisos','permisos')->name('permisos');
+Route::view('permisos','permisos')->name('permisos')->middleware('auth');
