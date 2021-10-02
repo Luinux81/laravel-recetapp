@@ -17,73 +17,10 @@ class PermisosController extends Component
         'crearRole',
         'destroyRole',
         'asignarRoles',
+        'crearPermission',
+        'destroyPermission',
+        'asignarPermisos',
     ];
-
-
-    /********************************* */
-    // public $foo;
- 
-    // public function boot()
-    // {
-    //     $this->emit('msg-ok',"Boot");
-    // }
- 
-    // public function mount()
-    // {
-    //     $this->emit('msg-ok',"Mount");
-    // }
- 
-    // public function hydrateFoo($value)
-    // {
-    //     //
-    // }
- 
-    // public function dehydrateFoo($value)
-    // {
-    //     //
-    // }
- 
-    // public function hydrate()
-    // {
-    //     $this->emit('msg-ok',"Hydrate");
-    // }
- 
-    // public function dehydrate()
-    // {
-    //     $this->emit('msg-ok',"Dehydrate");
-    // }
- 
-    // public function updating($name, $value)
-    // {
-    //     $this->emit('msg-ok',"Updating ".$name." a valor ".$value);
-    // }
- 
-    // public function updated($name, $value)
-    // {
-    //     $this->emit('msg-ok',"Updated ".$name." a valor ".$value);
-    // }
- 
-    // public function updatingFoo($value)
-    // {
-    //     //
-    // }
- 
-    // public function updatedFoo($value)
-    // {
-    //     //
-    // }
- 
-    // public function updatingFooBar($value)
-    // {
-    //     //
-    // }
- 
-    // public function updatedFooBar($value)
-    // {
-    //     //
-    // }
-
-
 
 
     //*********************************************/
@@ -266,5 +203,82 @@ class PermisosController extends Component
     //
     //*********************************************/
 
+    public function crearPermission($permissionName, $permissionId){
+        if($permissionName != "")
+        {
+            if(is_numeric(substr($permissionName, 0, 1))){
+                $permissionName = "_" . $permissionName;
+            }
+
+            if($permissionId)
+            {
+                $this->updatePermission(strval($permissionName), $permissionId);
+            }
+            else
+            {
+                $this->savePermission(strval($permissionName));
+            }        
+        }  
+        else{
+            $this->emit("msg-err","El nombre del permiso no puede ser vacio");            
+        }   
+
+        $this->dispatchBrowserEvent('clearPermissionSelected');
+        $this->dispatchBrowserEvent('setCheckboxesEventListener');
+        $this->resetInput();
+    }
+
+
+    public function savePermission($permissionName)
+    {
+        $permission = Permission::where("name",$permissionName)->first();
+
+        if($permission){
+            $this->emit('msg-err','El permiso que intenta crear ya existe en el sistema');            
+            return;
+        }
+
+        Permission::create([
+            "name" => $permissionName
+        ]);
+
+        $this->emit('msg-ok','El permiso se ha creado correctamente');        
+    }
+
+    public function updatePermission($permissionName, $permissionId)
+    {        
+        $permission = Permission::where("name",$permissionName)->where('id','<>',$permissionId)->first();
+
+        if($permission){
+            $this->emit('msg-err','El permiso que intenta crear ya existe en el sistema asociado a otro id');
+            return;
+        }
+
+        $permission = Permission::where('id', $permissionId)->firstOrFail();
+        $permission->name = $permissionName;
+        $permission->save();
+
+        $this->emit('msg-ok',"El permiso se ha actualizado");
+    }
+
+    public function destroyPermission($permissionId)
+    {        
+        if($this->tipo == "permiso"){
+            Permission::find($permissionId)->delete();      
+            $this->emit('msg-ok',"El permiso se ha eliminado");          
+            $this->resetInput();           
+        }
+    }
+
+    public function asignarPermisos($permissions)
+    {
+        if($this->tipo == "permiso"){
+            if($this->roleSelected){
+                $rol = Role::findOrFail($this->roleSelected);
+                $rol->syncPermissions($permissions);
+            }
     
+            $this->emit("msg-ok","Los permisos del rol se han actualizado");
+        }        
+    }
 }
