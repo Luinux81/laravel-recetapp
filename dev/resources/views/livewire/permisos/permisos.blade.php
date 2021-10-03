@@ -53,7 +53,7 @@
                         <button class="boton boton--gris" onclick="showPermission('{{$p}}')">Editar</button>
                         
                         @if (\App\Models\User::permission($p->name)->count()<1)
-                            <button class="boton boton--rojo" onclick="confirmar({{ $p->id }}, 'destroyPermission')">Borrar</button>
+                            <button class="boton boton--rojo" onclick="confirmarBorradoPermiso({{ $p->id }}, 'destroyPermission')">Borrar</button>
                         @endif
                     </td>
                     <td>
@@ -107,17 +107,31 @@
             document.querySelector("#permissionName").value = "";
         }
 
-        function confirmar(id, eventName)
+        function confirmarBorradoPermiso(id, eventName)
         {
-            if (confirm("Seguro que quieres borrar el registro?"))
-            {            
-                window.livewire.emit(eventName, id);
-                clearPermissionSelected();
+            if(typeof window.Swal !== "undefined"){
+                window.Swal.fire({
+                    title: 'Confirmar borrado',
+                    text: '¿Estás seguro/a de borrar el registro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText:'Si',
+                    confirmButtonAriaLabel: 'Yes',
+                    cancelButtonText:'No',
+                    cancelButtonAriaLabel: 'No'
+                }).then(function(value){                    
+                    if(value.isConfirmed){
+                        window.livewire.emit(eventName, id);
+                        clearPermissionSelected();
+                    }                    
+                });
             }
-            else
-            {
-                console.log("Cancelado");
-            }            
+            else{
+                if(confirm("Seguro que quieres borrar el registro?")){
+                    window.livewire.emit(eventName, id);
+                    clearPermissionSelected();
+                }
+            }      
         }
 
         function checkAll(valueMasterCheck)

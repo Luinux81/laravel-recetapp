@@ -6,6 +6,10 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+// Importación de sweet alert 2
+
+import Swal from 'sweetalert2'
+window.Swal = Swal;
 
 // Código para notificaciones toast
 import { Notyf } from 'notyf';

@@ -51,7 +51,7 @@
                         <button class="boton boton--gris" onclick="showRole('{{$r}}')">Editar</button>
 
                         @if (\App\Models\User::role($r->name)->count()<1)
-                            <button class="boton boton--rojo" onclick="confirmar({{ $r->id }}, 'destroyRole')">Borrar</button>
+                            <button class="boton boton--rojo" onclick="confirmarBorradoRol({{ $r->id }}, 'destroyRole')">Borrar</button>
                         @endif
                     </td>
                     <td>
@@ -106,17 +106,31 @@
             document.querySelector("#roleName").value = "";
         }
 
-        function confirmar(id, eventName)
+        function confirmarBorradoRol(id, eventName)
         {
-            if (confirm("Seguro que quieres borrar el registro?"))
-            {            
-                window.livewire.emit(eventName, id);
-                clearRoleSelected();
+            if(typeof window.Swal !== "undefined"){
+                window.Swal.fire({
+                    title: 'Confirmar borrado',
+                    text: '¿Estás seguro/a de borrar el registro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText:'Si',
+                    confirmButtonAriaLabel: 'Yes',
+                    cancelButtonText:'No',
+                    cancelButtonAriaLabel: 'No'
+                }).then(function(value){                    
+                    if(value.isConfirmed){
+                        window.livewire.emit(eventName, id);
+                        clearRoleSelected();
+                    }                    
+                });
             }
-            else
-            {
-                console.log("Cancelado");
-            }            
+            else{
+                if(confirm("Seguro que quieres borrar el registro?")){
+                    window.livewire.emit(eventName, id);
+                    clearRoleSelected();
+                }
+            }      
         }
 
         function checkAll(valueMasterCheck)
