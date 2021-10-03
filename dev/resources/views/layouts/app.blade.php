@@ -45,11 +45,31 @@
 
         <script>
             if(Livewire){
-                Livewire.on("msg-ok",(msg)=>{
-                    console.log("OK: "+msg);
+                Livewire.on("msg-ok",(msg)=>{                    
+                    if(Notyf){
+                        Notyf.open({
+                            duration: 2500,
+                            position:{
+                                x: 'right',
+                                y: 'top'
+                            },
+                            type: 'success',
+                            message: msg,
+                        });
+                    }
                 });
                 Livewire.on("msg-err",(msg)=>{
-                    console.log("Error: "+msg);
+                    if(Notyf){
+                        Notyf.open({
+                            duration: 2500,
+                            position:{
+                                x: 'right',
+                                y: 'top'
+                            },
+                            type: 'error',
+                            message: msg,
+                        });
+                    }
                 });
             }
         </script>

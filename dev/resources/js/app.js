@@ -7,6 +7,13 @@ window.Alpine = Alpine;
 Alpine.start();
 
 
+// Código para notificaciones toast
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+
+window.Notyf = new Notyf();
+
+
 // Para que esta función funcione correctamente se necesita tener instalado el paquete owenvoke/blade-fontawesome
 // y tener publicados los iconos con "php artisan vendor:publish --tag=blade-fontawesome --force"
 // El parámetro de entrada estará en formato fas-cloud, far-camera, fab-.... 
