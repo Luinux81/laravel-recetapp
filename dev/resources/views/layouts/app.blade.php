@@ -53,7 +53,7 @@
                                 x: 'right',
                                 y: 'top'
                             },
-                            type: 'success',
+                            type: 'info',
                             message: msg,
                         });
                     }

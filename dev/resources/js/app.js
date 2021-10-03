@@ -11,7 +11,37 @@ Alpine.start();
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
-window.Notyf = new Notyf();
+window.Notyf = new Notyf({
+    types: [
+        {
+            type: 'success',
+            className: 'notyf__toast--success',
+            backgroundColor: '#3dc763',
+            icon: {
+                className: 'notyf__icon--success',
+                tagName: 'i',
+            },
+        },
+        {
+            type: 'info',
+            className: 'notyf__toast--success',
+            backgroundColor: '#3E4AEC',
+            icon: {
+                className: 'notyf__icon--success',
+                tagName: 'i',
+            },
+        },        
+        {
+            type: 'error',
+            className: 'notyf__toast--error',
+            backgroundColor: '#ed3d3d',
+            icon: {
+                className: 'notyf__icon--error',
+                tagName: 'i',
+            },
+        },
+    ],}
+);
 
 
 // Para que esta función funcione correctamente se necesita tener instalado el paquete owenvoke/blade-fontawesome
