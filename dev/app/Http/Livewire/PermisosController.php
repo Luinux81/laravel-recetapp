@@ -29,6 +29,14 @@ class PermisosController extends Component
     //
     //*********************************************/
 
+    public function mount($tipo = "rol"){
+        if ($tipo == "permiso"){
+            $this->tipo = "permiso";
+        }
+        else{
+            $this->tipo = "rol";
+        }
+    }
 
     public function render()
     {
