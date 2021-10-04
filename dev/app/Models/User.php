@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Ingrediente;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
@@ -60,4 +61,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function ingredientes(){
+        return $this->hasMany(Ingrediente::class);
+    }
 }
