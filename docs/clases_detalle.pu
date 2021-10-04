@@ -1,8 +1,9 @@
 @startuml
 
 class Ingrediente{
-    int user_id
-    int cat_id
+    unsignedBigInteger id    
+    unsignedBigInteger user_id
+    unsignedBigInteger cat_id
 
     String nombre
     String descripcion
@@ -11,7 +12,7 @@ class Ingrediente{
     String imagen
     String url
     .. Info nutricional ..
-    Decimal calorias                
+    Integer calorias                
     Decimal fat_total
     Decimal fat_saturadas
     Decimal fat_poliinsaturadas
@@ -25,7 +26,9 @@ class Ingrediente{
     Decimal carb_azucar
     Decimal proteina
     ____
+    User user()
     Integer getCalorias()
+    CategoriaIngrediente getCategoria()
 }
 
 class CategoriaIngrediente{
@@ -36,6 +39,7 @@ class CategoriaIngrediente{
 
     User user()
     CategoriaIngrediente categoriaPadre()
+    CategoriaIngrediente categoriaRaiz()
 }
 
 @enduml
