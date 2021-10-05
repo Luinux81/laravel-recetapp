@@ -18,8 +18,8 @@ class CreateIngredientesTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            // $table->unsignedBigInteger('cat_id');
-            // $table->foreign('cat_id')->references('id')->on('categoriaingredientes');
+            $table->unsignedBigInteger('cat_id')->nullable();
+            $table->foreign('cat_id')->references('id')->on('categorias_ingrediente');
             
             $table->string("nombre");
             $table->string("descripcion")->nullable();

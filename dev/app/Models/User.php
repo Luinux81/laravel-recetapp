@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Ingrediente;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\CategoriaIngrediente;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -64,5 +65,9 @@ class User extends Authenticatable
 
     public function ingredientes(){
         return $this->hasMany(Ingrediente::class);
+    }
+
+    public function categoriasIngrediente(){
+        return $this->hasMany(CategoriaIngrediente::class);
     }
 }

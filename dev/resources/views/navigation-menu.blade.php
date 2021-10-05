@@ -23,6 +23,10 @@
                     <x-jet-nav-link href="{{ route('ingredientes') }}" :active="request()->routeIs('ingredientes')">
                         {{ __('Ingredientes') }}
                     </x-jet-nav-link>
+                    
+                    <x-jet-nav-link href="{{ route('ingredientes.categoria.index') }}" :active="request()->routeIs('ingredientes.categoria.index')">
+                        {{ __('Categorias Ingrediente') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 
