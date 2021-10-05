@@ -15,6 +15,7 @@
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Categoria Superior</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,9 @@
                         @if (!empty($c->catParent_id))
                             {{ \App\Models\CategoriaIngrediente::find($c->catParent_id)->nombre }}
                         @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('ingredientes.categoria.edit',['categoria'=>$c->id])}}">Editar</a>
                     </td>
                 </tr>
             @endforeach

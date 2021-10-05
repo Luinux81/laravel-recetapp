@@ -26,9 +26,16 @@ class CategoriaIngredienteController extends Controller
         return view('ingredientes.categorias.create',compact('categorias'));
     }
 
+    public function edit(Request $request, CategoriaIngrediente $categoria){
+        $categoriasHija = $categoria->categoriasHija(true);
+
+        return view('ingredientes.categorias.edit',compact(['categoria','categoriasHija']));
+    }
+
     public function store(Request $request){
         $data = $this->validate($request,$this->rules);
         
+
         $cat = new CategoriaIngrediente([
             'user_id'=>Auth::user()->id,
             'nombre'=>$data['cat_nombre'],
@@ -37,6 +44,22 @@ class CategoriaIngredienteController extends Controller
         ]);
 
         $cat->save();
+
+        return redirect()->route('ingredientes.categoria.index');
+    }
+
+    public function update(Request $request,CategoriaIngrediente $categoria){
+        $data = $this->validate($request, $this->rules);
+        
+        if(empty($data['cat_parent'])){
+            $data['cat_parent'] = NULL;
+        }
+
+        $categoria->update([
+            'nombre'=>$data['cat_nombre'],
+            'descripcion'=>$data['cat_descripcion'],
+            'catParent_id'=>$data['cat_parent']
+        ]);
 
         return redirect()->route('ingredientes.categoria.index');
     }
