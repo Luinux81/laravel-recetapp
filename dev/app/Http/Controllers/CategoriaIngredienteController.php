@@ -63,4 +63,24 @@ class CategoriaIngredienteController extends Controller
 
         return redirect()->route('ingredientes.categoria.index');
     }
+
+    public function destroy(CategoriaIngrediente $categoria){        
+        $hijas = $categoria->categoriasHija(false);
+
+        $recursivo = false;
+
+        foreach ($hijas as $key => $hija) {
+            if($recursivo){
+                $hija->delete();
+            }
+            else{
+                $hija->catParent_id = NULL;
+                $hija->save();
+            }
+        }
+
+        $categoria->delete();
+
+        return redirect()->route('ingredientes.categoria.index');
+    }
 }

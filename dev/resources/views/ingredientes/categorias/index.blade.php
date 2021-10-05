@@ -28,12 +28,51 @@
                             {{ \App\Models\CategoriaIngrediente::find($c->catParent_id)->nombre }}
                         @endif
                     </td>
-                    <td>
-                        <a href="{{ route('ingredientes.categoria.edit',['categoria'=>$c->id])}}">Editar</a>
+                    <td class="p-3 flex flex-row flex-between gap-2">
+                        <a href="{{ route('ingredientes.categoria.edit',['categoria'=>$c->id])}}" class="boton boton--gris">Editar</a>
+                        <form method="post" action="{{ route('ingredientes.categoria.destroy',['categoria'=>$c->id]) }}">
+                            @csrf
+                            @method('DELETE')
+                            {{-- <input type="submit" class="boton boton--rojo" value="Borrar" onsumbit="confirmarBorrado(event)" /> --}}
+                            <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
+                        </form>
+                        
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
     </x-content>
+
+@push('custom-scripts')
+<script>
+    function confirmarBorrado(event)
+    {
+        event.preventDefault();
+
+        if(typeof window.Swal !== "undefined"){
+            window.Swal.fire({
+                title: 'Confirmar borrado',
+                text: '¿Estás seguro/a de borrar el registro?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText:'Si',
+                confirmButtonAriaLabel: 'Yes',
+                cancelButtonText:'No',
+                cancelButtonAriaLabel: 'No'
+            }).then(function(value){                    
+                if(value.isConfirmed){
+                    event.target.parentNode.submit();
+                }                    
+            });
+        }
+        else{
+            if(confirm("Seguro que quieres borrar el registro?")){
+                event.target.parentNode.submit();
+            }
+        }      
+    }
+</script>
+@endpush
+
 </x-app-layout>
