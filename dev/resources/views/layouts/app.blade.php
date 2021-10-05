@@ -40,8 +40,11 @@
         </div>
 
         @stack('modals')
+        
 
         @livewireScripts
+
+        @stack('custom-scripts')
 
         <script>
             if(Livewire){
