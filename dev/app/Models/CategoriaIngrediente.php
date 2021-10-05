@@ -13,6 +13,8 @@ class CategoriaIngrediente extends Model
 
     protected $table = "categorias_ingrediente";
 
+    protected $guarded = [];
+
     public function ingredientes(){
         return $this->hasMany(Ingrediente::class);
     }
