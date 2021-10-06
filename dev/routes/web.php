@@ -23,6 +23,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');
 
     Route::get('/ingredientes',[IngredienteController::class, 'index'])->name('ingredientes');
+    Route::get('/ingredientes/create',[IngredienteController::class, 'create'])->name('ingredientes.create');
+    Route::post('/ingredientes',[IngredienteController::class, 'store'])->name('ingredientes.store');
+
 
     Route::get('/ingredientes/categoria',[CategoriaIngredienteController::class, 'index'])->name('ingredientes.categoria.index');
     Route::get('/ingredientes/categoria/create',[CategoriaIngredienteController::class, 'create'])->name('ingredientes.categoria.create');
