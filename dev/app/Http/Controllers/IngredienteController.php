@@ -119,4 +119,10 @@ class IngredienteController extends Controller
         
         return redirect()->route('ingredientes');
     }
+
+    public function destroy(Ingrediente $ingrediente){
+        $ingrediente->delete();
+
+        return redirect()->route('ingredientes');
+    }
 }
