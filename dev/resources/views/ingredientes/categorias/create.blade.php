@@ -15,7 +15,7 @@
                 </label>
                 <input id="cat_nombre" name="cat_nombre" type="text" />
                 @error('cat_nombre')
-                    <div class="alert alert-danger">Error{{ $message }}</div>
+                    <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
 

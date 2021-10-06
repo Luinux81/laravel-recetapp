@@ -15,7 +15,8 @@ class IngredienteSeeder extends Seeder
     public function run()
     {
         $factoria = Ingrediente::factory();
-        $num = count($factoria->ingredientes);
+        //$num = count($factoria->ingredientes);
+        $num = 5;
 
         $ingredientes = $factoria->count($num)->make();
 
