@@ -12,13 +12,18 @@
             @method('PUT')
             
             <div class="flex flex-col">
-                <label for="cat_nombre">Nombre</label>
+                <label for="cat_nombre">
+                    Nombre @error('cat_nombre')<span class="text-red-500">*</span>@enderror
+                </label>
                 <input 
                     id="cat_nombre" 
                     name="cat_nombre" 
                     type="text" 
                     value="{{old('cat_nombre')?old('cat_nombre'):$categoria->nombre}}" 
                 />
+                @error('cat_nombre')
+                    <div class="text-red-500" >{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="flex flex-col">

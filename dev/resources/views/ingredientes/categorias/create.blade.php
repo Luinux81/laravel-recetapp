@@ -10,8 +10,13 @@
         <form class="flex flex-col" method="post" action="{{ route('ingredientes.categoria.store')}}" >
             @csrf
             <div class="flex flex-col">
-                <label for="cat_nombre">Nombre</label>
+                <label for="cat_nombre">
+                    Nombre @error('cat_nombre')<span class="text-red-500">*</span>@enderror
+                </label>
                 <input id="cat_nombre" name="cat_nombre" type="text" />
+                @error('cat_nombre')
+                    <div class="alert alert-danger">Error{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="flex flex-col">
