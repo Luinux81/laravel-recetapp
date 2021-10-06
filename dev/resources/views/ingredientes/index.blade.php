@@ -27,7 +27,7 @@
                     <td>{{$i->calorias}}</td>
                     <td>{{$i->imagen}}</td>
                     <td>
-                        <a href="{{ route('ingredientes.create') }}" class="boton boton--gris">Editar</a>
+                        <a href="{{ route('ingredientes.edit', ['ingrediente'=>$i->id]) }}" class="boton boton--gris">Editar</a>
                     </td>
                 </tr>
             @endforeach

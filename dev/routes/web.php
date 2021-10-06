@@ -25,6 +25,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::get('/ingredientes',[IngredienteController::class, 'index'])->name('ingredientes');
     Route::get('/ingredientes/create',[IngredienteController::class, 'create'])->name('ingredientes.create');
     Route::post('/ingredientes',[IngredienteController::class, 'store'])->name('ingredientes.store');
+    Route::get('/ingredientes/{ingrediente}/edit',[IngredienteController::class, 'edit'])->name('ingredientes.edit');
+    Route::put('/ingredientes/{ingrediente}', [IngredienteController::class, 'update'])->name('ingredientes.update');
 
 
     Route::get('/ingredientes/categoria',[CategoriaIngredienteController::class, 'index'])->name('ingredientes.categoria.index');
