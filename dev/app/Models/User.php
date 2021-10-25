@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Ingrediente;
+use App\Models\CategoriaReceta;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\CategoriaIngrediente;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -69,5 +70,9 @@ class User extends Authenticatable
 
     public function categoriasIngrediente(){
         return $this->hasMany(CategoriaIngrediente::class);
+    }
+
+    public function categoriasReceta(){
+        return $this->hasMany(CategoriaReceta::class);
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IngredienteController;
+use App\Http\Controllers\CategoriaRecetaController;
 use App\Http\Controllers\CategoriaIngredienteController;
 
 /*
@@ -36,6 +37,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::get('/ingredientes/categoria/{categoria}/edit',[CategoriaIngredienteController::class, 'edit'])->name('ingredientes.categoria.edit');
     Route::put('/ingredientes/categoria/{categoria}',[CategoriaIngredienteController::class, 'update'])->name('ingredientes.categoria.update');
     Route::delete('/ingredientes/categoria/{categoria}',[CategoriaIngredienteController::class, 'destroy'])->name('ingredientes.categoria.destroy');
+
+    Route::get('/recetas/categoria',[CategoriaRecetaController::class, 'index'])->name('recetas.categoria.index');
+    Route::get('/recetas/categoria/create',[CategoriaRecetaController::class, 'create'])->name('recetas.categoria.create');
+    Route::post('/recetas/categoria',[CategoriaRecetaController::class, 'store'])->name('recetas.categoria.store');
+    Route::get('/recetas/categoria/{categoria}/edit',[CategoriaRecetaController::class, 'edit'])->name('recetas.categoria.edit');
+    Route::put('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'update'])->name('recetas.categoria.update');
+    Route::delete('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'destroy'])->name('recetas.categoria.destroy');
+
+    // Route::resource('recetas.categoria', CategoriaRecetaController::class);
 });
 
 // Hay que poner esta ruta por un tema con los guard al crear un rol o permiso nuevo

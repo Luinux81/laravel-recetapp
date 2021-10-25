@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             CategoriaIngredienteSeeder::class,
             IngredienteSeeder::class,
+            CategoriaRecetaSeeder::class,
         ]);
     }
 }
