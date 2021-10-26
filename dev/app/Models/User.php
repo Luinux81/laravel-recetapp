@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Receta;
 use App\Models\Ingrediente;
 use App\Models\CategoriaReceta;
 use Laravel\Sanctum\HasApiTokens;
@@ -70,6 +71,10 @@ class User extends Authenticatable
 
     public function categoriasIngrediente(){
         return $this->hasMany(CategoriaIngrediente::class);
+    }
+
+    public function recetas(){
+        return $this->hasMany(Receta::class);
     }
 
     public function categoriasReceta(){

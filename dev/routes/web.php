@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\IngredienteController;
 use App\Http\Controllers\CategoriaRecetaController;
 use App\Http\Controllers\CategoriaIngredienteController;
@@ -46,6 +47,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::delete('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'destroy'])->name('recetas.categoria.destroy');
 
     // Route::resource('recetas.categoria', CategoriaRecetaController::class);
+
+    Route::resource('recetas', RecetaController::class);
 });
 
 // Hay que poner esta ruta por un tema con los guard al crear un rol o permiso nuevo

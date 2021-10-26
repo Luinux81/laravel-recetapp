@@ -28,6 +28,10 @@
                         {{ __('Categorias Ingrediente') }}
                     </x-jet-nav-link>
 
+                    <x-jet-nav-link href="{{ route('recetas.index') }}" :active="request()->routeIs('recetas.index')">
+                        {{ __('Recetas') }}
+                    </x-jet-nav-link>
+
                     <x-jet-nav-link href="{{ route('recetas.categoria.index') }}" :active="request()->routeIs('recetas.categoria.index')">
                         {{ __('Categorias Receta') }}
                     </x-jet-nav-link>
