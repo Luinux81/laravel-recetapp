@@ -13,6 +13,7 @@
         @if($valor != "")
             value="{{ $valor }}"
         @endif
+        {{ $attributes }}
     />
     
     @error('{{ $nombre }}')
