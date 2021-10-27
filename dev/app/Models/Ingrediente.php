@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Receta;
 use App\Models\CategoriaIngrediente;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,5 +47,9 @@ class Ingrediente extends Model
 
     public function getCategoria(){
         return $this->belongsTo(CategoriaIngrediente::class,"cat_id");
+    }
+
+    public function recetas(){
+        return $this->belongsToMany(Receta::class, "ingrediente_receta")->withPivot('cantidad', 'unidad_medida');
     }
 }

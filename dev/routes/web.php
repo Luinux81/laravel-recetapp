@@ -49,6 +49,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     // Route::resource('recetas.categoria', CategoriaRecetaController::class);
 
     Route::resource('recetas', RecetaController::class);
+
+    Route::get('recetas/{receta}/ingrediente/create', [RecetaController::class, 'createIngrediente'])->name('recetas.ingrediente.create');
+    Route::post('recetas/{receta}/ingrediente/store', [RecetaController::class, 'storeIngrediente'])->name('recetas.ingrediente.store');
+    Route::get('recetas/{receta}/ingrediente/{ingrediente}/edit', [RecetaController::class, 'editIngrediente'])->name('recetas.ingrediente.edit');
+    Route::put('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'updateIngrediente'])->name('recetas.ingrediente.update');
+    Route::delete('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'destroyIngrediente'])->name('recetas.ingrediente.destroy');
+
 });
 
 // Hay que poner esta ruta por un tema con los guard al crear un rol o permiso nuevo

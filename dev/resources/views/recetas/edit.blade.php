@@ -49,6 +49,38 @@
 
             <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>
+
+        <section>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Ingredientes</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th><th>Cantidad</th><th>Unidades</th><th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($receta->ingredientes as $i)
+                        <tr>
+                            <td>{{ $i->nombre }}</td>
+                            <td class="text-center">{{ $i->pivot->cantidad }}</td>
+                            <td class="text-center">{{ $i->pivot->unidad_medida }}</td>
+                            <td class="flex gap-3">
+                                <a href="{{ route('recetas.ingrediente.edit',['receta'=>$receta->id, 'ingrediente'=>$i->id])}}" class="boton boton--gris">Editar</a>
+                                <form method="post" action="{{ route('recetas.ingrediente.destroy', ['receta'=>$receta->id, 'ingrediente'=>$i->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="boton boton--rojo">Borrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <a href="{{ route('recetas.ingrediente.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
+
+        </section>
     </x-content>
 
 </x-app-layout>

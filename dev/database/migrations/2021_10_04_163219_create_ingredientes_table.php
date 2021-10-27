@@ -29,18 +29,18 @@ class CreateIngredientesTable extends Migration
             $table->string("url")->nullable();
 
             $table->integer("calorias")->nullable();
-            $table->decimal("fat_total",4,2)->nullable();
-            $table->decimal("fat_saturadas",4,2)->nullable();
-            $table->decimal("fat_poliinsaturadas",4,2)->nullable();
-            $table->decimal("fat_monoinsaturadas",4,2)->nullable();
-            $table->decimal("fat_trans",4,2)->nullable();
-            $table->decimal("colesterol",4,2)->nullable();
-            $table->decimal("sodio",4,2)->nullable();
-            $table->decimal("potasio",4,2)->nullable();
-            $table->decimal("fibra",4,2)->nullable();
-            $table->decimal("carb_total",4,2)->nullable();
-            $table->decimal("carb_azucar",4,2)->nullable();
-            $table->decimal("proteina",4,2)->nullable();
+            $table->decimal("fat_total",5,2)->nullable();
+            $table->decimal("fat_saturadas",5,2)->nullable();
+            $table->decimal("fat_poliinsaturadas",5,2)->nullable();
+            $table->decimal("fat_monoinsaturadas",5,2)->nullable();
+            $table->decimal("fat_trans",5,2)->nullable();
+            $table->decimal("colesterol",5,2)->nullable();
+            $table->decimal("sodio",6,2)->nullable();
+            $table->decimal("potasio",6,2)->nullable();
+            $table->decimal("fibra",5,2)->nullable();
+            $table->decimal("carb_total",5,2)->nullable();
+            $table->decimal("carb_azucar",5,2)->nullable();
+            $table->decimal("proteina",5,2)->nullable();
 
             $table->softDeletes();
             $table->timestamps();

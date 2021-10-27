@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Receta;
+use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,12 @@ class RecetaController extends Controller
         'descripcion' => '',
         'calorias' => 'numeric|nullable',
         'categoria' => '',
+    ];
+
+    protected $rulesIngredientes = [
+        'ingrediente' => 'required',
+        'cantidad' => 'numeric|required',
+        'unidad_medida' => 'required',
     ];
 
     public function index(){
@@ -69,5 +76,41 @@ class RecetaController extends Controller
         $receta->delete();
 
         return redirect()->route('recetas.index');
+    }
+
+
+    public function createIngrediente(Receta $receta){
+        $ingredientes = Auth::user()->ingredientes()->get();        
+
+        return view('recetas.ingredientes.create', compact(['receta','ingredientes']));
+    }
+
+    public function storeIngrediente(Receta $receta, Request $request){
+        $data = $this->validate($request, $this->rulesIngredientes);
+
+        $ingrediente = Ingrediente::findOrFail($data['ingrediente']);
+
+        $receta->ingredientes()->attach($ingrediente, ['cantidad' => $data['cantidad'], 'unidad_medida' => $data['unidad_medida']]);
+        
+        return redirect()->route('recetas.edit',['receta' => $receta->id]);
+    }
+
+    public function editIngrediente(Receta $receta, Ingrediente $ingrediente){
+        return view('recetas.ingredientes.edit', compact(['receta','ingrediente']));
+    }
+
+    public function updateIngrediente(Receta $receta, Ingrediente $ingrediente, Request $request){
+        $data = $this->validate($request, $this->rulesIngredientes);
+
+        $receta->ingredientes()->detach($ingrediente);
+        $receta->ingredientes()->attach($ingrediente,["cantidad"=>$data['cantidad'], "unidad_medida"=>$data['unidad_medida']]);
+
+        return redirect()->route('recetas.edit', ['receta'=>$receta->id]);
+    }
+
+    public function destroyIngrediente(Receta $receta, Ingrediente $ingrediente){
+        $receta->ingredientes()->detach($ingrediente);
+
+        return redirect()->route('recetas.edit', ['receta'=>$receta->id]);
     }
 }
