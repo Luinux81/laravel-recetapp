@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategoriaRecetaSeeder::class,
             RecetaSeeder::class,
             IngredienteRecetaSeeder::class,
+            PasoRecetaSeeder::class,
         ]);
     }
 }

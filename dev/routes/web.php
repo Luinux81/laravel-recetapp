@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecetaController;
+use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
 use App\Http\Controllers\CategoriaRecetaController;
 use App\Http\Controllers\CategoriaIngredienteController;
@@ -55,6 +56,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::get('recetas/{receta}/ingrediente/{ingrediente}/edit', [RecetaController::class, 'editIngrediente'])->name('recetas.ingrediente.edit');
     Route::put('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'updateIngrediente'])->name('recetas.ingrediente.update');
     Route::delete('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'destroyIngrediente'])->name('recetas.ingrediente.destroy');
+
+    Route::resource('recetas.paso', PasoRecetaController::class);
 
 });
 
