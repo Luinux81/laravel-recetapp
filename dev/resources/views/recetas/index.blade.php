@@ -27,6 +27,7 @@
                     <td>{{$r->calorias}}</td>
                     <!-- <td>{{$r->imagen}}</td> -->
                     <td class="p-3 flex flex-row flex-between gap-2">
+                        <a href="{{ route('recetas.show', ['receta'=>$r->id]) }}" class="boton boton--gris">Ver</a>
                         <a href="{{ route('recetas.edit', ['receta'=>$r->id]) }}" class="boton boton--gris">Editar</a>
                         <form method="post" action="{{ route('recetas.destroy',['receta'=>$r->id]) }}">
                             @csrf

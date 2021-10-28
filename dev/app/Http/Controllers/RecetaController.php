@@ -29,6 +29,10 @@ class RecetaController extends Controller
         return view('recetas.index',compact('recetas'));
     }
 
+    public function show(Receta $receta){
+        return view('recetas.show',compact('receta'));
+    }
+
     public function create(){
         $categorias = Auth::user()->categoriasReceta()->get();
 
