@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Ver Receta') }}
             </h2>
-            <a href="{{ route('recetas.create') }}" class="boton boton--rojo">Volver</a>
+            <a href="{{ route('recetas.index') }}" class="boton boton--rojo">Volver</a>
         </div>
     </x-slot>
 
