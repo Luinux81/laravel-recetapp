@@ -46,7 +46,7 @@ class RecetaController extends Controller
             $data['categoria'] = NULL;
         }
 
-        Receta::create([
+        $receta = Receta::create([
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
             "calorias" => $data['calorias'],
@@ -54,7 +54,7 @@ class RecetaController extends Controller
             "user_id" => Auth::user()->id,
         ]);
 
-        return redirect()->route('recetas.index');
+        return redirect()->route('recetas.edit',['receta'=>$receta->id]);
     }
 
     public function edit(Receta $receta){

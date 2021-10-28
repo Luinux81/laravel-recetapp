@@ -5,7 +5,14 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Editar receta') }}
             </h2>
-            <a href="{{ route('recetas.index') }}" class="boton boton--rojo">Cancelar</a>
+            <div class="flex gap-3">
+                <a href="{{ route('recetas.index') }}" class="boton boton--gris">Volver</a>
+                <form method="post" action="{{ route('recetas.destroy',['receta'=>$receta->id]) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
+                </form>
+            </div>
         </div>
     </x-slot>
 
@@ -114,5 +121,34 @@
 
         </section>
     </x-content>
+    @push('custom-scripts')
+        <script>
+            function confirmarBorrado(event)
+            {
+                event.preventDefault();
 
+                if(typeof window.Swal !== "undefined"){
+                    window.Swal.fire({
+                        title: 'Confirmar borrado',
+                        text: '¿Estás seguro/a de borrar el registro?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText:'Si',
+                        confirmButtonAriaLabel: 'Yes',
+                        cancelButtonText:'No',
+                        cancelButtonAriaLabel: 'No'
+                    }).then(function(value){                    
+                        if(value.isConfirmed){
+                            event.target.parentNode.submit();
+                        }                    
+                    });
+                }
+                else{
+                    if(confirm("Seguro que quieres borrar el registro?")){
+                        event.target.parentNode.submit();
+                    }
+                }      
+            }
+        </script>
+    @endpush
 </x-app-layout>
