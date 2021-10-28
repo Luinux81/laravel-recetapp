@@ -42,4 +42,31 @@ class CategoriaIngrediente{
     CategoriaIngrediente categoriaRaiz()
 }
 
+class Receta{
+    String nombre
+    String descripcion
+    Integer calorias
+    CategoriaReceta categoria
+
+    User user()
+    Ingrediente ingredientes()
+    PasoReceta pasos()
+}
+
+class CategoriaReceta{
+    String nombre
+    String descripcion
+    int user_id
+    int catParent_id
+
+    User user()
+    CategoriaReceta categoriaPadre()
+    CategoriaReceta categoriaRaiz()
+}
+
+class PasoReceta{
+    Integer receta_id
+    Integer orden
+    String texto
+}
 @enduml

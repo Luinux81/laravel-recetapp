@@ -1,0 +1,82 @@
+@startuml
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Ingrediente" {
+    *id : number <<generated>>
+    --
+    *user_id : number <<FK>>
+    *cat_id : number <<FK>> 
+    *nombre : text            
+    descripcion : text
+    marca : text
+    barcode : text
+    imagen : text
+    url : text
+    calorias : number
+    fat_total : number
+    fat_saturadas : number
+    fat_poliinsaturadas : number
+    fat_monoinsaturadas : number
+    fat_trans : number
+    colesterol : number
+    sodio : number
+    potasio : number
+    fibra : number
+    carb_total : number
+    carb_azucar : number
+    proteina : number
+}
+
+entity "Receta" {
+    *id : number <<generated>>
+    --
+    *user_id : number <<FK>>
+    *cat_id : number <<FK>> 
+    *nombre : text            
+    descripcion : text
+    calorias : number    
+}
+
+entity "CategoriaIngrediente"{
+    *id : number <<generated>>
+    --
+    *user_id : number <<FK>>
+    catParent_id : number <<FK>>
+    *nombre : text            
+    descripcion : text
+}
+
+entity "CategoriaReceta"{
+    *id : number <<generated>>
+    --
+    *user_id : number <<FK>>
+    catParent_id : number <<FK>>
+    *nombre : text            
+    descripcion : text
+}
+
+entity "PasoReceta"{
+    *id : number <<generated>>
+    --
+    *receta_id : number <<FK>>
+    *orden : number    
+    *texto : text
+    media_assets : text
+}
+
+entity "IngredienteReceta"{
+    *ingrediente_id : number <<FK>>
+    *receta_id : number <<FK>>
+    --
+    *cantidad : number
+    *unidad_medida : text
+}
+
+Ingrediente }o..|| IngredienteReceta
+Receta }o--|| IngredienteReceta
+Receta |o..|{ CategoriaReceta
+Ingrediente |o..|{ CategoriaIngrediente
+Receta }o..|{ PasoReceta
+
+@enduml
