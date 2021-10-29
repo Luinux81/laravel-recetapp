@@ -24,6 +24,7 @@ class CreateRecetasTable extends Migration
             $table->string("nombre");
             $table->string("descripcion")->nullable();
             $table->integer("raciones")->nullable();
+            $table->string("imagen")->nullable();
 
             $table->integer("calorias")->nullable();
             $table->decimal("fat_total",4,2)->nullable();

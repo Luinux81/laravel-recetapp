@@ -6,6 +6,7 @@ use App\Models\Receta;
 use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RecetaController extends Controller
 {
@@ -15,6 +16,7 @@ class RecetaController extends Controller
         'descripcion' => '',
         'calorias' => 'numeric|nullable',
         'categoria' => '',
+        'imagen' => 'image|nullable',
     ];
 
     protected $rulesIngredientes = [
@@ -46,10 +48,18 @@ class RecetaController extends Controller
             $data['categoria'] = NULL;
         }
 
+        if(array_key_exists('imagen',$data)){
+            $data['imagen'] = request('imagen')->store('recetas','public');
+        }
+        else{
+            $data['imagen'] = "";
+        }
+
         $receta = Receta::create([
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
             "calorias" => $data['calorias'],
+            "imagen" => $data['imagen'],
             "cat_id" => $data['categoria'],
             "user_id" => Auth::user()->id,
         ]);
@@ -66,10 +76,26 @@ class RecetaController extends Controller
     public function update(Request $request, Receta $receta){
         $data = $this->validate($request, $this->rules);
 
+        if(empty($data['categoria'])){
+            $data['categoria'] = NULL;
+        }
+
+        if(array_key_exists('imagen',$data)){
+            $data['imagen'] = request('imagen')->store('recetas','public');
+
+            if(Storage::disk('public')->exists($receta->imagen)){
+                Storage::disk('public')->delete($receta->imagen);
+            }
+        }
+        else{
+            $data['imagen'] = $receta->imagen;
+        }
+
         $receta->update([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'calorias' => $data['calorias'],
+            'imagen' => $data['imagen'],
             'cat_id' => $data['categoria'],
         ]);
 
@@ -77,6 +103,10 @@ class RecetaController extends Controller
     }
 
     public function destroy(Receta $receta){
+        if(Storage::disk('public')->exists($receta->imagen)){
+            Storage::disk('public')->delete($receta->imagen);
+        }
+
         $receta->delete();
 
         return redirect()->route('recetas.index');

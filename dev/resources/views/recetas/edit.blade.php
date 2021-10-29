@@ -17,7 +17,12 @@
     </x-slot>
 
     <x-content>
-        <form method="post" action="{{ route('recetas.update', ['receta'=>$receta->id])}}" class="flex flex-col">
+        <form 
+            method="post" 
+            action="{{ route('recetas.update', ['receta'=>$receta->id])}}" 
+            class="flex flex-col"
+            enctype="multipart/form-data"
+        >
             @csrf
             @method('PUT')
 
@@ -44,15 +49,32 @@
             >
             </x-form.input-text>
             
-            <div class="flex flex-col">
-                <label for="categoria">Categoria</label>
-                <select id="categoria" name="categoria">                
-                    <option value="" @if(empty($receta->cat_id)) selected @endif >Ninguna</option>
-                    @foreach ($categorias as $cat)
-                        <option value="{{$cat->id}}" @if($receta->cat_id == $cat->id) selected @endif >{{$cat->nombre}}</option>
-                    @endforeach
-                </select>
-            </div>
+            <x-form.select nombre="categoria" titulo="Categoria">
+                <option 
+                    value="" 
+                    @if(empty($receta->cat_id)) selected @endif 
+                >
+                Ninguna
+                </option>
+
+                @foreach ($categorias as $cat)
+                    <option 
+                        value="{{$cat->id}}" 
+                        @if($receta->cat_id == $cat->id) selected @endif 
+                    >
+                    {{$cat->nombre}}
+                    </option>
+                @endforeach                
+            </x-form.select>
+
+            <x-form.image-upload
+                nombre="imagen"
+                titulo="imagen"
+                imagen="{{ old('imagen')?old('imagen'):$receta->imagen }}"
+                accept="image/*"                
+            >
+
+            </x-form.image-upload>
 
             <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>

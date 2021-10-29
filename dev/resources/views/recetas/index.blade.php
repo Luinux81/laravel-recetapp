@@ -15,7 +15,7 @@
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Calorias</th>
-                    <!-- <th>Imagen</th> -->
+                    <th>Imagen</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -25,7 +25,7 @@
                     <td>{{$r->nombre}}</td>
                     <td>{{$r->descripcion}}</td>
                     <td>{{$r->calorias}}</td>
-                    <!-- <td>{{$r->imagen}}</td> -->
+                    <td>{{$r->imagen}}</td>
                     <td class="p-3 flex flex-row flex-between gap-2">
                         <a href="{{ route('recetas.show', ['receta'=>$r->id]) }}" class="boton boton--gris">Ver</a>
                         <a href="{{ route('recetas.edit', ['receta'=>$r->id]) }}" class="boton boton--gris">Editar</a>
