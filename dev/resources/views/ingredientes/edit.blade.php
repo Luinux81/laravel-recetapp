@@ -10,7 +10,12 @@
     </x-slot>
 
     <x-content>
-        <form method="post" action="{{ route('ingredientes.update', ['ingrediente'=>$ingrediente->id])}}" class="flex flex-col">
+        <form 
+            method="post" 
+            action="{{ route('ingredientes.update', ['ingrediente'=>$ingrediente->id])}}" 
+            class="flex flex-col"
+            enctype="multipart/form-data"
+        >
             @csrf
             @method('PUT')
 
@@ -45,13 +50,14 @@
             >
             </x-form.input-text>        
 
-            <x-form.input-text 
-                nombre="imagen" 
-                titulo="imagen" 
-                tipo="text"
-                valor="{{ old('imagen')?old('imagen'):$ingrediente->imagen }}"
+            <x-form.image-upload
+                nombre="imagen"
+                titulo="imagen"
+                imagen="{{ old('imagen')?old('imagen'):$ingrediente->imagen }}"
+                accept="image/*"                
             >
-            </x-form.input-text>
+
+            </x-form.image-upload>
             
             <x-form.input-text 
                 nombre="url" 

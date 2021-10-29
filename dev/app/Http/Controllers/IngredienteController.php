@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class IngredienteController extends Controller
 {   
@@ -13,7 +14,7 @@ class IngredienteController extends Controller
         "descripcion" => '',
         "marca" => '',
         "barcode" => '',
-        "imagen" => '',        
+        "imagen" => 'image|nullable',        
         "url" => '',   
         "calorias" => '',     
         "fat_total" => '',        
@@ -50,6 +51,13 @@ class IngredienteController extends Controller
 
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
+        }
+
+        if(array_key_exists('imagen',$data)){
+            $data['imagen'] = request('imagen')->store('ingredientes','public');
+        }
+        else{
+            $data['imagen'] = "";
         }
 
         $ingrediente = Ingrediente::create([
@@ -94,6 +102,17 @@ class IngredienteController extends Controller
             $data['categoria'] = NULL;
         }
 
+        if(array_key_exists('imagen',$data)){
+            $data['imagen'] = request('imagen')->store('ingredientes','public');
+
+            if(Storage::disk('public')->exists($ingrediente->imagen)){
+                Storage::disk('public')->delete($ingrediente->imagen);
+            }
+        }
+        else{
+            $data['imagen'] = $ingrediente->imagen;
+        }
+
         $ingrediente->update([
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
@@ -121,6 +140,10 @@ class IngredienteController extends Controller
     }
 
     public function destroy(Ingrediente $ingrediente){
+        if(Storage::disk('public')->exists($ingrediente->imagen)){
+            Storage::disk('public')->delete($ingrediente->imagen);
+        }
+        
         $ingrediente->delete();
 
         return redirect()->route('ingredientes');
