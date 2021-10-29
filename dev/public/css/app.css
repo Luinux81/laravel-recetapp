@@ -1072,6 +1072,9 @@ select {
 .visible {
 	visibility: visible;
 }
+.invisible {
+	visibility: hidden;
+}
 .fixed {
 	position: fixed;
 }
@@ -1664,6 +1667,12 @@ select {
 .pt-8 {
 	padding-top: 2rem;
 }
+.pl-0 {
+	padding-left: 0px;
+}
+.pr-0 {
+	padding-right: 0px;
+}
 .text-left {
 	text-align: left;
 }
@@ -2023,6 +2032,9 @@ select {
 .boton--rojo:disabled {
 	--tw-bg-opacity: 1;
 	background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+}
+.invisible{
+    display: none;
 }
 .hover\:border-gray-300:hover {
 	--tw-border-opacity: 1;
@@ -2452,4 +2464,3 @@ select {
 		padding-right: 2rem;
 	}
 }
-
