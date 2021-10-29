@@ -1,6 +1,6 @@
 @props(['nombre', 'titulo', 'valor' => '', 'tipo'=>'text'])
 
-<div class="flex flex-col">
+<div class="form-component form-component--input flex flex-col">
     
     <label for="{{ $nombre }}">
         {{ ucfirst($titulo) }} @error('{{ $nombre }}')<span class="text-red-500">*</span>@enderror
