@@ -107,6 +107,12 @@ class RecetaController extends Controller
             Storage::disk('public')->delete($receta->imagen);
         }
 
+        foreach ($receta->pasos as $paso) {
+            $paso->borradoCompleto();
+        }
+
+        $receta->ingredientes()->sync([]);
+
         $receta->delete();
 
         return redirect()->route('recetas.index');

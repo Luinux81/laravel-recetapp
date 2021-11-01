@@ -22,4 +22,12 @@ class PasoReceta extends Model
     public function assets(){
         return $this->hasMany(Asset::class,'paso_id');
     }
+
+    public function borradoCompleto(){
+        foreach ($this->assets as $asset) {
+            $asset->borradoCompleto();
+        }
+
+        $this->delete();
+    }
 }
