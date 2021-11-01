@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
@@ -47,7 +48,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('recetas', RecetaController::class);
     Route::resource('recetas.ingrediente', IngredienteRecetaController::class);
     Route::resource('recetas.paso', PasoRecetaController::class);
-    Route::post('recetas/{receta}/paso/{paso}/imagen/store', [PasoRecetaController::class, 'storeImagePaso'])->name('recetas.paso.imagen.store');
+
+    Route::post('recetas/{receta}/paso/{paso}/asset', [AssetController::class, 'store'])->name('recetas.paso.asset.store');
+    Route::delete('recetas/{receta}/paso/{paso}/asset/{asset}', [AssetController::class, 'destroy'])->name('recetas.paso.asset.destroy');
 
 });
 

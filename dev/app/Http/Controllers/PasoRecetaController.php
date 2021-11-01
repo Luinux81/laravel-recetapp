@@ -20,17 +20,23 @@ class PasoRecetaController extends Controller
     public function store(Receta $receta, Request $request){
         $data = $this->validate($request, $this->rules);
 
-        PasoReceta::create([
+        $paso = PasoReceta::create([
             'receta_id' => $receta->id,
             'orden' => $data['orden'],
             'texto' => $data['texto'],
         ]);
 
-        return redirect()->route('recetas.edit', compact('receta'));
+        return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
     }
 
     public function edit(Receta $receta, PasoReceta $paso){
-        return view('recetas.pasos.edit', compact(['receta','paso']));
+        $assets = $paso->assets()->get();
+        
+        foreach ($assets as $asset) {
+            $imagenes[$asset->id]= $asset->ruta;
+        }
+
+        return view('recetas.pasos.edit', compact(['receta','paso','assets']));
     }
 
     public function update(Receta $receta, PasoReceta $paso, Request $request){
@@ -49,4 +55,36 @@ class PasoRecetaController extends Controller
 
         return redirect()->route('recetas.edit', compact('receta'));
     }
+
+    // public function storeImagePaso(Receta $receta, PasoReceta $paso, Request $request){
+    //     $data = $this->validate($request, [
+    //         'imagen' => 'image|required',
+    //     ]);
+        
+    //     $img = request('imagen')->store('pasos','public');
+
+    //     $imagenes = $paso->media_assets;
+    //     if($imagenes){
+    //         $imagenes = json_decode($imagenes);
+    //     }
+    //     else{
+    //         $imagenes = [];
+    //     }
+
+    //     array_push($imagenes, $img);
+
+    //     $imagenes = json_encode($imagenes);
+
+    //     $paso->update([
+    //         'media_assets' => $imagenes,
+    //     ]);
+
+    //     if($request->callback){
+    //         return redirect($request->callback);
+    //     }
+    //     else{
+    //         return redirect()->route('receta.paso.edit', compact(['receta', 'paso']));
+    //     }
+        
+    // }
 }
