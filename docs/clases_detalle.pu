@@ -47,6 +47,7 @@ class Receta{
     String descripcion
     Integer calorias
     CategoriaReceta categoria
+    String imagen
 
     User user()
     Ingrediente ingredientes()
