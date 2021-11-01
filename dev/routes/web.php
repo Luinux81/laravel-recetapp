@@ -5,6 +5,7 @@ use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
 use App\Http\Controllers\CategoriaRecetaController;
+use App\Http\Controllers\IngredienteRecetaController;
 use App\Http\Controllers\CategoriaIngredienteController;
 
 /*
@@ -25,14 +26,9 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');
 
-    Route::get('/ingredientes',[IngredienteController::class, 'index'])->name('ingredientes');
-    Route::get('/ingredientes/create',[IngredienteController::class, 'create'])->name('ingredientes.create');
-    Route::post('/ingredientes',[IngredienteController::class, 'store'])->name('ingredientes.store');
-    Route::get('/ingredientes/{ingrediente}/edit',[IngredienteController::class, 'edit'])->name('ingredientes.edit');
-    Route::put('/ingredientes/{ingrediente}', [IngredienteController::class, 'update'])->name('ingredientes.update');
-    Route::delete('/ingrediente/{ingrediente}', [IngredienteController::class, 'destroy'])->name('ingredientes.destroy');
-
-
+    Route::resource('ingredientes', IngredienteController::class);
+    // Route::resource('ingredientes.categoria', CategoriaIngredienteController::class)->shallow();
+    
     Route::get('/ingredientes/categoria',[CategoriaIngredienteController::class, 'index'])->name('ingredientes.categoria.index');
     Route::get('/ingredientes/categoria/create',[CategoriaIngredienteController::class, 'create'])->name('ingredientes.categoria.create');
     Route::post('/ingredientes/categoria',[CategoriaIngredienteController::class, 'store'])->name('ingredientes.categoria.store');
@@ -47,17 +43,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::put('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'update'])->name('recetas.categoria.update');
     Route::delete('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'destroy'])->name('recetas.categoria.destroy');
 
-    // Route::resource('recetas.categoria', CategoriaRecetaController::class);
 
     Route::resource('recetas', RecetaController::class);
-
-    Route::get('recetas/{receta}/ingrediente/create', [RecetaController::class, 'createIngrediente'])->name('recetas.ingrediente.create');
-    Route::post('recetas/{receta}/ingrediente/store', [RecetaController::class, 'storeIngrediente'])->name('recetas.ingrediente.store');
-    Route::get('recetas/{receta}/ingrediente/{ingrediente}/edit', [RecetaController::class, 'editIngrediente'])->name('recetas.ingrediente.edit');
-    Route::put('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'updateIngrediente'])->name('recetas.ingrediente.update');
-    Route::delete('recetas/{receta}/ingrediente/{ingrediente}', [RecetaController::class, 'destroyIngrediente'])->name('recetas.ingrediente.destroy');
-
+    Route::resource('recetas.ingrediente', IngredienteRecetaController::class);
     Route::resource('recetas.paso', PasoRecetaController::class);
+    Route::post('recetas/{receta}/paso/{paso}/imagen/store', [PasoRecetaController::class, 'storeImagePaso'])->name('recetas.paso.imagen.store');
 
 });
 

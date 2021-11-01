@@ -5,7 +5,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Editar ingrediente') }}
             </h2>
-            <a href="{{ route('ingredientes') }}" class="boton boton--rojo">Cancelar</a>
+            <a href="{{ route('ingredientes.index') }}" class="boton boton--rojo">Cancelar</a>
         </div>
     </x-slot>
 

@@ -20,7 +20,7 @@
                         {{ __('Permisos') }}
                     </x-jet-nav-link>
 
-                    <x-jet-nav-link href="{{ route('ingredientes') }}" :active="request()->routeIs('ingredientes')">
+                    <x-jet-nav-link href="{{ route('ingredientes.index') }}" :active="request()->routeIs('ingredientes')">
                         {{ __('Ingredientes') }}
                     </x-jet-nav-link>
                     

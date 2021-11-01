@@ -54,7 +54,9 @@ class IngredienteController extends Controller
         }
 
         if(array_key_exists('imagen',$data)){
-            $data['imagen'] = request('imagen')->store('ingredientes','public');
+            if($data['imagen']){
+                $data['imagen'] = request('imagen')->store('ingredientes','public');
+            }
         }
         else{
             $data['imagen'] = "";
@@ -84,7 +86,7 @@ class IngredienteController extends Controller
             "user_id" => Auth::user()->id,
         ]);
 
-        return redirect()->route('ingredientes');
+        return redirect()->route('ingredientes.index');
     }
 
 
@@ -103,11 +105,13 @@ class IngredienteController extends Controller
         }
 
         if(array_key_exists('imagen',$data)){
-            $data['imagen'] = request('imagen')->store('ingredientes','public');
+            if($data['imagen']){
+                $data['imagen'] = request('imagen')->store('ingredientes','public');
 
-            if(Storage::disk('public')->exists($ingrediente->imagen)){
-                Storage::disk('public')->delete($ingrediente->imagen);
-            }
+                if(Storage::disk('public')->exists($ingrediente->imagen)){
+                    Storage::disk('public')->delete($ingrediente->imagen);
+                }
+            }            
         }
         else{
             $data['imagen'] = $ingrediente->imagen;
@@ -136,7 +140,7 @@ class IngredienteController extends Controller
             "cat_id" => $data['categoria'],
         ]);       
         
-        return redirect()->route('ingredientes');
+        return redirect()->route('ingredientes.index');
     }
 
     public function destroy(Ingrediente $ingrediente){
@@ -146,6 +150,6 @@ class IngredienteController extends Controller
         
         $ingrediente->delete();
 
-        return redirect()->route('ingredientes');
+        return redirect()->route('ingredientes.index');
     }
 }

@@ -5,12 +5,12 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Crear nuevo ingrediente') }}
             </h2>
-            <a href="{{ route('ingredientes') }}" class="boton boton--rojo">Cancelar</a>
+            <a href="{{ route('ingredientes.index') }}" class="boton boton--rojo">Cancelar</a>
         </div>
     </x-slot>
 
     <x-content>
-        <form method="post" action="{{ route('ingredientes.store')}}" class="flex flex-col">
+        <form method="post" action="{{ route('ingredientes.store')}}" class="flex flex-col" enctype="multipart/form-data">
             @csrf
             
             <x-form.input-text nombre="nombre" titulo="Nombre" tipo="text">  </x-form.input-text>
@@ -21,7 +21,13 @@
 
             <x-form.input-text nombre="barcode" titulo="barcode" tipo="text">  </x-form.input-text>        
 
-            <x-form.input-text nombre="imagen" titulo="imagen" tipo="text">  </x-form.input-text>
+            <x-form.image-upload 
+                nombre="imagen" 
+                titulo="imagen" 
+                accept="image/*"
+                imagen=""
+                >  
+            </x-form.image-upload>
             
             <x-form.input-text nombre="url" titulo="url" tipo="text">  </x-form.input-text>
 
