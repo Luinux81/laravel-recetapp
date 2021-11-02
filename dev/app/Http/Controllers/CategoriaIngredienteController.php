@@ -14,6 +14,10 @@ class CategoriaIngredienteController extends Controller
         'cat_parent'=>'',
     ];
 
+    public function show(CategoriaIngrediente $categoria){
+
+    }
+    
     public function index(){
         $categorias = Auth::user()->categoriasIngrediente()->get();
 

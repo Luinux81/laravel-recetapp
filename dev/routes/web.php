@@ -27,23 +27,17 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');
 
-    Route::resource('ingredientes', IngredienteController::class);
-    // Route::resource('ingredientes.categoria', CategoriaIngredienteController::class)->shallow();
     
-    Route::get('/ingredientes/categoria',[CategoriaIngredienteController::class, 'index'])->name('ingredientes.categoria.index');
-    Route::get('/ingredientes/categoria/create',[CategoriaIngredienteController::class, 'create'])->name('ingredientes.categoria.create');
-    Route::post('/ingredientes/categoria',[CategoriaIngredienteController::class, 'store'])->name('ingredientes.categoria.store');
-    Route::get('/ingredientes/categoria/{categoria}/edit',[CategoriaIngredienteController::class, 'edit'])->name('ingredientes.categoria.edit');
-    Route::put('/ingredientes/categoria/{categoria}',[CategoriaIngredienteController::class, 'update'])->name('ingredientes.categoria.update');
-    Route::delete('/ingredientes/categoria/{categoria}',[CategoriaIngredienteController::class, 'destroy'])->name('ingredientes.categoria.destroy');
+    
+    Route::prefix('ingredientes')->name('ingredientes.')->group(function(){
+        Route::resource('categoria', CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);
+    });
 
-    Route::get('/recetas/categoria',[CategoriaRecetaController::class, 'index'])->name('recetas.categoria.index');
-    Route::get('/recetas/categoria/create',[CategoriaRecetaController::class, 'create'])->name('recetas.categoria.create');
-    Route::post('/recetas/categoria',[CategoriaRecetaController::class, 'store'])->name('recetas.categoria.store');
-    Route::get('/recetas/categoria/{categoria}/edit',[CategoriaRecetaController::class, 'edit'])->name('recetas.categoria.edit');
-    Route::put('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'update'])->name('recetas.categoria.update');
-    Route::delete('/recetas/categoria/{categoria}',[CategoriaRecetaController::class, 'destroy'])->name('recetas.categoria.destroy');
+    Route::resource('ingredientes', IngredienteController::class);
 
+    Route::prefix('recetas')->name('recetas.')->group(function(){
+        Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
+    });
 
     Route::resource('recetas', RecetaController::class);
     Route::resource('recetas.ingrediente', IngredienteRecetaController::class);

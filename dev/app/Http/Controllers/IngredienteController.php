@@ -32,6 +32,10 @@ class IngredienteController extends Controller
         "categoria" => '',
     ];
 
+    public function show(Ingrediente $ingrediente){
+
+    }
+    
     public function index(){
         $ingredientes = Auth::user()->ingredientes()->get();
         

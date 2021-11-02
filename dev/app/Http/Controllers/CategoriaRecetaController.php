@@ -14,6 +14,10 @@ class CategoriaRecetaController extends Controller
         "cat_parent"=>"",
     ];
 
+    public function show(CategoriaReceta $categoria){
+
+    }
+    
     public function index(){
         $categorias = Auth::user()->categoriasReceta()->get();
         
