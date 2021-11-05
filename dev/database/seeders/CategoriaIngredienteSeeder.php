@@ -23,14 +23,14 @@ class CategoriaIngredienteSeeder extends Seeder
         DB::table("categorias_ingrediente")->insert([
             "user_id"=>"1",
             "nombre"=>"Fruta",
-            "descripcion"=>"Fruta",
+            "descripcion"=>"Frutas",
             "catParent_id"=>"1",
         ]);
 
         DB::table("categorias_ingrediente")->insert([
             "user_id"=>"1",
             "nombre"=>"Verdura",
-            "descripcion"=>"Verdura",
+            "descripcion"=>"Verduras",
             "catParent_id"=>"1",
         ]);
 
@@ -66,6 +66,12 @@ class CategoriaIngredienteSeeder extends Seeder
             "nombre"=>"Embutidos",
             "descripcion"=>"Embutidos",
             "catParent_id"=>"6",
+        ]);
+
+        DB::table("categorias_ingrediente")->insert([
+            "user_id"=>"1",
+            "nombre"=>"Cereales",
+            "descripcion"=>"Cereales",
         ]);
 
     }

@@ -32,6 +32,8 @@ class IngredienteSeeder extends Seeder
             "carb_total" => "86",
             "carb_azucar" => "0",
             "proteina" => "7",
+            "cat_id"  => "9",
+            "url" => "https://www.bedca.net/bdpub/index.php",
         ]);
 
         DB::table("ingredientes")->insert([
@@ -51,16 +53,101 @@ class IngredienteSeeder extends Seeder
             "carb_total" => "0",
             "carb_azucar" => "0",
             "proteina" => "0",
+            "url" => "https://www.bedca.net/bdpub/index.php",
         ]);
 
-        $factoria = Ingrediente::factory();
-        //$num = count($factoria->ingredientes);
-        $num = 5;
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Ajo",
+            "descripcion" => "Ajo crudo",
+            "calorias" => "117",
+            "fat_total" => "0.23",
+            "fat_saturadas" => "0.05",
+            "fat_poliinsaturadas" => "0.1",
+            "fat_monoinsaturadas" => "0.03",
+            "fat_trans" => "0",
+            "colesterol" => "0",
+            "sodio" => "19",
+            "potasio" => "446",
+            "fibra" => "1.2",
+            "carb_total" => "24.3",
+            "carb_azucar" => "0",
+            "proteina" => "3.9",
+            "cat_id"  => "3",
+            "url" => "https://www.bedca.net/bdpub/index.php",
+        ]);
 
-        $ingredientes = $factoria->count($num)->make();
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Apio",
+            "descripcion" => "Apio crudo",
+            "calorias" => "11",
+            "fat_total" => "0.1",
+            "fat_saturadas" => "0",
+            "fat_poliinsaturadas" => "0",
+            "fat_monoinsaturadas" => "0",
+            "fat_trans" => "0",
+            "colesterol" => "0",
+            "sodio" => "110",
+            "potasio" => "305",
+            "fibra" => "2",
+            "carb_total" => "1.5",
+            "carb_azucar" => "0",
+            "proteina" => "0.9",
+            "cat_id"  => "3",
+            "url" => "https://www.bedca.net/bdpub/index.php",
+        ]);        
 
-        foreach ($ingredientes as $ingrediente){
-            $ingrediente->save();
-        }
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Berenjena",
+            "descripcion" => "Berenjena cruda",
+            "calorias" => "20",
+            "fat_total" => "0.2",
+            "fat_saturadas" => "0",
+            "fat_poliinsaturadas" => "0",
+            "fat_monoinsaturadas" => "0",
+            "fat_trans" => "0",
+            "colesterol" => "0",
+            "sodio" => "3",
+            "potasio" => "262",
+            "fibra" => "2.4",
+            "carb_total" => "3.8",
+            "carb_azucar" => "0",
+            "proteina" => "0.7",
+            "cat_id"  => "3",
+            "url" => "https://www.bedca.net/bdpub/index.php",
+        ]); 
+
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Brocoli",
+            "descripcion" => "Brocoli crudo",
+            "calorias" => "26",
+            "fat_total" => "0.4",
+            "fat_saturadas" => "0.07",
+            "fat_poliinsaturadas" => "0.2",
+            "fat_monoinsaturadas" => "0",
+            "fat_trans" => "0",
+            "colesterol" => "0",
+            "sodio" => "13",
+            "potasio" => "370",
+            "fibra" => "3",
+            "carb_total" => "2.4",
+            "carb_azucar" => "0",
+            "proteina" => "3",
+            "cat_id"  => "3",
+            "url" => "https://www.bedca.net/bdpub/index.php",
+        ]); 
+
+        // $factoria = Ingrediente::factory();
+        // //$num = count($factoria->ingredientes);
+        // $num = 5;
+
+        // $ingredientes = $factoria->count($num)->make();
+
+        // foreach ($ingredientes as $ingrediente){
+        //     $ingrediente->save();
+        // }
     }
 }
