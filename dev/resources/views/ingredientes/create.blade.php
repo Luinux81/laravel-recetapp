@@ -60,9 +60,9 @@
             <div class="flex flex-col">
                 <label for="categoria">Categoria</label>
                 <select id="categoria" name="categoria">
-                    <option value="" selected>Ninguna</option>
+                    <option value="" @if(empty(old('categoria'))) selected @endif>Ninguna</option>
                 @foreach ($categorias as $cat)
-                    <option value="{{$cat->id}}">{{$cat->nombre}}</option>
+                    <option value="{{$cat->id}}" @if(old('categoria') == $cat->id) selected @endif>{{$cat->nombre}}</option>
                 @endforeach
                 </select>
             </div>
