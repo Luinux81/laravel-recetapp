@@ -32,8 +32,10 @@ class IngredienteRecetaController extends Controller
      * @param \App\Models\Receta 
      * @return \Illuminate\Http\Response
      */
-    public function create(Receta $receta)
+    public function create(Receta $receta, Request $request)
     {
+        $request->session()->flash('url_retorno', route('recetas.ingrediente.create', ['receta'=>$receta->id ]));
+
         $ingredientes = Auth::user()->ingredientes()->get();        
 
         return view('recetas.ingredientes.create', compact(['receta','ingredientes']));

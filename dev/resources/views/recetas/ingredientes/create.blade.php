@@ -22,6 +22,8 @@
             </select>
         </div>
 
+        <a href="{{ route('ingredientes.create') }}" class="boton boton--gris">Nuevo ingrediente</a>
+        
         <x-form.input-text
             nombre="cantidad" 
             titulo="Cantidad" 

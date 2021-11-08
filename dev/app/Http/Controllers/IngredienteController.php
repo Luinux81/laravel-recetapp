@@ -6,6 +6,7 @@ use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class IngredienteController extends Controller
 {   
@@ -43,15 +44,27 @@ class IngredienteController extends Controller
     }
 
 
-    public function create(){
+    public function create(Request $request){
+        $request->session()->reflash();
+
         $categorias = Auth::user()->categoriasIngrediente()->get();
 
         return view('ingredientes.create', compact('categorias'));
     }
 
 
-    public function store(Request $request){
-        $data = $this->validate($request, $this->rules);
+    public function store(Request $request){        
+        $validator = Validator::make($request->all(), $this->rules);
+
+        if($validator->fails()){
+            $request->session()->reflash();
+
+            return redirect( route('ingredientes.create') )
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $data = $validator->validated();
 
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
@@ -90,7 +103,12 @@ class IngredienteController extends Controller
             "user_id" => Auth::user()->id,
         ]);
 
-        return redirect()->route('ingredientes.index');
+        if($request->session()->has('url_retorno')){
+            return redirect($request->session()->get('url_retorno'));
+        }
+        else{
+            return redirect()->route('ingredientes.index');
+        }
     }
 
 
