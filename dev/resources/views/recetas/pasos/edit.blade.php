@@ -4,7 +4,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Editar paso en receta {{ $receta->nombre }}
         </h2>
-        <a href="{{ route('recetas.edit',['receta'=>$receta->id])}}" class="boton boton--rojo">Cancelar</a>
+        <a href="{{ route('recetas.edit',['receta'=>$receta->id])}}" class="boton boton--rojo">Volver</a>
     </div>
 </x-slot>
 <x-content>

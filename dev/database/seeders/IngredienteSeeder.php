@@ -15,6 +15,7 @@ class IngredienteSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table("ingredientes")->insert([
             "user_id" => 1,
             "nombre" => "Arroz",
@@ -140,6 +141,50 @@ class IngredienteSeeder extends Seeder
             "url" => "https://www.bedca.net/bdpub/index.php",
         ]); 
 
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Huevo",
+            "descripcion" => "Huevo crudo",
+            "calorias" => "150",
+            "fat_total" => "11.1",
+            "fat_saturadas" => "3.1",
+            "fat_poliinsaturadas" => "1.74",
+            "fat_monoinsaturadas" => "3.97",
+            "fat_trans" => "0",
+            "colesterol" => "385",
+            "sodio" => "140",
+            "potasio" => "130",
+            "fibra" => "0",
+            "carb_total" => "0",
+            "carb_azucar" => "0",
+            "proteina" => "12.5",
+            "cat_id"  => "1",
+            "url" => "https://www.bedca.net/bdpub/index.php",
+        ]); 
+
+
+        DB::table("ingredientes")->insert([
+            "user_id" => 1,
+            "nombre" => "Tomate frito",
+            "descripcion" => "Tomate frito",
+            "marca" => "Hacendado",
+            "barcode" => "8480000171511",
+            "calorias" => "77",
+            "fat_total" => "3.5",
+            "fat_saturadas" => "0.3",
+            "fat_poliinsaturadas" => "0",
+            "fat_monoinsaturadas" => "0",
+            "fat_trans" => "0",
+            "colesterol" => "0",
+            "sodio" => "0",
+            "potasio" => "0",
+            "fibra" => "0",
+            "carb_total" => "9.5",
+            "carb_azucar" => "6.9",
+            "proteina" => "1.5",
+            "cat_id"  => "6",
+            "url" => "https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/hacendado/tomate-frito/100g",
+        ]); 
         // $factoria = Ingrediente::factory();
         // //$num = count($factoria->ingredientes);
         // $num = 5;
