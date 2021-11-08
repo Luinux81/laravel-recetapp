@@ -3,7 +3,10 @@
 <div class="form-component form-component--input flex flex-col">
     
     <label for="{{ $nombre }}">
-        {{ ucfirst($titulo) }} @error('{{ $nombre }}')<span class="text-red-500">*</span>@enderror
+        {{ ucfirst($titulo) }} 
+        @if($errors->has($nombre))
+            <span class="text-red-500">*</span>
+        @endif
     </label>
 
     <input 
@@ -12,12 +15,15 @@
         type="{{ $tipo }}" 
         @if($valor != "")
             value="{{ $valor }}"
+        @else
+            value="{{ old($nombre) ? old($nombre) : '' }}"
         @endif
         {{ $attributes }}
     />
     
-    @error('{{ $nombre }}')
-        <div class="alert alert-danger">{{ $message }}</div>
-    @enderror
+    @if($errors->has($nombre))
+        <div class="alert alert-danger text-red-500">{{ $errors->first($nombre) }}</div>
+    @endif
+
 
 </div>
