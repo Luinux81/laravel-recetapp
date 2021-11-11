@@ -33,11 +33,45 @@
     display: none;
 }
 
-.form-component--imageUpload{
-    
-    .botonImagen{
-        /*border-radius: 15px;*/
-        /*background-color: #EAEFFB;*/
+.form-ingrediente{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+
+    & &__detalles{
+        width: 40%;
+        margin: 0;
+        padding: .5em;
+
+        h2{
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 1em;
+        }
     }
 
+    & &__info{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        column-gap: 5em;
+        width: 50%;
+        padding: .5em;
+
+        h2{
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        &--col1{
+            width: 50%;
+        }
+
+        &--col2{
+            width: 50%;
+        }
+
+    }
 }
