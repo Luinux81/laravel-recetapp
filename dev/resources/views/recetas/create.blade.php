@@ -23,6 +23,10 @@
             <x-form.input-text nombre="descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
             <x-form.input-text nombre="calorias" titulo="calorias" tipo="number">  </x-form.input-text>
+
+            <x-form.input-text nombre="raciones" titulo="raciones" tipo="number">  </x-form.input-text>
+
+            <x-form.input-text nombre="tiempo" titulo="tiempo" tipo="text">  </x-form.input-text>
             
             <x-form.select nombre="categoria" titulo="categoria">
                     <option value="" selected>Ninguna</option>

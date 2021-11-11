@@ -49,6 +49,23 @@
             >
             </x-form.input-text>
             
+            <x-form.input-text 
+                nombre="raciones" 
+                titulo="raciones" 
+                tipo="number"
+                valor="{{ old('raciones')?old('raciones'):$receta->raciones }}"
+            >
+            </x-form.input-text>
+
+            <x-form.input-text 
+                nombre="tiempo" 
+                titulo="tiempo" 
+                tipo="text"
+                valor="{{ old('tiempo')?old('tiempo'):$receta->tiempo }}"
+            >
+            </x-form.input-text>
+
+
             <x-form.select nombre="categoria" titulo="Categoria">
                 <option 
                     value="" 

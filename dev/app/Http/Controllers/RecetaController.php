@@ -15,6 +15,8 @@ class RecetaController extends Controller
         'nombre' => 'required',
         'descripcion' => '',
         'calorias' => 'numeric|nullable',
+        'raciones' => 'numeric|nullable',
+        'tiempo' => '',
         'categoria' => '',
         'imagen' => 'image|nullable',
     ];
@@ -59,6 +61,8 @@ class RecetaController extends Controller
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
             "calorias" => $data['calorias'],
+            "raciones" => $data['raciones'],
+            "tiempo" => $data['tiempo'],
             "imagen" => $data['imagen'],
             "cat_id" => $data['categoria'],
             "user_id" => Auth::user()->id,
@@ -95,6 +99,8 @@ class RecetaController extends Controller
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'calorias' => $data['calorias'],
+            "raciones" => $data['raciones'],
+            "tiempo" => $data['tiempo'],
             'imagen' => $data['imagen'],
             'cat_id' => $data['categoria'],
         ]);
