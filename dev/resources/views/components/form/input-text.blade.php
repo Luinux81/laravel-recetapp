@@ -18,6 +18,7 @@
         @else
             value="{{ old($nombre) ? old($nombre) : '' }}"
         @endif
+        class="bg-gray-200 rounded-md mb-3"
         {{ $attributes }}
     />
     
