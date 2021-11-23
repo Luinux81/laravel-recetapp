@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Terminal;
+use App\Helpers\WebScrapper;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,65 +16,72 @@ class CategoriaIngredienteSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Productos frescos",
-            "descripcion"=>"Sólo productos frescos",
-        ]);
+        $this->setCategoriasAutoFile();
+        //$this->setCategoriasAutoFatSecret();
+        //$this->setCategoriasManual();
+    }
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Fruta",
-            "descripcion"=>"Frutas",
-            "catParent_id"=>"1",
-        ]);
+    private function setCategoriasAutoFile(){
+        $path = "storage/seeds/categorias_ingrediente_data.sql";
+        
+        DB::unprepared(file_get_contents($path));
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Verdura",
-            "descripcion"=>"Verduras",
-            "catParent_id"=>"1",
-        ]);
+        $this->command->info('CategoriasIngrediente table seeded!');
+    }
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Carnes",
-            "descripcion"=>"Carnes",
-            "catParent_id"=>"1",
-        ]);
+    private function setCategoriasAutoFatSecret(){
+        echo "\nObteniendo categorias de ingredientes de Fat Secret";
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Pescados",
-            "descripcion"=>"Pescados",
-            "catParent_id"=>"1",
-        ]);
+        $categorias = WebScrapper::getAllCategorias();
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Productos preparados",
-            "descripcion"=>"Sólo productos preparados",
-        ]);
+        $numCategorias = 0;
+        foreach ($categorias as $key => $value) {
+            $numCategorias++;
+            if(is_array($value->subcategorias)){
+                $numCategorias = $numCategorias + count($value->subcategorias);
+            }
+        }
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Salsas",
-            "descripcion"=>"Salsas",
-            "catParent_id"=>"6",
-        ]);
+        echo "\n" . $numCategorias . " categorias encontradas.\n";
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Embutidos",
-            "descripcion"=>"Embutidos",
-            "catParent_id"=>"6",
-        ]);
+        $i = 0;
+        foreach ($categorias as $key => $categoria) {
+            $id = $this->save(1,$categoria->nombre,$categoria->url);
+            $i++;
 
-        DB::table("categorias_ingrediente")->insert([
-            "user_id"=>"1",
-            "nombre"=>"Cereales",
-            "descripcion"=>"Cereales",
-        ]);
+            Terminal::consoleProgressBar($i,$numCategorias);
 
+            foreach ($categoria->subcategorias as $subcat => $url) {
+                $this->save(1,$subcat, $url, $id);
+                $i++;
+                Terminal::consoleProgressBar($i,$numCategorias);
+            }
+        }
+
+        echo "\n\n";
+    }
+
+    private function setCategoriasManual(){
+        $id = $this->save(1, "Productos frescos", "Sólo productos frescos");
+        $this->save(1, "Frutas", "Frutas", $id);
+        $this->save(1, "Verdura", "Verduras", $id);
+        $this->save(1, "Cereales", "Cereales", $id);
+        $this->save(1, "Carnes", "Carnes", $id);
+        $this->save(1, "Pescados", "Pescados", $id);
+
+        $id = $this->save(1, "Productos preparados", "Sólo productos preparados");
+        $this->save(1, "Salsas", "Salsas", $id);
+        $this->save(1, "Embutidos", "Embutidos", $id);
+    }
+
+    private function save($user_id, $nombre, $descripcion, $parent = NULL){        
+        $params = [
+            "user_id" => $user_id,
+            "nombre" => $nombre,
+            "descripcion" => $descripcion,
+            "catParent_id" => $parent,
+        ];
+        
+        return DB::table("categorias_ingrediente")->insertGetId($params);
     }
 }

@@ -2,9 +2,14 @@
 
 namespace Database\Seeders;
 
+use stdClass;
+use App\Helpers\Terminal;
 use App\Models\Ingrediente;
+use App\Helpers\WebScrapper;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\CategoriaIngrediente;
+
 
 class IngredienteSeeder extends Seeder
 {
@@ -15,7 +20,20 @@ class IngredienteSeeder extends Seeder
      */
     public function run()
     {
+        //$this->seedIngredientesManual();
+        //$this->seedIngredientesAutoFatSecret();
+        $this->seedIngredientesAutoFile();
+    }
 
+    public function seedIngredientesAutoFile(){
+        $path = "storage/seeds/ingredientes_data_temp.sql";
+        
+        DB::unprepared(file_get_contents($path));
+
+        $this->command->info('Ingredientes table seeded!');
+    }
+
+    private function seedIngredientesManual(){
         DB::table("ingredientes")->insert([
             "user_id" => 1,
             "nombre" => "Arroz",
@@ -185,14 +203,79 @@ class IngredienteSeeder extends Seeder
             "cat_id"  => "6",
             "url" => "https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/hacendado/tomate-frito/100g",
         ]); 
-        // $factoria = Ingrediente::factory();
-        // //$num = count($factoria->ingredientes);
-        // $num = 5;
+    }
 
-        // $ingredientes = $factoria->count($num)->make();
+    private function seedIngredientesAutoFatSecret(){
+        $categorias = CategoriaIngrediente::all();
+        $acumulados = [];
 
-        // foreach ($ingredientes as $ingrediente){
-        //     $ingrediente->save();
-        // }
+        foreach($categorias as $categoria){
+            
+            if($categoria->categoriaRaiz()){
+                $ingredientes = WebScrapper::getIngredientesPorCategoriaFatSecret($categoria->descripcion);
+                
+                if(!empty($ingredientes)){
+                    foreach ($ingredientes as $ingrediente) {
+                        if(is_array($ingrediente->listaIngredientes)){
+                            foreach ($ingrediente->listaIngredientes as $valor) {
+                                $obj = new stdClass();
+                                $obj->categoria = $ingrediente->categoria;
+                                $obj->nombre = $valor->nombre;
+                                $obj->url = $valor->url;
+                                array_push($acumulados, $obj);
+                                Terminal::consoleFixedText(count($acumulados) . " ingredientes descubiertos.");
+                            }
+                        }
+                    }
+                }              
+            }
+        }
+
+        $total = count($acumulados);
+        $this->command->info("\n" . $total . " ingredientes descubiertos.");
+
+        $this->command->warn("Procesando ingredientes:");
+
+        $i = 0;
+        foreach ($acumulados as $linkIngrediente) {
+            $ingrediente_fs = WebScrapper::getIngredienteFatSecret($linkIngrediente->url);
+            
+            //$array[$i++] = $ingrediente_fs;
+
+            $array[$i++] = Ingrediente::create([
+                "user_id"             => "1",
+                "cat_id"              => $this->getIdCategoriaPorNombre($linkIngrediente->categoria),
+                "nombre"              => $linkIngrediente->nombre,                
+                "url"                 => $linkIngrediente->url,
+                "calorias"            => $ingrediente_fs->calorias,
+                "fat_total"           => $ingrediente_fs->fat_total,
+                "fat_saturadas"       => $ingrediente_fs->fat_saturadas,
+                "fat_poliinsaturadas" => $ingrediente_fs->fat_poliinsaturadas,
+                "fat_monoinsaturadas" => $ingrediente_fs->fat_monoinsaturadas,
+                "colesterol"          => $ingrediente_fs->colesterol,
+                "potasio"             => $ingrediente_fs->potasio,
+                "fibra"               => $ingrediente_fs->fibra,
+                "carb_total"          => $ingrediente_fs->carb_total,
+                "carb_azucar"         => $ingrediente_fs->carb_azucar,
+                "proteina"            => $ingrediente_fs->proteina,
+            ]);
+
+            Terminal::consoleProgressBar($i,$total);
+
+            //if($i == 10) break;
+        }
+        $this->command->info($total . " ingredientes procesandos");
+        //dd($array);
+    }
+
+    private function getIdCategoriaPorNombre($nombre){
+        $categoria = CategoriaIngrediente::where('nombre',$nombre)->first();
+
+        if($categoria){
+            return $categoria->id;
+        }
+        else{
+            return null;
+        }
     }
 }
