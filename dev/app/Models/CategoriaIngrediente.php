@@ -58,7 +58,7 @@ class CategoriaIngrediente extends Model
     }
 
     public function categoriaRaiz(){
-
+        return $this->catParent_id == NULL;
     }
 }
 
