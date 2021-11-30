@@ -1301,6 +1301,9 @@ select {
 .w-96 {
 	width: 24rem;
 }
+.w-3\/5 {
+	width: 60%;
+}
 .min-w-0 {
 	min-width: 0px;
 }

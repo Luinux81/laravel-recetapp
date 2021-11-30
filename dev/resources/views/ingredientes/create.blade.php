@@ -14,7 +14,13 @@
     </x-slot>
 
     <x-content>
-        <form method="post" action="{{ route('ingredientes.store')}}" class="flex flex-col" enctype="multipart/form-data">
+        <form 
+            method="post" 
+            action="{{ route('ingredientes.store')}}" 
+            class="flex flex-col" 
+            enctype="multipart/form-data"
+            id="create-ingrediente-form"
+        >
             @csrf
             
             <div class="form-ingrediente">
@@ -84,10 +90,11 @@
             
 
             <div class="flex gap-5 justify-center m-6">
-                <a href="{{ route('ingredientes.store') }}" class="boton boton--azul">Guardar</a>
+                <button type="submit" class="boton boton--azul">Guardar</button>
                 <a href="{{ route('ingredientes.index') }}" class="boton boton--rojo">Cancelar</a>
             </div>
         </form>
     </x-content>
 
 </x-app-layout>
+
