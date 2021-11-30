@@ -27,12 +27,29 @@ class PermissionSeeder extends Seeder
         Permission::create(['name'=>'permisos_edit']);
         Permission::create(['name'=>'permisos_destroy']);
 
+        Permission::create(['name'=>'public_index']);
+        Permission::create(['name'=>'public_create']);
+        Permission::create(['name'=>'public_edit']);
+        Permission::create(['name'=>'public_destroy']);
+
         // Asignación de permisos a roles
         $admin->givePermissionTo([
             'permisos_index',
             'permisos_create',
             'permisos_edit',
             'permisos_destroy',
+            'public_index',
+            'public_create',
+            'public_edit',
+            'public_destroy',
+        ]);
+
+        $empleado->givePermissionTo([
+            'public_index',
+        ]);
+
+        $cliente->givePermissionTo([
+            'public_index',
         ]);
 
         $user = User::find(1);
