@@ -12,10 +12,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Calorias</th>
-                    <th>Imagen</th>
+                    <th class="text-left w-3/5">Nombre</th>
+                    <th class="text-left">Categoria</th>
+                    <th>Calorias (100g)</th>                    
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -23,17 +22,19 @@
             @foreach ($ingredientes as $i)
                 <tr>
                     <td>{{$i->nombre}}</td>
-                    <td>{{$i->descripcion}}</td>
-                    <td>{{$i->calorias}}</td>
-                    <td>{{$i->imagen}}</td>
+                    <td>{{$i->categoria->nombre ?? "" }}</td>
+                    <td class="text-center">{{$i->calorias}}</td>                    
                     <td class="p-3 flex flex-row flex-between gap-2">
                         <a href="{{ route('ingredientes.edit', ['ingrediente'=>$i->id]) }}" class="boton boton--gris">Editar</a>
-                        <form method="post" action="{{ route('ingredientes.destroy',['ingrediente'=>$i->id]) }}">
-                            @csrf
-                            @method('DELETE')
-                            {{-- <input type="submit" class="boton boton--rojo" value="Borrar" onsumbit="confirmarBorrado(event)" /> --}}
-                            <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
-                        </form>
+
+                        <x-form.boton-post
+                            url="{{ route('ingredientes.destroy',['ingrediente'=>$i->id]) }}"
+                            metodo="DELETE"
+                            class="boton boton--rojo"
+                            onclick="confirmarBorrado(event)"
+                        >
+                            Borrar
+                        </x-form.boton-post>
                     </td>
                 </tr>
             @endforeach
