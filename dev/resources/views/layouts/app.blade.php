@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         @livewireStyles
+        @powerGridStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
@@ -43,7 +44,8 @@
         
 
         @livewireScripts
-
+        @powerGridScripts
+        
         @stack('custom-scripts')
 
         <script>
