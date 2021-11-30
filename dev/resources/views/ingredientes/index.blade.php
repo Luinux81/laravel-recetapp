@@ -9,6 +9,23 @@
     </x-slot>
 
     <x-content>
+        <div class="flex justify-between">
+            <div class="flex flex-row items-center gap-3">
+                <a href="{{ route('ingredientes.index')}}">TODOS</a>
+                @foreach (range('A','Z') as $letra)
+                    <a href="{{ route('ingredientes.index')}}?filtro=alf&valor_filtro={{$letra}}">{{$letra}}</a>    
+                @endforeach
+            </div>
+            <div>
+                <select onchange="filtrarPorCategoria(event);">
+                    <option value="" selected disabled>Filtro categoria</option> 
+                    <option value="">Ninguno</option> 
+                    @foreach ($categorias as $cat)
+                        <option value="{{$cat->id}}">{{$cat->nombre}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -76,6 +93,12 @@
                     event.target.parentNode.submit();
                 }
             }      
+        }
+    </script>
+
+    <script>
+        function filtrarPorCategoria(event){
+            location.href="{{ route('ingredientes.index') }}?filtro=categoria&valor_filtro="+event.target.value;
         }
     </script>
     @endpush

@@ -38,14 +38,57 @@ class IngredienteController extends Controller
 
     }
     
-    public function index(){        
-        $public = Ingrediente::where('user_id',NULL)->get();
-        $propios = Auth::user()->ingredientes()->get();
-        
-        $ingredientes = $public->merge($propios)->sortBy('nombre');
 
-        return view('ingredientes.index', compact('ingredientes'));
+
+
+
+    public function index(Request $request){          
+        $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
+        $ingredientesPropios = Auth::user()->ingredientes()->get();
+
+        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
+
+        if(!empty($request->input('filtro')) && !empty($request->input('valor_filtro'))){
+            switch($request->input('filtro')){
+                case "alf":
+                    $filtradoPublico = $ingredientesPublicos->filter(
+                        function($value,$key) use($request)  {
+                            return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
+                        });
+                    $filtradoPropio = $ingredientesPropios->filter(
+                        function($value,$key) use($request){
+                            return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
+                        });
+                    break;    
+                case "categoria":
+                    if(!empty($request->input('valor_filtro'))){
+                        $filtradoPublico = $ingredientesPublicos->filter(
+                            function($value,$key) use($request)  {
+                                return $value->cat_id == $request->input('valor_filtro');
+                            });
+                        $filtradoPropio = $ingredientesPropios->filter(
+                            function($value,$key) use($request){
+                                return $value->cat_id == $request->input('valor_filtro');
+                            });
+                    }
+                    else{
+                        $filtradoPublico = $ingredientesPublicos;
+                        $filtradoPropio = $ingredientesPropios;
+                    }
+                    break;    
+            }
+        }
+        else{
+            $filtradoPublico = $ingredientesPublicos;
+            $filtradoPropio = $ingredientesPropios;
+        }
+        
+        $ingredientes = $filtradoPublico->merge($filtradoPropio)->sortBy('nombre');
+
+        return view('ingredientes.index', compact('ingredientes','categorias'));
     }
+
+
 
 
     public function create(Request $request){
@@ -55,6 +98,8 @@ class IngredienteController extends Controller
 
         return view('ingredientes.create', compact('categorias'));
     }
+
+
 
 
     public function store(Request $request){        
