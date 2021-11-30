@@ -45,7 +45,7 @@ class Ingrediente extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getCategoria(){
+    public function categoria(){
         return $this->belongsTo(CategoriaIngrediente::class,"cat_id");
     }
 

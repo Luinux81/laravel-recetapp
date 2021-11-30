@@ -28,7 +28,7 @@ class Ingrediente{
     ____
     User user()
     Integer getCalorias()
-    CategoriaIngrediente getCategoria()
+    CategoriaIngrediente categoria()
 }
 
 class CategoriaIngrediente{
