@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,9 +38,12 @@ class IngredienteController extends Controller
 
     }
     
-    public function index(){
-        $ingredientes = Auth::user()->ingredientes()->get();
+    public function index(){        
+        $public = Ingrediente::where('user_id',NULL)->get();
+        $propios = Auth::user()->ingredientes()->get();
         
+        $ingredientes = $public->merge($propios)->sortBy('nombre');
+
         return view('ingredientes.index', compact('ingredientes'));
     }
 
@@ -113,9 +117,30 @@ class IngredienteController extends Controller
 
 
     public function edit(Request $request, Ingrediente $ingrediente){
+        if($ingrediente->user_id == NULL){
+            if(!Auth::user()->can('public_edit')){
+                $obj = new stdClass();
+                $obj->tipo = "error";
+                $obj->mensaje = "No tiene permiso para editar este ingrediente";
+            }
+        }
+        else{
+            if($ingrediente->user_id != Auth::user()->id){
+                $obj = new stdClass();
+                $obj->tipo = "error";
+                $obj->mensaje = "No tiene permiso para editar este ingrediente";
+            }
+        }
+
+        if (!empty($obj)){
+            $request->session()->flash('notificacion',$obj);
+            return redirect()->route('ingredientes.index');
+        }
+        
+
         $categorias = Auth::user()->categoriasIngrediente()->get();
 
-        return view('ingredientes.edit', compact(['categorias','ingrediente']));
+        return view('ingredientes.edit', compact(['categorias','ingrediente']));        
     }
 
 
@@ -165,7 +190,28 @@ class IngredienteController extends Controller
         return redirect()->route('ingredientes.index');
     }
 
-    public function destroy(Ingrediente $ingrediente){
+    public function destroy(Request $request, Ingrediente $ingrediente){
+        if($ingrediente->user_id == NULL){
+            if(!Auth::user()->can('public_destroy')){
+                $error = new stdClass();
+                $error->tipo = "error";
+                $error->mensaje = "No tiene permiso para borrar este ingrediente";
+            }
+        }
+        else{
+            if(Auth::user()->id != $ingrediente->user_id){
+                $error = new stdClass();
+                $error->tipo = "error";
+                $error->mensaje = "No tiene permiso para borrar este ingrediente";
+            }
+        }
+        
+        if(!empty($error)){
+            $request->session()->flash('notificacion',$error);
+            return redirect()->route('ingredientes.index');    
+        }
+        
+
         if(Storage::disk('public')->exists($ingrediente->imagen)){
             Storage::disk('public')->delete($ingrediente->imagen);
         }
