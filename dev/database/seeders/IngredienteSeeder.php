@@ -26,7 +26,7 @@ class IngredienteSeeder extends Seeder
     }
 
     public function seedIngredientesAutoFile(){
-        $path = "storage/seeds/ingredientes_data_temp.sql";
+        $path = "storage/seeds/ingredientes_publicos_data.sql";
         
         DB::unprepared(file_get_contents($path));
 
@@ -240,9 +240,7 @@ class IngredienteSeeder extends Seeder
         foreach ($acumulados as $linkIngrediente) {
             $ingrediente_fs = WebScrapper::getIngredienteFatSecret($linkIngrediente->url);
             
-            //$array[$i++] = $ingrediente_fs;
-
-            $array[$i++] = Ingrediente::create([
+            $dataArray = [
                 "user_id"             => "1",
                 "cat_id"              => $this->getIdCategoriaPorNombre($linkIngrediente->categoria),
                 "nombre"              => $linkIngrediente->nombre,                
@@ -258,14 +256,17 @@ class IngredienteSeeder extends Seeder
                 "carb_total"          => $ingrediente_fs->carb_total,
                 "carb_azucar"         => $ingrediente_fs->carb_azucar,
                 "proteina"            => $ingrediente_fs->proteina,
-            ]);
+            ];
+
+            $array[$i++] = Ingrediente::create($dataArray);
+
+            //unset($dataArray["user_id"]);
+
+            //IngredientePublico::create($dataArray);
 
             Terminal::consoleProgressBar($i,$total);
-
-            //if($i == 10) break;
         }
-        $this->command->info($total . " ingredientes procesandos");
-        //dd($array);
+        $this->command->info($total . " ingredientes procesados");
     }
 
     private function getIdCategoriaPorNombre($nombre){

@@ -21,20 +21,27 @@
             <tbody>
             @foreach ($ingredientes as $i)
                 <tr>
-                    <td>{{$i->nombre}}</td>
+                    <td>{{html_entity_decode($i->nombre)}}</td>
                     <td>{{$i->categoria->nombre ?? "" }}</td>
                     <td class="text-center">{{$i->calorias}}</td>                    
                     <td class="p-3 flex flex-row flex-between gap-2">
-                        <a href="{{ route('ingredientes.edit', ['ingrediente'=>$i->id]) }}" class="boton boton--gris">Editar</a>
+                        
+                        @canany(['public_edit','public_destroy'])
+                            @if (($i->user_id != NULL && $i->user_id == Auth::user()->id) || Auth::user()->can('public_edit'))
+                                <a href="{{ route('ingredientes.edit', ['ingrediente'=>$i->id]) }}" class="boton boton--gris">Editar</a>
+                            @endif
 
-                        <x-form.boton-post
-                            url="{{ route('ingredientes.destroy',['ingrediente'=>$i->id]) }}"
-                            metodo="DELETE"
-                            class="boton boton--rojo"
-                            onclick="confirmarBorrado(event)"
-                        >
-                            Borrar
-                        </x-form.boton-post>
+                            @if (($i->user_id != NULL && $i->user_id == Auth::user()->id) || Auth::user()->can('public_destroy'))
+                                <x-form.boton-post
+                                    url="{{ route('ingredientes.destroy',['ingrediente'=>$i->id]) }}"
+                                    metodo="DELETE"
+                                    class="boton boton--rojo"
+                                    onclick="confirmarBorrado(event)"
+                                >
+                                    Borrar
+                                </x-form.boton-post>
+                            @endif
+                        @endcanany
                     </td>
                 </tr>
             @endforeach
