@@ -76,5 +76,30 @@
                 });
             }
         </script>
+
+        <script>
+            @if(session('notificacion'))
+                window.addEventListener('DOMContentLoaded',(event)=>{
+                    notifica('{{ session('notificacion')->tipo }}','{{ session('notificacion')->mensaje }}');
+                });
+            @endif
+
+            function notifica(tipo,msg){
+                if(Notyf){
+                    Notyf.open({
+                        duration: 3000,
+                        position:{
+                            x: 'right',
+                            y: 'top'
+                        },
+                        type: tipo,
+                        message: msg,
+                    });
+                }
+                else{
+                    alert(msg);
+                }
+            }
+        </script>
     </body>
 </html>
