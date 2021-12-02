@@ -80,4 +80,13 @@ class User extends Authenticatable
     public function categoriasReceta(){
         return $this->hasMany(CategoriaReceta::class);
     }
+
+    public function getAllIngredientesAccesibles(){
+        $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
+        $ingredientesPrivados = auth()->user()->ingredientes()->get();
+
+        $ingredientes = $ingredientesPublicos->merge($ingredientesPrivados)->sortBy('nombre');
+
+        return $ingredientes;
+    }
 }
