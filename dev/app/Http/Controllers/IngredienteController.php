@@ -94,7 +94,7 @@ class IngredienteController extends Controller
     public function create(Request $request){
         $request->session()->reflash();
 
-        $categorias = Auth::user()->categoriasIngrediente()->get();
+        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
 
         return view('ingredientes.create', compact('categorias'));
     }
@@ -183,7 +183,7 @@ class IngredienteController extends Controller
         }
         
 
-        $categorias = Auth::user()->categoriasIngrediente()->get();
+        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
 
         return view('ingredientes.edit', compact(['categorias','ingrediente']));        
     }
