@@ -17,9 +17,8 @@
             value="{{ $valor }}"
         @else
             value="{{ old($nombre) ? old($nombre) : '' }}"
-        @endif
-        class="bg-gray-200 rounded-md mb-3"
-        {{ $attributes }}
+        @endif        
+        {{ $attributes->merge(['class'=>'form-input bg-gray-200 rounded-md mb-3']) }}
     />
     
     @if($errors->has($nombre))
