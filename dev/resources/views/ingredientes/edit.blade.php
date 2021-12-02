@@ -31,7 +31,7 @@
 
                     <div class="flex flex-col">
                         <label for="categoria">Categoria</label>
-                        <select id="categoria" name="categoria" class="bg-gray-200 rounded-md mb-3">
+                        <select id="categoria" name="categoria" class="form-select bg-gray-200 rounded-md mb-3">
                             <option value="" @if(empty($ingrediente->cat_id)) selected @endif >Ninguna</option>
                             @foreach ($categorias as $cat)
                                 <option value="{{$cat->id}}" @if($ingrediente->cat_id == $cat->id) selected @endif >{{$cat->nombre}}</option>
@@ -77,6 +77,7 @@
                             nombre="calorias"
                             titulo="calorias"
                             tipo="number"
+                            min="0"
                             valor="{{ old('calorias')?old('calorias'):$ingrediente->calorias }}"
                         >
                         </x-form.input-text>
@@ -85,6 +86,7 @@
                             nombre="fat_total"
                             titulo="Grasas (Total)"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fat_total')?old('fat_total'):$ingrediente->fat_total }}"
                         >
                         </x-form.input-text>
@@ -93,6 +95,7 @@
                             nombre="fat_saturadas"
                             titulo="Grasas saturadas"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fat_saturadas')?old('fat_saturadas'):$ingrediente->fat_saturadas }}"
                         >
                         </x-form.input-text>
@@ -101,6 +104,7 @@
                             nombre="fat_poliinsaturadas"
                             titulo="Grasas poliinsaturadas"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fat_poliinsaturadas')?old('fat_poliinsaturadas'):$ingrediente->fat_poliinsaturadas }}"
                         >
                         </x-form.input-text>
@@ -109,6 +113,7 @@
                             nombre="fat_monoinsaturadas"
                             titulo="Grasas monoisaturadas"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fat_monoinsaturadas')?old('fat_monoinsaturadas'):$ingrediente->fat_monoinsaturadas }}"
                         >
                         </x-form.input-text>
@@ -117,6 +122,7 @@
                             nombre="fat_trans"
                             titulo="Grasas Trans"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fat_trans')?old('fat_trans'):$ingrediente->fat_trans }}"
                         >
                         </x-form.input-text>
@@ -125,6 +131,7 @@
                             nombre="colesterol"
                             titulo="colesterol"
                             tipo="number"
+                            min="0"
                             valor="{{ old('colesterol')?old('colesterol'):$ingrediente->colesterol }}"
                         >
                         </x-form.input-text>
@@ -135,6 +142,7 @@
                             nombre="sodio"
                             titulo="sodio"
                             tipo="number"
+                            min="0"
                             valor="{{ old('sodio')?old('sodio'):$ingrediente->sodio }}"
                         >
                         </x-form.input-text>
@@ -143,6 +151,7 @@
                             nombre="potasio"
                             titulo="potasio"
                             tipo="number"
+                            min="0"
                             valor="{{ old('potasio')?old('potasio'):$ingrediente->potasio }}"
                         >
                         </x-form.input-text>
@@ -151,6 +160,7 @@
                             nombre="fibra"
                             titulo="fibra"
                             tipo="number"
+                            min="0"
                             valor="{{ old('fibra')?old('fibra'):$ingrediente->fibra }}"
                         >
                         </x-form.input-text>
@@ -159,6 +169,7 @@
                             nombre="carb_total"
                             titulo="Carbohidratos (Total)"
                             tipo="number"
+                            min="0"
                             valor="{{ old('carb_total')?old('carb_total'):$ingrediente->carb_total }}"
                         >
                         </x-form.input-text>
@@ -167,6 +178,7 @@
                             nombre="carb_azucar"
                             titulo="Azúcar"
                             tipo="number"
+                            min="0"
                             valor="{{ old('carb_azucar')?old('carb_azucar'):$ingrediente->carb_azucar }}"
                         >
                         </x-form.input-text>
@@ -175,6 +187,7 @@
                             nombre="proteina"
                             titulo="proteina"
                             tipo="number"
+                            min="0"
                             valor="{{ old('proteina')?old('proteina'):$ingrediente->proteina }}"
                         >
                         </x-form.input-text>

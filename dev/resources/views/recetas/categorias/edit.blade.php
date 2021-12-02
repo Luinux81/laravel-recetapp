@@ -6,57 +6,45 @@
     </x-slot>
 
     <x-content>
-        Formulario para editar categoria
+
         <form class="flex flex-col" method="post" action="{{ route('recetas.categoria.update',['categoria'=>$categoria->id])}}" >
             @csrf
             @method('PUT')
             
-            <div class="flex flex-col">
-                <label for="nombre">
-                    Nombre @error('nombre')<span class="text-red-500">*</span>@enderror
-                </label>
-                <input 
-                    id="nombre" 
-                    name="nombre" 
-                    type="text" 
-                    value="{{old('nombre')?old('nombre'):$categoria->nombre}}" 
-                />
-                @error('cat_nombre')
-                    <div class="text-red-500" >{{ $message }}</div>
-                @enderror
-            </div>
+            <x-form.input-text 
+                nombre="nombre" 
+                titulo="Nombre" 
+                tipo="text"
+                valor="{{ old('nombre')?old('nombre'):$categoria->nombre }}"
+            >
+            </x-form.input-text>
 
-            <div class="flex flex-col">
-                <label for="descripcion">Descripcion</label>
-                <input 
-                    id="descripcion" 
-                    name="descripcion" 
-                    type="text" 
-                    value="{{ old('descripcion')?old('descripcion'):$categoria->descripcion }}"
-                />
-            </div>
+            <x-form.input-text 
+                nombre="descripcion" 
+                titulo="Descripcion" 
+                tipo="text"
+                valor="{{ old('descripcion')?old('descripcion'):$categoria->descripcion }}"
+            >
+            </x-form.input-text>
 
-            <div class="flex flex-col">
-                <label for="cat_parent">Categoria Superior</label>
-                <select id="cat_parent" name="cat_parent">
-                    <option value="" selected>Ninguna</option>
-                    @foreach (\App\Models\CategoriaReceta::all() as $cat)
-                        @if ($cat->id != $categoria->id)
-                            <option 
-                                value="{{$cat->id}}" 
-                                @if ($cat->id == $categoria->catParent_id)
-                                    selected 
-                                @endif
-                                @if ($categoriasHija->contains($cat->id))
-                                    disabled
-                                @endif                                
-                            >
-                                {{$cat->nombre}}
-                            </option>    
-                        @endif                        
-                    @endforeach                    
-                </select>
-            </div>
+            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
+                <option value="" selected>Ninguna</option>
+                @foreach (\App\Models\CategoriaReceta::all() as $cat)
+                    @if ($cat->id != $categoria->id)
+                        <option 
+                            value="{{$cat->id}}" 
+                            @if ($cat->id == $categoria->catParent_id)
+                                selected 
+                            @endif
+                            @if ($categoriasHija->contains($cat->id))
+                                disabled
+                            @endif                                
+                        >
+                            {{$cat->nombre}}
+                        </option>    
+                    @endif                        
+                @endforeach   
+            </x-form.select>
 
             <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>

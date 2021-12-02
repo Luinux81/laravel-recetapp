@@ -45,6 +45,7 @@
                 nombre="calorias" 
                 titulo="calorias" 
                 tipo="number"
+                min="0"
                 valor="{{ old('calorias')?old('calorias'):$receta->calorias }}"
             >
             </x-form.input-text>
@@ -53,6 +54,7 @@
                 nombre="raciones" 
                 titulo="raciones" 
                 tipo="number"
+                min="0"
                 valor="{{ old('raciones')?old('raciones'):$receta->raciones }}"
             >
             </x-form.input-text>

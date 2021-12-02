@@ -8,12 +8,10 @@
         @csrf
         @method('PUT')
 
-            <div class="flex flex-col">
-                <label for="nombre">Ingrediente</label>
-                <select id="nombre" name="nombre" disabled>                
-                    <option value="{{ $ingrediente->id }}">{{$ingrediente->nombre}}</option>
-                </select>
-            </div>
+        <x-form.select nombre="ingrediente" titulo="Ingrediente" disabled>
+            <option value="{{ $ingrediente->id }}">{{$ingrediente->nombre}}</option>
+        </x-form.select>
+
 
         <input type="hidden" name="ingrediente" value="{{ $ingrediente->id }}" />
 

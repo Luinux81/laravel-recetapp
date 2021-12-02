@@ -7,30 +7,16 @@
     <x-content>
         <form class="flex flex-col" method="post" action="{{ route('recetas.categoria.store')}}" >
             @csrf
-            <div class="flex flex-col">
-                <label for="nombre">
-                    Nombre @error('nombre')<span class="text-red-500">*</span>@enderror
-                </label>
-                <input id="nombre" name="nombre" type="text" />
-                @error('nombre')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
+            <x-form.input-text nombre="nombre" titulo="Nombre" tipo="text">  </x-form.input-text>
+            
+            <x-form.input-text nombre="descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
-            <div class="flex flex-col">
-                <label for="descripcion">Descripcion</label>
-                <input id="descripcion" name="descripcion" type="text" />
-            </div>
-
-            <div class="flex flex-col">
-                <label for="cat_parent">Categoria Superior</label>
-                <select id="cat_parent" name="cat_parent">
+            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
                     <option value="" selected>Ninguna</option>
-                @foreach ($categorias as $cat)
-                    <option value="{{$cat->id}}">{{$cat->nombre}}</option>
-                @endforeach
-                </select>
-            </div>
+                    @foreach ($categorias as $cat)
+                        <option value="{{$cat->id}}">{{$cat->nombre}}</option>
+                    @endforeach
+            </x-form.select>
 
             <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>

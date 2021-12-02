@@ -6,33 +6,20 @@
     </x-slot>
 
     <x-content>
-        Formulario para crear nueva categoria
+        
         <form class="flex flex-col" method="post" action="{{ route('ingredientes.categoria.store')}}" >
             @csrf
-            <div class="flex flex-col">
-                <label for="cat_nombre">
-                    Nombre @error('cat_nombre')<span class="text-red-500">*</span>@enderror
-                </label>
-                <input id="cat_nombre" name="cat_nombre" type="text" />
-                @error('cat_nombre')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
 
-            <div class="flex flex-col">
-                <label for="cat_descripcion">Descripcion</label>
-                <input id="cat_descripcion" name="cat_descripcion" type="text" />
-            </div>
+            <x-form.input-text nombre="cat_nombre" titulo="Nombre" tipo="text">  </x-form.input-text>
+            
+            <x-form.input-text nombre="cat_descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
-            <div class="flex flex-col">
-                <label for="cat_parent">Categoria Superior</label>
-                <select id="cat_parent" name="cat_parent">
+            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
                     <option value="" selected>Ninguna</option>
-                @foreach ($categorias as $cat)
-                    <option value="{{$cat->id}}">{{$cat->nombre}}</option>
-                @endforeach
-                </select>
-            </div>
+                    @foreach ($categorias as $cat)
+                        <option value="{{$cat->id}}">{{$cat->nombre}}</option>
+                    @endforeach
+            </x-form.select>
 
             <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>

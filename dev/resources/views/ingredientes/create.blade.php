@@ -31,7 +31,7 @@
                     
                     <div class="flex flex-col">
                         <label for="categoria">Categoria</label>
-                        <select id="categoria" name="categoria" class="bg-gray-200 rounded-md mb-3">
+                        <select id="categoria" name="categoria" class="form-select bg-gray-200 rounded-md mb-3">
                             <option value="" @if(empty(old('categoria'))) selected @endif>Ninguna</option>
                         @foreach ($categorias as $cat)
                             <option value="{{$cat->id}}" @if(old('categoria') == $cat->id) selected @endif>{{$cat->nombre}}</option>
@@ -47,33 +47,33 @@
                 <div class="form-ingrediente__info">
                     <h2>Información nutricional (100gr)</h2>
                     <div class="form-ingrediente__info-col1">
-                        <x-form.input-text nombre="calorias" titulo="calorias" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="calorias" titulo="calorias" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fat_total" titulo="Grasas (Total)" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fat_total" titulo="Grasas (Total)" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fat_saturadas" titulo="Grasas saturadas" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fat_saturadas" titulo="Grasas saturadas" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fat_poliinsaturadas" titulo="Grasas poliinsaturadas" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fat_poliinsaturadas" titulo="Grasas poliinsaturadas" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fat_monoinsaturadas" titulo="Grasas monoisaturadas" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fat_monoinsaturadas" titulo="Grasas monoisaturadas" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fat_trans" titulo="Grasas Trans" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fat_trans" titulo="Grasas Trans" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="colesterol" titulo="colesterol" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="colesterol" titulo="colesterol" tipo="number" min="0">  </x-form.input-text>
                     </div>
                     
                     <div class="form-ingrediente__info-col2">
-                        <x-form.input-text nombre="sodio" titulo="sodio" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="sodio" titulo="sodio" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="potasio" titulo="potasio" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="potasio" titulo="potasio" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="fibra" titulo="fibra" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="fibra" titulo="fibra" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="carb_total" titulo="Carbohidratos (Total)" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="carb_total" titulo="Carbohidratos (Total)" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="carb_azucar" titulo="Azúcar" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="carb_azucar" titulo="Azúcar" tipo="number" min="0">  </x-form.input-text>
                         
-                        <x-form.input-text nombre="proteina" titulo="proteina" tipo="number">  </x-form.input-text>
+                        <x-form.input-text nombre="proteina" titulo="proteina" tipo="number" min="0">  </x-form.input-text>
                     </div>
                 </div>
 

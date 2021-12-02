@@ -6,7 +6,7 @@
 <x-content>
     <form method="post" action="{{ route('recetas.ingrediente.store',['receta'=>$receta->id]) }}" class="flex flex-col">
         @csrf
-        <div class="flex flex-col">
+        {{-- <div class="flex flex-col">
             <label for="ingrediente">Ingrediente</label>
             <select id="ingrediente" name="ingrediente">                                
                 @foreach ($ingredientes as $i)
@@ -20,7 +20,19 @@
                     </option>
                 @endforeach
             </select>
-        </div>
+        </div> --}}
+        <x-form.select nombre="ingrediente" titulo="Ingrediente">
+            @foreach ($ingredientes as $i)
+                <option 
+                    value="{{$i->id}}"
+                    @if($receta->ingredientes()->find($i))
+                    disabled
+                    @endif
+                >
+                    {{$i->nombre}}
+                </option>
+            @endforeach
+        </x-form.select>
 
         <a href="{{ route('ingredientes.create') }}" class="boton boton--gris">Nuevo ingrediente</a>
         
