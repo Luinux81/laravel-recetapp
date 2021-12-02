@@ -103,5 +103,34 @@
                 }
             }
         </script>
+
+        <script>
+            function confirmarBorrado(event)
+            {
+                event.preventDefault();
+
+                if(typeof window.Swal !== "undefined"){
+                    window.Swal.fire({
+                        title: 'Confirmar borrado',
+                        text: '¿Estás seguro/a de borrar el registro?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText:'Si',
+                        confirmButtonAriaLabel: 'Yes',
+                        cancelButtonText:'No',
+                        cancelButtonAriaLabel: 'No'
+                    }).then(function(value){                    
+                        if(value.isConfirmed){
+                            event.target.parentNode.submit();
+                        }                    
+                    });
+                }
+                else{
+                    if(confirm("Seguro que quieres borrar el registro?")){
+                        event.target.parentNode.submit();
+                    }
+                }      
+            }
+        </script>
     </body>
 </html>

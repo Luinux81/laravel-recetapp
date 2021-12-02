@@ -85,8 +85,8 @@ return [
     |
     */
 
-    'js_framework' => 'alpinejs',
-    //'js_framework' => null, // If you already have Alpine included in your project
+    //'js_framework' => 'alpinejs',
+    'js_framework' => null, // If you already have Alpine included in your project
 
     /*
     |--------------------------------------------------------------------------
