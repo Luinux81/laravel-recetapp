@@ -13,6 +13,19 @@ class PasoRecetaSeeder extends Seeder
      * @return void
      */
     public function run()
+    {   
+        $this->seedAutoFile();
+    }
+
+    private function seedAutoFile(){
+        $path = "storage/seeds/pasos_receta.sql";
+        
+        DB::unprepared(file_get_contents($path));
+
+        $this->command->info('PasosRecetas table seeded!');
+    }
+
+    public function seedManual()
     {
         DB::table("pasos_receta")->insert([
             "receta_id" => 1,

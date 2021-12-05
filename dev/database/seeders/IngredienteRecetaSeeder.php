@@ -15,18 +15,14 @@ class IngredienteRecetaSeeder extends Seeder
      */
     public function run()
     {   
-        // DB::table("ingrediente_receta")->insert([
-        //     "ingrediente_id" => 1,
-        //     "receta_id" => 1,
-        //     "cantidad" => 250,
-        //     "unidad_medida" => "gr",
-        // ]);
+        $this->seedAutoFile();
+    }
 
-        // DB::table("ingrediente_receta")->insert([
-        //     "ingrediente_id" => 2,
-        //     "receta_id" => 1,
-        //     "cantidad" => 40,
-        //     "unidad_medida" => "gr",
-        // ]);
+    private function seedAutoFile(){
+        $path = "storage/seeds/ingrediente_receta.sql";
+        
+        DB::unprepared(file_get_contents($path));
+
+        $this->command->info('IngredientesRecetas table seeded!');
     }
 }
