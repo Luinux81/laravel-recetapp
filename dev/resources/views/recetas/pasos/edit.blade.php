@@ -4,17 +4,28 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Editar paso en receta {{ $receta->nombre }}
         </h2>
-        <a href="{{ route('recetas.edit',['receta'=>$receta->id])}}" class="boton boton--rojo">Volver</a>
+
+        <div class="flex gap-5">
+            <button class="boton boton--azul" onclick="document.getElementById('update_form_paso').submit();">Guardar</button>
+            <a href="{{ route('recetas.edit',['receta'=>$receta->id])}}" class="boton boton--rojo">Cancelar</a>
+        </div>
     </div>
 </x-slot>
 <x-content>
-    <form method="post" action="{{ route('recetas.paso.update',['receta'=>$receta->id, 'paso'=>$paso->id]) }}" class="flex flex-col">
+    <form 
+        id="update_form_paso"
+        method="post" 
+        action="{{ route('recetas.paso.update',['receta'=>$receta->id, 'paso'=>$paso->id]) }}" 
+        class="flex flex-col"
+    >
         @csrf
         @method('PUT')
         <x-form.input-text
             nombre="orden" 
             titulo="orden" 
             tipo="number" 
+            min="1"
+            max="{{ $receta->pasos()->count() }}"
             valor="{{ old('orden') ? old('orden') : $paso->orden }}"
         >
         </x-form.input-text>
@@ -25,9 +36,7 @@
             tipo="text" 
             valor="{{ old('texto') ? old('texto') : $paso->texto }}"
         >
-        </x-form.input-text>
-
-        <button type="submit" class="boton boton--azul">Añadir</button>
+        </x-form.input-text>        
     </form>
 
     <div>
@@ -53,5 +62,10 @@
         </x-form.image-upload>
         <button type="submit" class="boton boton--azul">Añadir imagen</button>
     </form>
+
+    <div class="flex justify-center gap-5 m-6">
+        <button class="boton boton--azul" onclick="document.getElementById('update_form_paso').submit();">Guardar</button>
+        <a href="{{ route('recetas.edit',['receta'=>$receta->id])}}" class="boton boton--rojo">Cancelar</a>
+    </div>
 </x-content>
 </x-app-layout>

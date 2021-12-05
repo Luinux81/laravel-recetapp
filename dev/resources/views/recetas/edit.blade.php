@@ -6,12 +6,20 @@
                 {{ __('Editar receta') }}
             </h2>
             <div class="flex gap-3">
-                <a href="{{ route('recetas.index') }}" class="boton boton--gris">Volver</a>
-                <form method="post" action="{{ route('recetas.destroy',['receta'=>$receta->id]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
-                </form>
+                <div class="flex flex-row justify-between gap-5">
+                    <button class="boton boton--azul" onclick="document.getElementById('update_form_receta').submit();">Guardar</button>
+                    
+                    <a href="{{ route('recetas.index') }}" class="boton boton--gris">Cancelar</a>
+                    
+                    <x-form.boton-post
+                        url="{{ route('recetas.destroy',['receta'=>$receta->id]) }}"
+                        metodo="post"
+                        onclick="confirmarBorrado(event)"
+                        class="boton boton--rojo"
+                    >
+                    Borrar
+                    </x-form.boton-post>
+                </div>
             </div>
         </div>
     </x-slot>
@@ -22,6 +30,7 @@
             action="{{ route('recetas.update', ['receta'=>$receta->id])}}" 
             class="flex flex-col"
             enctype="multipart/form-data"
+            id="update_form_receta"
         >
             @csrf
             @method('PUT')
@@ -95,7 +104,6 @@
 
             </x-form.image-upload>
 
-            <input class="boton boton--azul m-6" type="submit" value="Guardar"/>
         </form>
 
 
@@ -116,18 +124,22 @@
                             <td class="text-center">{{ $i->pivot->unidad_medida }}</td>
                             <td class="flex gap-3">
                                 <a href="{{ route('recetas.ingrediente.edit',['receta'=>$receta->id, 'ingrediente'=>$i->id])}}" class="boton boton--gris">Editar</a>
-                                <form method="post" action="{{ route('recetas.ingrediente.destroy', ['receta'=>$receta->id, 'ingrediente'=>$i->id]) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="boton boton--rojo">Borrar</button>
-                                </form>
+
+                                <x-form.boton-post
+                                    url="{{ route('recetas.ingrediente.destroy', ['receta'=>$receta->id, 'ingrediente'=>$i->id]) }}"
+                                    metodo="DELETE"
+                                    class="boton boton--rojo"
+                                    onclick="confirmarBorrado(event)"
+                                >
+                                    Borrar
+                                </x-form.boton-post>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            <a href="{{ route('recetas.ingrediente.create',['receta'=>$receta->id]) }}" class="boton boton--gris my-3">Añadir</a>
+            <a href="{{ route('recetas.ingrediente.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
 
         </section>
 
@@ -141,17 +153,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($receta->pasos as $p)
+                    @foreach($receta->pasos()->get() as $p)
                         <tr>
                             <td class="text-center">{{ $p->orden }}</td>
                             <td>{{ $p->texto }}</td>                            
                             <td class="flex gap-3" style=>
                                 <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$p->id])}}" class="boton boton--gris">Editar</a>
-                                <form method="post" action="{{ route('recetas.paso.destroy', ['receta'=>$receta->id, 'paso'=>$p->id]) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="boton boton--rojo">Borrar</button>
-                                </form>
+                                <x-form.boton-post
+                                    url="{{ route('recetas.paso.destroy', ['receta'=>$receta->id, 'paso'=>$p->id]) }}"
+                                    metodo="DELETE"
+                                    class="boton boton--rojo"
+                                    onclick="confirmarBorrado(event)"    
+                                >
+                                    Borrar
+                                </x-form.boton-post>
                             </td>
                         </tr>
                     @endforeach
@@ -161,7 +176,14 @@
             <a href="{{ route('recetas.paso.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
 
         </section>
+
+        <div class="flex justify-center gap-5 m-6">
+            <button class="boton boton--azul" onclick="document.getElementById('update_form_receta').submit();">Guardar</button>
+            <a href="{{ route('recetas.index') }}" class="boton boton--rojo">Volver</a>
+        </div>
+
     </x-content>
+
     @push('custom-scripts')
         <script>
             function confirmarBorrado(event)

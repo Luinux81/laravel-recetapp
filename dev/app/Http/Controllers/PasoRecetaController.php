@@ -21,11 +21,19 @@ class PasoRecetaController extends Controller
     public function store(Receta $receta, Request $request){
         $data = $this->validate($request, $this->rules);
 
+        $pasosParaOrdenar = $receta->pasos()->where('orden','>=',$data['orden'])->get();
+
         $paso = PasoReceta::create([
             'receta_id' => $receta->id,
             'orden' => $data['orden'],
             'texto' => $data['texto'],
         ]);
+
+        foreach($pasosParaOrdenar as $p){
+            $p->update([
+                'orden' => intval($p->orden) + 1,
+            ]);
+        }
 
         return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
     }
@@ -43,10 +51,23 @@ class PasoRecetaController extends Controller
     public function update(Receta $receta, PasoReceta $paso, Request $request){
         $data = $this->validate($request, $this->rules);
 
+        $pasosParaOrdenar = $receta->pasos()->where('orden','>=',$data['orden'])->orderBy('orden')->get();
+
         $receta->pasos()->find($paso->id)->update([
             'orden' => $data['orden'],
             'texto' => $data['texto'],
         ]);
+
+        $i = 1;
+
+        foreach($pasosParaOrdenar as $p){
+            if($p->id != $paso->id){
+                $p->update([
+                    'orden' => intval($data['orden']) + $i,
+                ]);
+                $i++;
+            }
+        }
 
         return redirect()->route('recetas.edit', compact('receta'));
     }
@@ -54,11 +75,24 @@ class PasoRecetaController extends Controller
     public function destroy(Receta $receta, PasoReceta $paso){
         $aux = $receta->pasos()->find($paso->id);
 
+        $pasosParaOrdenar = $receta
+                                ->pasos()
+                                ->where('orden',">",$paso->orden)
+                                ->orderBy('orden')
+                                ->get();
+
+        
         foreach ($paso->assets as $asset){            
             $asset->borradoCompleto();
         }
         
         $aux->delete();
+
+        foreach($pasosParaOrdenar as $p){
+            $p->update([
+                'orden' => intval($p->orden) - 1,
+            ]);
+        }
 
         return redirect()->route('recetas.edit', compact('receta'));
     }

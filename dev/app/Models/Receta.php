@@ -23,6 +23,6 @@ class Receta extends Model
     }
 
     public function pasos(){
-        return $this->hasMany(PasoReceta::class);
+        return $this->hasMany(PasoReceta::class)->orderBy('orden');
     }
 }
