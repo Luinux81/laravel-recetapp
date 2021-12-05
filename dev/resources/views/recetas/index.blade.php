@@ -14,8 +14,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripcion</th>
-                    <th>Calorias</th>
-                    <th>Imagen</th>
+                    <th>Calorias</th>                    
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -25,16 +24,27 @@
                     <td>{{$r->nombre}}</td>
                     <td>{{$r->descripcion}}</td>
                     <td>{{$r->calorias}}</td>
-                    <td>{{$r->imagen}}</td>
+                    
                     <td class="p-3 flex flex-row flex-between gap-2">
+                        @if(/*auth()->user()->can('seeder_save')*/ false)                            
+                            <x-form.boton-post
+                                url="{{ route('admin.seed.receta',['receta'=>$r->id]) }}"
+                                class="boton boton--azul"
+                                metodo="post"
+                            >
+                                Seeder
+                            </x-form.boton-post>
+                        @endif
                         <a href="{{ route('recetas.show', ['receta'=>$r->id]) }}" class="boton boton--gris">Ver</a>
                         <a href="{{ route('recetas.edit', ['receta'=>$r->id]) }}" class="boton boton--gris">Editar</a>
-                        <form method="post" action="{{ route('recetas.destroy',['receta'=>$r->id]) }}">
-                            @csrf
-                            @method('DELETE')
-                            {{-- <input type="submit" class="boton boton--rojo" value="Borrar" onsumbit="confirmarBorrado(event)" /> --}}
-                            <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
-                        </form>
+                        <x-form.boton-post
+                            url="{{ route('recetas.destroy',['receta'=>$r->id]) }}"
+                            metodo="DELETE"
+                            class="boton boton--rojo"
+                            onclick="confirmarBorrado(event)"
+                        >
+                            Borrar
+                        </x-form.boton-post>
                     </td>
                 </tr>
             @endforeach

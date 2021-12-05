@@ -123,4 +123,10 @@ class RecetaController extends Controller
 
         return redirect()->route('recetas.index');
     }
+
+    // public function saveSeed(Request $request, Receta $receta){
+    //     $sqlFile = file_get_contents('storage/seeds/ingrediente_receta.sql');
+
+    //     dd($sqlFile);
+    // }
 }
