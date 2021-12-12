@@ -82,8 +82,11 @@ class User extends Authenticatable
     }
 
     public function getAllIngredientesAccesibles(){
+        /** @var User */
+        $user = auth()->user();
+        
         $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
-        $ingredientesPrivados = auth()->user()->ingredientes()->get();
+        $ingredientesPrivados = $user->ingredientes()->get();
 
         $ingredientes = $ingredientesPublicos->merge($ingredientesPrivados)->sortBy('nombre');
 
