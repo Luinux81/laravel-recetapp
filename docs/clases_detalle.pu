@@ -1,10 +1,10 @@
-@startuml
+@startuml "Clases detalle"
 
 class Ingrediente{
     unsignedBigInteger id    
     unsignedBigInteger user_id
     unsignedBigInteger cat_id
-
+    ....
     String nombre
     String descripcion
     String marca 
@@ -27,47 +27,74 @@ class Ingrediente{
     Decimal proteina
     ____
     User user()
-    Integer getCalorias()
+    EloquentBelongsToMany<Receta,cantidad,unidad_medida> recetas()
     CategoriaIngrediente categoria()
 }
 
 class CategoriaIngrediente{
+    unsignedBigInteger id
+    unsignedBigInteger user_id
+    unsignedBigInteger catParent_id
+    ....
     String nombre
     String descripcion
-    int user_id
-    int catParent_id
-
+    ----
     User user()
+    EloquentHasMany<Ingrediente> ingredientes()
+    Collection<CategoriaIngrediente> categoriasHija($recursivo)
     CategoriaIngrediente categoriaPadre()
-    CategoriaIngrediente categoriaRaiz()
+    Boolean categoriaRaiz()
 }
 
 class Receta{
+    unsignedBigInteger id 
+    unsignedBigInteger user_id
+    ....
     String nombre
     String descripcion
     Integer calorias
     CategoriaReceta categoria
     String imagen
-
+    ----
     User user()
-    Ingrediente ingredientes()
-    PasoReceta pasos()
+    EloquentHasMany<Ingrediente> ingredientes()
+    EloquentHasMany<PasoReceta> pasos()
 }
 
 class CategoriaReceta{
+    unsignedBigInteger id
+    unsignedBigInteger user_id
+    unsignedBigInteger catParent_id
+    ....
     String nombre
     String descripcion
-    int user_id
-    int catParent_id
-
+    ----
     User user()
     CategoriaReceta categoriaPadre()
-    CategoriaReceta categoriaRaiz()
+    Collection<CategoriaReceta> categoriasHija()
 }
 
 class PasoReceta{
-    Integer receta_id
+    unsignedBigInteger id
+    unsignedBigInteger receta_id
+    ....
     Integer orden
     String texto
+    ----
+    Receta receta()
+    EloquentHasMany<Asset> assets()
+    void borradoCompleto()
+}
+
+class Asset{
+    unsignedBigInteger id
+    unsignedBigInteger paso_id
+    ....
+    String tipo
+    String ruta
+    Boolean remoto
+    ----
+    PasoReceta paso()
+    void borradoCompleto()
 }
 @enduml

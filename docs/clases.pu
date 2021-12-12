@@ -1,8 +1,8 @@
-@startuml
+@startuml Clases
 
 class User{}
 
-class SocialIdentity{}
+' class SocialIdentity{}
 
 class Ingrediente{}
 
@@ -10,8 +10,10 @@ class CategoriaIngrediente{}
 
 class Receta{}
 
-class Componente{}
+class CategoriaReceta{}
 
-class Accion{}
+class PasoReceta{}
+
+class Asset{}
 
 @enduml
