@@ -29,7 +29,8 @@ INSERT INTO `recetas` (`id`, `user_id`, `cat_id`, `nombre`, `descripcion`, `raci
 (1, 1, NULL, 'Arroz blanco cocido', 'Arroz blanco cocido.', 4, '20 min', NULL, 500, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-05 10:46:41'),
 (2, 1, NULL, 'Gazpacho (Thermomix)', 'Gazpacho clásico andaluz con Thermomix', 6, '15 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-05 11:02:29', '2021-12-05 11:02:29'),
 (3, 1, 1, 'Salmorejo (Thermomix)', 'Salmorejo clásico andaluz con Thermomix', 6, '15 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-05 11:19:09', '2021-12-05 11:19:09'),
-(4, 1, NULL, 'Tortilla de patatas', 'Con cebolla, que está más rica. Al microondas si tienes los recipientes adecuados.', 4, '25 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-05 11:30:28', '2021-12-05 11:42:31');
+(4,NULL,NULL,'Tortilla de patatas','Con cebolla, que está más rica. Al microondas si tienes los recipientes adecuados.',4,'25 min', '', 300,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2021-12-05 12:30:28','2021-12-05 12:42:31'),
+(5,NULL,NULL,'Lentejas con verduras y pollo','Además de los ingredientes hay que añadir 1 hoja de laurel, comino al gusto y avecrem (opcional).',4,'30 min', '', 300,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2021-12-11 23:08:32','2021-12-11 23:52:36');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

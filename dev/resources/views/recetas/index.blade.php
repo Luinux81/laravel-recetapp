@@ -26,7 +26,7 @@
                     <td>{{$r->calorias}}</td>
                     
                     <td class="p-3 flex flex-row flex-between gap-2">
-                        @if(/*auth()->user()->can('seeder_save')*/ false)                            
+                        @if(auth()->user()->can('seeder_save'))                            
                             <x-form.boton-post
                                 url="{{ route('admin.seed.receta',['receta'=>$r->id]) }}"
                                 class="boton boton--azul"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Receta;
+use App\Helpers\Seeder;
 use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -124,9 +125,13 @@ class RecetaController extends Controller
         return redirect()->route('recetas.index');
     }
 
-    // public function saveSeed(Request $request, Receta $receta){
-    //     $sqlFile = file_get_contents('storage/seeds/ingrediente_receta.sql');
+    public function saveSeed(Request $request, Receta $receta){        
+        Seeder::actualizaSeedFileRecetas($receta);
+        Seeder::actualizaSeederFileIngredientesReceta($receta);
+        Seeder::actualizaSeederFilePasosReceta($receta);
+        
+        session()->flash('notificacion',(object)['tipo'=>"info",'mensaje'=>"Receta añadida a seeder correctamente"]);
 
-    //     dd($sqlFile);
-    // }
+        return redirect()->route('recetas.index');
+    }
 }

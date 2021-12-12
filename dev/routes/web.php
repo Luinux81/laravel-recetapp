@@ -27,11 +27,11 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');
 
-    // Route::prefix('admin')->name('admin.')->group(function(){
-    //     Route::prefix('seed')->name('seed.')->group(function(){
-    //         Route::post('receta/{receta}',[RecetaController::class, 'saveSeed'])->name('receta');
-    //     });
-    // });
+    Route::prefix('admin')->name('admin.')->group(function(){
+        Route::prefix('seed')->name('seed.')->group(function(){
+            Route::post('receta/{receta}',[RecetaController::class, 'saveSeed'])->name('receta');
+        });
+    });
     
     Route::prefix('ingredientes')->name('ingredientes.')->group(function(){
         Route::resource('categoria', CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);

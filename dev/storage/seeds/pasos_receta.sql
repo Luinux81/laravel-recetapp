@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-12-2021 a las 22:58:24
+-- Tiempo de generación: 12-12-2021 a las 02:56:16
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.12
 
@@ -45,7 +45,12 @@ INSERT INTO `pasos_receta` (`id`, `receta_id`, `orden`, `texto`, `media_assets`)
 (20, 4, 4, 'Removemos todo y añadimos un poco más de aceite si hace falta. Repetimos el paso anterior hasta completar 15 minutos en total.', NULL),
 (21, 4, 5, 'Dejamos reposar y enfriar unos minutos las patatas, mientras tanto batimos los huevos en una fuente. Después mezclamos y añadimos una pizca de sal.', NULL),
 (22, 4, 6, 'Calentamos aceite en una sartén a fuego medio-alto y echamos la mezcla. Movemos la sartén para que la mezcla cree una superficie plana.', NULL),
-(23, 4, 7, 'Cocinar de 7-10 minutos y voltear, usando plato o sartén doble, cocinar otros 10 minutos.', NULL);
+(23, 4, 7, 'Cocinar de 7-10 minutos y voltear, usando plato o sartén doble, cocinar otros 10 minutos.', NULL),
+(24, 5, 1, 'Poner las lentejas en remojo 24 horas (2 horas si son lentejas pardinas)', NULL),
+(25, 5, 2, 'Pelar y trocear todo.', NULL),
+(26, 5, 3, 'Usaremos una olla rápida. Ponemos las lentejas al fondo, con las verduras y el pollo encima.', NULL),
+(27, 5, 4, 'Poner agua hasta casi cubrir todo. Añadimos el aceite, la sal y las especias.', NULL),
+(28, 5, 5, 'Ponemos la olla a fuego fuerte hasta que suba la presión. Mantenemos a fuego mínimo 25 minutos.', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
