@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Receta;
 use App\Helpers\Seeder;
 use App\Models\Ingrediente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -28,9 +29,14 @@ class RecetaController extends Controller
         'unidad_medida' => 'required',
     ];
 
-    public function index(){
-        $recetas = Auth::user()->recetas()->get();
+    public function index(){        
+        /** @var User */
+        $user = Auth::user();
+        $recetas = $user->recetas()->get();
+        $recetas_publicas = Receta::where('user_id',NULL)->get();
 
+        $recetas = $recetas->merge($recetas_publicas)->sortBy('nombre');
+        
         return view('recetas.index',compact('recetas'));
     }
 
@@ -39,7 +45,9 @@ class RecetaController extends Controller
     }
 
     public function create(){
-        $categorias = Auth::user()->categoriasReceta()->get();
+        /** @var User */
+        $user = Auth::user();
+        $categorias = $user->categoriasReceta()->get();
 
         return view('recetas.create',compact('categorias'));
     }
@@ -73,7 +81,9 @@ class RecetaController extends Controller
     }
 
     public function edit(Receta $receta){
-        $categorias = Auth::user()->categoriasReceta()->get();
+        /** @var User */
+        $user = Auth::user();
+        $categorias = $user->categoriasReceta()->get();
 
         return view('recetas.edit',compact(['receta','categorias']));
     }
