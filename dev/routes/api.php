@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RecetaController;
 use App\Http\Controllers\Api\PasoRecetaController;
 use App\Http\Controllers\Api\IngredienteController;
 use App\Http\Controllers\Api\IngredienteRecetaController;
@@ -30,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::prefix("v1")->name("v1.")->group(function(){
         Route::apiResource("ingredientes",IngredienteController::class);
+        Route::apiResource("recetas",RecetaController::class);
 
         Route::prefix("recetas")->name("recetas.")->group(function(){
             Route::group(['prefix'=>'{receta}'],function(){
