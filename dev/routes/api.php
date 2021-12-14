@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AssetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -47,6 +48,13 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
                     });
 
                     Route::group(['prefix'=>'{receta}'],function(){
+                        Route::prefix("pasos/{paso}")
+                                ->name('pasos.')
+                                ->group(function(){
+                                    Route::apiResource("assets",AssetController::class)->only(['store','destroy']);
+                                });
+
+
                         Route::apiResource("pasos",PasoRecetaController::class);
                         Route::apiResource("ingredientes",IngredienteRecetaController::class);
                     });            
