@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaIngredienteController;
+use App\Http\Controllers\Api\CategoriaRecetaController;
 use App\Http\Controllers\Api\RecetaController;
 use App\Http\Controllers\Api\PasoRecetaController;
 use App\Http\Controllers\Api\IngredienteController;
@@ -21,10 +22,6 @@ use App\Http\Controllers\Api\IngredienteRecetaController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
 
@@ -33,21 +30,30 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::prefix("v1")->name("v1.")->group(function(){        
         
-        Route::prefix("ingredientes")->name("ingredientes.")->group(function(){
-            Route::apiResource("categorias",CategoriaIngredienteController::class);
-        });
+        Route::prefix("ingredientes")
+                ->name("ingredientes.")
+                ->group(function(){
+                    Route::apiResource("categorias",CategoriaIngredienteController::class);
+                });
 
-        Route::apiResource("ingredientes",IngredienteController::class);
+        Route::apiResource("ingredientes",IngredienteController::class);        
+
+
+        Route::prefix("recetas")
+                ->name("recetas.")
+                ->group(function(){
+                    Route::group([], function(){
+                        Route::apiResource("categorias",CategoriaRecetaController::class);
+                    });
+
+                    Route::group(['prefix'=>'{receta}'],function(){
+                        Route::apiResource("pasos",PasoRecetaController::class);
+                        Route::apiResource("ingredientes",IngredienteRecetaController::class);
+                    });            
+
+                });
+
         Route::apiResource("recetas",RecetaController::class);
-
-        Route::prefix("recetas")->name("recetas.")->group(function(){
-            
-            Route::group(['prefix'=>'{receta}'],function(){
-                Route::apiResource("pasos",PasoRecetaController::class);
-                Route::apiResource("ingredientes",IngredienteRecetaController::class);
-            });
-            
-        });
     });
     
 });
