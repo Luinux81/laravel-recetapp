@@ -3,10 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoriaIngredienteController;
 use App\Http\Controllers\Api\RecetaController;
 use App\Http\Controllers\Api\PasoRecetaController;
 use App\Http\Controllers\Api\IngredienteController;
 use App\Http\Controllers\Api\IngredienteRecetaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,11 +31,17 @@ Route::post('/login',[AuthController::class, 'login']);
 Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('/logout',[AuthController::class, 'logout']);
 
-    Route::prefix("v1")->name("v1.")->group(function(){
+    Route::prefix("v1")->name("v1.")->group(function(){        
+        
+        Route::prefix("ingredientes")->name("ingredientes.")->group(function(){
+            Route::apiResource("categorias",CategoriaIngredienteController::class);
+        });
+
         Route::apiResource("ingredientes",IngredienteController::class);
         Route::apiResource("recetas",RecetaController::class);
 
         Route::prefix("recetas")->name("recetas.")->group(function(){
+            
             Route::group(['prefix'=>'{receta}'],function(){
                 Route::apiResource("pasos",PasoRecetaController::class);
                 Route::apiResource("ingredientes",IngredienteRecetaController::class);
