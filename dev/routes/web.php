@@ -44,13 +44,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
         Route::group(['prefix'=>"{receta}"], function(){
             Route::resource('ingrediente', IngredienteRecetaController::class)->except(['index','show']);
+            Route::resource('paso', PasoRecetaController::class)->except(['index','show']);
         });
     });
     
 
     Route::resource('recetas', RecetaController::class);
-    
-    Route::resource('recetas.paso', PasoRecetaController::class);
 
     Route::post('recetas/{receta}/paso/{paso}/asset', [AssetController::class, 'store'])->name('recetas.paso.asset.store');
     Route::delete('recetas/{receta}/paso/{paso}/asset/{asset}', [AssetController::class, 'destroy'])->name('recetas.paso.asset.destroy');

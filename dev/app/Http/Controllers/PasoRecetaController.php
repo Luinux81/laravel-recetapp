@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Helpers\Tools;
 use App\Models\Receta;
 use App\Models\PasoReceta;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PasoRecetaController extends Controller
 {
@@ -14,11 +15,55 @@ class PasoRecetaController extends Controller
         'texto' => 'required',
     ];
 
-    public function create(Receta $receta){
+    protected function index(Receta $receta){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != NULL){
+            if($receta->user_id != $user->id){
+                return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
+            }
+        }
+
+        return $receta->pasos()->get();
+    }
+
+
+    protected function show(Receta $receta, PasoReceta $paso){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != NULL){
+            if($receta->user_id != $user->id){
+                return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
+            }
+        }
+
+        return $receta->pasos()->where("id",$paso->id)->first();
+    }
+
+
+    protected function create(Receta $receta){
         return view('recetas.pasos.create', compact('receta'));
     }
 
-    public function store(Receta $receta, Request $request){
+
+    /**
+     * Guarda un nuevo PasoReceta a la receta especificada
+     *
+     * @param Receta $receta
+     * @param Request $request
+     * 
+     * @return \Illuminate\Http\Response|\App\Models\PasoReceta
+     */
+    protected function store(Receta $receta, Request $request){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != $user->id){
+            return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
+        }
+
         $max = $receta->pasos()->count() + 1;
         $this->rules['orden'] = $this->rules['orden'] . "|max:" . $max;
 
@@ -38,26 +83,51 @@ class PasoRecetaController extends Controller
             ]);
         }
 
+        return $paso;
         return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
     }
 
-    public function edit(Receta $receta, PasoReceta $paso){
-        $assets = $paso->assets()->get();
-        
-        foreach ($assets as $asset) {
-            $imagenes[$asset->id]= $asset->ruta;
+
+    /**
+     * Devuelve la vista para editar pasos de recetas
+     *
+     * @param Receta $receta
+     * @param PasoReceta $paso
+     * @return 
+     */
+    protected function edit(Receta $receta, PasoReceta $paso){
+        /** @var User */
+        $user = auth()->user();
+
+        if ($receta->user_id == NULL){
+            if($receta->user_id != $user->id){
+                return Tools::getResponse("error","No tiene pemiso para realizar esta acción",401);
+            }
         }
 
+        $assets = $paso->assets()->get();
+        
         return view('recetas.pasos.edit', compact(['receta','paso','assets']));
     }
 
-    public function update(Receta $receta, PasoReceta $paso, Request $request){
+
+    protected function update(Receta $receta, PasoReceta $paso, Request $request){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != $user->id){
+            return Tools::getResponse("error","No tiene permiso para realizar está acción", 401);
+        }
+
+        if($receta->pasos()->find($paso->id) == NULL){
+            return Tools::getResponse("error","El paso no pertenece a la receta", 200);
+        }
+
         $max = $receta->pasos()->count();
         $this->rules['orden'] = $this->rules['orden'] . "|max:" . $max;
 
         $data = $this->validate($request, $this->rules);
-
-        //$pasosParaOrdenar = $receta->pasos()->where('orden','>=',$data['orden'])->orderBy('orden')->get();
+        
         $pasos = $receta->pasos()->orderBy('orden');
         $pasosParaOrdenar = collect();
 
@@ -100,11 +170,22 @@ class PasoRecetaController extends Controller
             $p->update(['orden' => $newValue]);
         }
 
-        return redirect()->route('recetas.edit', compact('receta'));
+        return $paso;
+        // return redirect()->route('recetas.edit', compact('receta'));
     }
 
-    public function destroy(Receta $receta, PasoReceta $paso){
-        $aux = $receta->pasos()->find($paso->id);
+
+    protected function destroy(Receta $receta, PasoReceta $paso){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != $user->id){
+            return Tools::getResponse("error", "No tiene permiso para realizar esta acción", 401);
+        }
+
+        if($receta->id != $paso->receta_id){
+            return Tools::getResponse("error", "El paso no pertence a la receta", 401);
+        }
 
         $pasosParaOrdenar = $receta
                                 ->pasos()
@@ -117,7 +198,7 @@ class PasoRecetaController extends Controller
             $asset->borradoCompleto();
         }
         
-        $aux->delete();
+        $paso->delete();
 
         foreach($pasosParaOrdenar as $p){
             $p->update([
@@ -125,6 +206,8 @@ class PasoRecetaController extends Controller
             ]);
         }
 
-        return redirect()->route('recetas.edit', compact('receta'));
+        return Tools::getResponse("info","La acción se ha realizado correctamente",200);
+
+        //return redirect()->route('recetas.edit', compact('receta'));
     }
 }
