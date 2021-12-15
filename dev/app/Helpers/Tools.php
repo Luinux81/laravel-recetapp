@@ -2,11 +2,15 @@
 
 namespace App\Helpers;
 
-class Tool{
+class Tools{
 
     public static function notificaUIFlash(string $tipo, string $mensaje) : void
     {
         session()->flash('notificacion',(object)['tipo' => $tipo, 'mensaje' => $mensaje]);
     }
     
+
+    public static function getResponse(string $tipo, string $mensaje, int $codigo){
+        return response(["tipo"=>$tipo, "mensaje"=>$mensaje],$codigo);
+    }
 }
