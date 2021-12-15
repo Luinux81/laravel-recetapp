@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Helpers\Tool;
+use App\Helpers\Tools;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoriaRecetaBaseController;
 use App\Models\CategoriaReceta;
@@ -28,12 +28,12 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
 
         switch(get_class($respuesta)){
             case "Illuminate\Http\Response":                 
-                Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+                Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
                 $res = redirect()->route('recetas.categoria.create');
                 break;
 
             case "App\Models\CategoriaReceta":
-                Tool::notificaUIFlash("info", "Categoría creada con éxito");
+                Tools::notificaUIFlash("info", "Categoría creada con éxito");
 
             default:
                 $res = redirect()->route("recetas.categoria.index");
@@ -54,12 +54,12 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
 
         switch (get_class($respuesta)) {
             case "Illuminate\Http\Response":                                
-                Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+                Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
                 $res = redirect()->route('recetas.categoria.edit',['categoria'=>$categoria->id]);
                 break;                
 
             case "App\Models\CategoriaReceta":       
-                Tool::notificaUIFlash("info", "Categoría creada con éxito");
+                Tools::notificaUIFlash("info", "Categoría creada con éxito");
                 
             default:
                 $res = redirect()->route('recetas.categoria.index');                
@@ -72,7 +72,7 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
     {
         $respuesta = parent::destroy($categoria);
 
-        Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+        Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
 
         return redirect()->route('recetas.categoria.index'); 
     }

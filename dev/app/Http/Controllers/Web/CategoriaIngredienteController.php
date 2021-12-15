@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Helpers\Tool;
+use App\Helpers\Tools;
 use Illuminate\Http\Request;
 use App\Models\CategoriaIngrediente;
 use App\Http\Controllers\CategoriaIngredienteBaseController;
@@ -22,7 +22,7 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
 
         // switch ($respuesta) {
         //     case "Illuminate\Http\Response":
-        //         Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+        //         Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
 
         //         break;
             
@@ -47,12 +47,12 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
 
         switch (get_class($respuesta)) {
             case "Illuminate\Http\Response":
-                Tool::notificaUIFlash($respuesta->original['tipo'], $respuesta->original['mensaje']);
+                Tools::notificaUIFlash($respuesta->original['tipo'], $respuesta->original['mensaje']);
                 $res = redirect()->route('ingredientes.categoria.create');
                 break;
             
             case "App\Models\CategoriaIngrediente":
-                Tool::notificaUIFlash("info", "Acción realizada con éxito");
+                Tools::notificaUIFlash("info", "Acción realizada con éxito");
 
             default:
                 $res = redirect()->route('ingredientes.categoria.index');
@@ -77,12 +77,12 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
 
         switch (get_class($respuesta)) {
             case "Illuminate\Http\Response":                                
-                Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+                Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
                 $res = redirect()->route('ingredientes.categoria.edit',['categoria'=>$categoria->id]);
                 break;                
 
             case "App\Models\CategoriaReceta":       
-                Tool::notificaUIFlash("info", "Categoría creada con éxito");
+                Tools::notificaUIFlash("info", "Categoría creada con éxito");
                 
             default:
                 $res = redirect()->route('ingredientes.categoria.index');                
@@ -96,7 +96,7 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     public function destroy(CategoriaIngrediente $categoria){
         $respuesta = parent::destroy($categoria);
 
-        Tool::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
+        Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
 
         return redirect()->route('ingredientes.categoria.index'); 
     }
