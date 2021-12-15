@@ -5,7 +5,7 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
-use App\Http\Controllers\IngredienteRecetaController;
+use App\Http\Controllers\Web\IngredienteRecetaController;
 use App\Http\Controllers\Web\CategoriaIngredienteController;
 use App\Http\Controllers\Web\CategoriaRecetaController;
 
@@ -42,14 +42,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('recetas')->name('recetas.')->group(function(){
         Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
 
-        // Route::group(['prefix'=>"{receta}"], function(){
-
-        // });
+        Route::group(['prefix'=>"{receta}"], function(){
+            Route::resource('ingrediente', IngredienteRecetaController::class)->except(['index','show']);
+        });
     });
     
 
     Route::resource('recetas', RecetaController::class);
-    Route::resource('recetas.ingrediente', IngredienteRecetaController::class);
+    
     Route::resource('recetas.paso', PasoRecetaController::class);
 
     Route::post('recetas/{receta}/paso/{paso}/asset', [AssetController::class, 'store'])->name('recetas.paso.asset.store');
