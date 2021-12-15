@@ -6,7 +6,7 @@ use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
 use App\Http\Controllers\IngredienteRecetaController;
-use App\Http\Controllers\CategoriaIngredienteController;
+use App\Http\Controllers\Web\CategoriaIngredienteController;
 use App\Http\Controllers\Web\CategoriaRecetaController;
 
 /*
@@ -37,11 +37,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::resource('categoria', CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);
     });
 
+    Route::resource('ingredientes', IngredienteController::class);
+
     Route::prefix('recetas')->name('recetas.')->group(function(){
         Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
-    });
 
-    Route::resource('ingredientes', IngredienteController::class);
+        // Route::group(['prefix'=>"{receta}"], function(){
+
+        // });
+    });
+    
 
     Route::resource('recetas', RecetaController::class);
     Route::resource('recetas.ingrediente', IngredienteRecetaController::class);
