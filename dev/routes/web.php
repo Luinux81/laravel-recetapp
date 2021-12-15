@@ -5,9 +5,9 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
-use App\Http\Controllers\CategoriaRecetaController;
 use App\Http\Controllers\IngredienteRecetaController;
 use App\Http\Controllers\CategoriaIngredienteController;
+use App\Http\Controllers\Web\CategoriaRecetaController;
 
 /*
 |--------------------------------------------------------------------------
