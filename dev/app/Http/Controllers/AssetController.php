@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Tools;
+use Exception;
+use App\Models\User;
 use App\Models\Asset;
 use App\Models\Receta;
 use App\Models\PasoReceta;
@@ -11,35 +14,52 @@ use Illuminate\Support\Facades\Storage;
 class AssetController extends Controller
 {
     public function store(Receta $receta, PasoReceta $paso, Request $request){
-        $data = $this->validate($request, [
-            'imagen' => 'image|required',
-        ]);
+
+        $this->checkCondiciones($receta, $paso);
+
+        $this->validate($request, ['imagen' => 'image|required']);
         
         $img = request('imagen')->store('pasos','public');
 
-        
-        $paso->assets()->save(new Asset([
+        $asset = new Asset([
             'tipo' => 'local',
             'ruta' => $img,
             'remoto' => false,
-        ]));
+        ]);
 
-        if($request->callback){
-            return redirect($request->callback);
-        }
-        else{
-            return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
-        }        
+        $asset = $paso->assets()->save($asset);
+
+        return $asset;       
     }
 
+
+
     public function destroy(Receta $receta, PasoReceta $paso, Asset $asset){
+
+        $this->checkCondiciones($receta, $paso);
+
         if(Storage::disk('public')->exists($asset->ruta)){
             Storage::disk('public')->delete($asset->ruta);
         }
 
         $asset->delete();
 
-        return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
+        return Tools::getResponse("info","Acción realizada con éxito", 200);
+    }
+
+
+
+    private function checkCondiciones(Receta $receta, PasoReceta $paso){
+        /** @var User */
+        $user = auth()->user();
+
+        if($receta->user_id != $user->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);            
+        }
+
+        if($receta->id != $paso->receta_id){
+            throw new Exception("El paso no pertenece a la receta especificada", 200);            
+        }
     }
 
 

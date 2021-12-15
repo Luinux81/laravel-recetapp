@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AssetController;
+use App\Http\Controllers\Web\AssetController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\PasoRecetaController;
 use App\Http\Controllers\IngredienteController;
@@ -43,17 +43,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
 
         Route::group(['prefix'=>"{receta}"], function(){
+            Route::prefix("pasos/{paso}")
+                    ->name('paso.')
+                    ->group(function(){
+                        Route::resource("asset",AssetController::class)->only(['store','destroy']);
+                    });
+
             Route::resource('ingrediente', IngredienteRecetaController::class)->except(['index','show']);
-            Route::resource('paso', PasoRecetaController::class)->except(['index','show']);
+            Route::resource('paso', PasoRecetaController::class)->except(['index','show']);            
         });
     });
     
 
     Route::resource('recetas', RecetaController::class);
-
-    Route::post('recetas/{receta}/paso/{paso}/asset', [AssetController::class, 'store'])->name('recetas.paso.asset.store');
-    Route::delete('recetas/{receta}/paso/{paso}/asset/{asset}', [AssetController::class, 'destroy'])->name('recetas.paso.asset.destroy');
-
 });
 
 // Hay que poner esta ruta por un tema con los guard al crear un rol o permiso nuevo

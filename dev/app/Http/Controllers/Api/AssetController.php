@@ -2,39 +2,38 @@
 
 namespace App\Http\Controllers\Api;
 
+use Throwable;
+use App\Helpers\Tools;
 use App\Models\Asset;
 use App\Models\Receta;
 use App\Models\PasoReceta;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AssetController as AssetBaseController;
 
-class AssetController extends Controller
+class AssetController extends AssetBaseController
 {
     public function store(Receta $receta, PasoReceta $paso, Request $request){
-        $data = $this->validate($request, [
-            'imagen' => 'image|required',
-        ]);
-        
-        $img = request('imagen')->store('pasos','public');
-
-        
-        $paso->assets()->save(new Asset([
-            'tipo' => 'local',
-            'ruta' => $img,
-            'remoto' => false,
-        ]));
-
-        return response($paso, 201);        
+        try {
+            $res = parent::store($receta, $paso, $request);            
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return response($res,201);
+        }
     }
 
     public function destroy(Receta $receta, PasoReceta $paso, Asset $asset){
-        if(Storage::disk('public')->exists($asset->ruta)){
-            Storage::disk('public')->delete($asset->ruta);
+        try{
+            $respuesta = parent::destroy($receta, $paso, $asset);
         }
-
-        $asset->delete();
-
-        return response(["mensaje"=>"Acción realizada con éxito"]);
+        catch (Throwable $th){
+            $respuesta = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $respuesta;
+        }
     }
 }
