@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use stdClass;
+use Exception;
+use App\Models\User;
 use App\Models\Ingrediente;
+use App\Helpers\Tools;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class IngredienteController extends Controller
 {   
@@ -34,86 +34,76 @@ class IngredienteController extends Controller
         "categoria" => '',
     ];
 
-    public function show(Ingrediente $ingrediente){
 
-    }
-    
-
-
-
-
-    public function index(Request $request){          
+    protected function index(Request $request){    
         $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
-        $ingredientesPropios = Auth::user()->ingredientes()->get();
+        $ingredientesPropios = $this->user()->ingredientes()->get();
 
-        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
+        // if(!empty($request->input('filtro')) && !empty($request->input('valor_filtro'))){
+        //     switch($request->input('filtro')){
+        //         case "alf":
+        //             $filtradoPublico = $ingredientesPublicos->filter(
+        //                 function($value,$key) use($request)  {
+        //                     return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
+        //                 });
+        //             $filtradoPropio = $ingredientesPropios->filter(
+        //                 function($value,$key) use($request){
+        //                     return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
+        //                 });
+        //             break;    
+        //         case "categoria":
+        //             if(!empty($request->input('valor_filtro'))){
+        //                 $filtradoPublico = $ingredientesPublicos->filter(
+        //                     function($value,$key) use($request)  {
+        //                         return $value->cat_id == $request->input('valor_filtro');
+        //                     });
+        //                 $filtradoPropio = $ingredientesPropios->filter(
+        //                     function($value,$key) use($request){
+        //                         return $value->cat_id == $request->input('valor_filtro');
+        //                     });
+        //             }
+        //             else{
+        //                 $filtradoPublico = $ingredientesPublicos;
+        //                 $filtradoPropio = $ingredientesPropios;
+        //             }
+        //             break;    
+        //     }
+        // }
+        // else{
+        //      $filtradoPublico = $ingredientesPublicos;
+        //      $filtradoPropio = $ingredientesPropios;
+        // }
 
-        if(!empty($request->input('filtro')) && !empty($request->input('valor_filtro'))){
-            switch($request->input('filtro')){
-                case "alf":
-                    $filtradoPublico = $ingredientesPublicos->filter(
-                        function($value,$key) use($request)  {
-                            return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
-                        });
-                    $filtradoPropio = $ingredientesPropios->filter(
-                        function($value,$key) use($request){
-                            return strtolower($value->nombre[0]) == strtolower($request->input('valor_filtro'));
-                        });
-                    break;    
-                case "categoria":
-                    if(!empty($request->input('valor_filtro'))){
-                        $filtradoPublico = $ingredientesPublicos->filter(
-                            function($value,$key) use($request)  {
-                                return $value->cat_id == $request->input('valor_filtro');
-                            });
-                        $filtradoPropio = $ingredientesPropios->filter(
-                            function($value,$key) use($request){
-                                return $value->cat_id == $request->input('valor_filtro');
-                            });
-                    }
-                    else{
-                        $filtradoPublico = $ingredientesPublicos;
-                        $filtradoPropio = $ingredientesPropios;
-                    }
-                    break;    
+        // $ingredientes = $filtradoPublico->merge($filtradoPropio)->sortBy('nombre');
+
+        $ingredientes = $ingredientesPublicos->concat($ingredientesPropios)->sortBy('nombre');
+
+        return $ingredientes;
+    }
+
+
+    protected function show(Ingrediente $ingrediente){
+        if($ingrediente->user_id != NULL){
+            if($ingrediente->user_id != $this->user()->id){
+                throw new Exception("No tiene permiso para realizar esta acción", 401);
             }
         }
-        else{
-            $filtradoPublico = $ingredientesPublicos;
-            $filtradoPropio = $ingredientesPropios;
-        }
-        
-        $ingredientes = $filtradoPublico->merge($filtradoPropio)->sortBy('nombre');
 
-        return view('ingredientes.index', compact('ingredientes','categorias'));
+        return $ingrediente;
     }
 
 
-
-
-    public function create(Request $request){
+    protected function create(Request $request){
         $request->session()->reflash();
 
-        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
+        $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
 
         return view('ingredientes.create', compact('categorias'));
     }
 
 
-
-
-    public function store(Request $request){        
-        $validator = Validator::make($request->all(), $this->rules);
-
-        if($validator->fails()){
-            $request->session()->reflash();
-
-            return redirect( route('ingredientes.create') )
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-
-        $data = $validator->validated();
+    protected function store(Request $request){        
+        $data = $request->validate($this->rules);
 
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
@@ -149,47 +139,38 @@ class IngredienteController extends Controller
             "carb_azucar" => $data['carb_azucar'],        
             "proteina" => $data['proteina'],
             "cat_id" => $data['categoria'],
-            "user_id" => Auth::user()->id,
+            "user_id" => $this->user()->id,
         ]);
 
-        if($request->session()->has('url_retorno')){
-            return redirect($request->session()->get('url_retorno'));
-        }
-        else{
-            return redirect()->route('ingredientes.index');
-        }
+        return $ingrediente;
     }
 
 
-    public function edit(Request $request, Ingrediente $ingrediente){
-        if($ingrediente->user_id == NULL){
-            if(!Auth::user()->can('public_edit')){
-                $obj = new stdClass();
-                $obj->tipo = "error";
-                $obj->mensaje = "No tiene permiso para editar este ingrediente";
-            }
-        }
-        else{
-            if($ingrediente->user_id != Auth::user()->id){
-                $obj = new stdClass();
-                $obj->tipo = "error";
-                $obj->mensaje = "No tiene permiso para editar este ingrediente";
-            }
-        }
-
-        if (!empty($obj)){
-            $request->session()->flash('notificacion',$obj);
-            return redirect()->route('ingredientes.index');
+    protected function edit(Request $request, Ingrediente $ingrediente){
+        if($ingrediente->user_id == NULL && !$this->user()->can('public_edit')){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
         }
         
-
-        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
+        if($ingrediente->user_id != NULL && $ingrediente->user_id != $this->user()->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+        
+        
+        $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
 
         return view('ingredientes.edit', compact(['categorias','ingrediente']));        
     }
 
 
-    public function update(Request $request, Ingrediente $ingrediente){
+    protected function update(Request $request, Ingrediente $ingrediente){
+        if($ingrediente->user_id == NULL && !$this->user()->can('public_edit')){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);            
+        }
+
+        if($ingrediente->user_id != NULL && $ingrediente->user_id != $this->user()->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
         $data = $this->validate($request, $this->rules);
 
         if(empty($data['categoria'])){
@@ -232,37 +213,32 @@ class IngredienteController extends Controller
             "cat_id" => $data['categoria'],
         ]);       
         
-        return redirect()->route('ingredientes.index');
+        return $ingrediente;
     }
 
-    public function destroy(Request $request, Ingrediente $ingrediente){
-        if($ingrediente->user_id == NULL){
-            if(!Auth::user()->can('public_destroy')){
-                $error = new stdClass();
-                $error->tipo = "error";
-                $error->mensaje = "No tiene permiso para borrar este ingrediente";
-            }
-        }
-        else{
-            if(Auth::user()->id != $ingrediente->user_id){
-                $error = new stdClass();
-                $error->tipo = "error";
-                $error->mensaje = "No tiene permiso para borrar este ingrediente";
-            }
-        }
-        
-        if(!empty($error)){
-            $request->session()->flash('notificacion',$error);
-            return redirect()->route('ingredientes.index');    
-        }
-        
 
+    protected function destroy(Ingrediente $ingrediente){
+        if($ingrediente->user_id == NULL && !$this->user()->can('public_destroy')){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
+        if($ingrediente->user_id != NULL && $this->user()->id != $ingrediente->user_id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+        
         if(Storage::disk('public')->exists($ingrediente->imagen)){
             Storage::disk('public')->delete($ingrediente->imagen);
         }
         
         $ingrediente->delete();
 
-        return redirect()->route('ingredientes.index');
+        return Tools::getResponse("info", "Acción realizada con éxito", 200);        
+    }
+
+
+    private function user() : User
+    {
+        /** @var User */
+        return auth()->user();
     }
 }
