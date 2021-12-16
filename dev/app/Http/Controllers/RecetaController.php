@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\User;
 use App\Models\Receta;
 use App\Helpers\Seeder;
-use App\Models\Ingrediente;
-use App\Models\User;
+use App\Helpers\Tools;
+use App\Models\CategoriaReceta;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class RecetaController extends Controller
@@ -29,30 +30,33 @@ class RecetaController extends Controller
         'unidad_medida' => 'required',
     ];
 
-    public function index(){        
-        /** @var User */
-        $user = Auth::user();
-        $recetas = $user->recetas()->get();
+    protected function index(){
+        $recetas_privadas = $this->user()->recetas()->get();
         $recetas_publicas = Receta::where('user_id',NULL)->get();
 
-        $recetas = $recetas->merge($recetas_publicas)->sortBy('nombre');
-        
-        return view('recetas.index',compact('recetas'));
+        $recetas = $recetas_privadas->concat($recetas_publicas)->sortBy('nombre');
+
+        return $recetas;
     }
 
-    public function show(Receta $receta){
-        return view('recetas.show',compact('receta'));
+
+    protected function show(Receta $receta){
+        if($receta->user_id != NULL && $receta->user_id != $this->user()->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
+        return $receta;
     }
 
-    public function create(){
-        /** @var User */
-        $user = Auth::user();
-        $categorias = $user->categoriasReceta()->get();
+
+    protected function create(){
+        $categorias = $this->user()->categoriasReceta()->get();
 
         return view('recetas.create',compact('categorias'));
     }
 
-    public function store(Request $request){
+
+    protected function store(Request $request){
         $data = $this->validate($request, $this->rules);
 
         if(empty($data['categoria'])){
@@ -74,25 +78,38 @@ class RecetaController extends Controller
             "tiempo" => $data['tiempo'],
             "imagen" => $data['imagen'],
             "cat_id" => $data['categoria'],
-            "user_id" => Auth::user()->id,
+            "user_id" => $this->user()->id,
         ]);
 
-        return redirect()->route('recetas.edit',['receta'=>$receta->id]);
+        return $receta;
     }
 
-    public function edit(Receta $receta){
-        /** @var User */
-        $user = Auth::user();
-        $categorias = $user->categoriasReceta()->get();
+
+    protected function edit(Receta $receta){
+        $categorias = $this->user()->categoriasReceta()->get();
 
         return view('recetas.edit',compact(['receta','categorias']));
     }
 
-    public function update(Request $request, Receta $receta){
-        $data = $this->validate($request, $this->rules);
 
+    public function update(Request $request, Receta $receta){
+        if($receta->user_id == NULL && !$this->user()->can('public_edit')){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
+        if($receta->user_id != NULL && $receta->user_id != $this->user()->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
+        $data = $this->validate($request, $this->rules);
+        
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
+        }
+        else{
+            if(CategoriaReceta::where("cat_id",$data['categoria'])->count() == 0){
+                throw new Exception("La categoría de recetas no existe", 200);
+            }
         }
 
         if(array_key_exists('imagen',$data)){
@@ -106,7 +123,7 @@ class RecetaController extends Controller
             $data['imagen'] = $receta->imagen;
         }
 
-        $receta->update([
+        $receta = $receta->update([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'calorias' => $data['calorias'],
@@ -116,10 +133,19 @@ class RecetaController extends Controller
             'cat_id' => $data['categoria'],
         ]);
 
-        return redirect()->route('recetas.index');
+        return $receta;
     }
 
+
     public function destroy(Receta $receta){
+        if($receta->user_id == NULL && !$this->user()->can('public_destroy')){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
+        if($receta->user_id != NULL && $receta->user_id != $this->user()->id){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
+
         if(Storage::disk('public')->exists($receta->imagen)){
             Storage::disk('public')->delete($receta->imagen);
         }
@@ -132,8 +158,9 @@ class RecetaController extends Controller
 
         $receta->delete();
 
-        return redirect()->route('recetas.index');
+        return Tools::getResponse("info", "Acción realizada correctamente", 200);
     }
+
 
     public function saveSeed(Request $request, Receta $receta){        
         Seeder::actualizaSeedFileRecetas($receta);
@@ -144,4 +171,11 @@ class RecetaController extends Controller
 
         return redirect()->route('recetas.index');
     }
+
+
+    private function user() : User
+    {
+        return auth()->user();
+    }
+
 }
