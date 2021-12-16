@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use Throwable;
+use App\Helpers\Tools;
 use App\Models\CategoriaReceta;
-use App\Http\Controllers\CategoriaRecetaBaseController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\CategoriaRecetaController as CategoriaRecetaBaseController;
 
 class CategoriaRecetaController extends CategoriaRecetaBaseController
 {
@@ -28,7 +30,15 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
      */
     public function show(CategoriaReceta $categoria)
     {
-        return parent::show($categoria);
+        try {
+            $res = parent::show($categoria);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
 
 
@@ -40,7 +50,15 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
      */
     public function store(Request $request)
     {
-        return parent::store($request);
+        try {
+            $res = parent::store($request);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
 
 
@@ -53,7 +71,15 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
      */
     public function update(Request $request, CategoriaReceta  $categoria)
     {
-        return parent::update($request, $categoria);
+        try {
+            $res = parent::update($request, $categoria);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
 
 
@@ -65,6 +91,14 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
      */
     public function destroy(CategoriaReceta $categoria)
     {
-        return parent::destroy($categoria);
+        try {
+            $res = parent::destroy($categoria);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
 }

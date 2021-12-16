@@ -2,78 +2,94 @@
 
 namespace App\Http\Controllers\Web;
 
+use Throwable;
 use App\Helpers\Tools;
-use Illuminate\Http\Request;
-use App\Http\Controllers\CategoriaRecetaBaseController;
 use App\Models\CategoriaReceta;
+use Illuminate\Http\Request;
+use App\Http\Controllers\CategoriaRecetaController as CategoriaRecetaBaseController;
 
 class CategoriaRecetaController extends CategoriaRecetaBaseController
 {
-    public function index(){
+    public function index()
+    {
         $categorias = parent::index();
         
         return view('recetas.categorias.index',compact('categorias'));
     }
 
 
-    public function create(){
-        $categorias = parent::create();
-
-        return view('recetas.categorias.create',compact('categorias'));
+    public function create()
+    {
+        return parent::create();
     }
 
 
-    public function store(Request $request){
-        $respuesta = parent::store($request);
+    public function store(Request $request)
+    {
+        try {
+            parent::store($request);
+            
+            Tools::notificaOk();
+            $res = redirect()->route('recetas.categoria.index');
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
 
-        switch(get_class($respuesta)){
-            case "Illuminate\Http\Response":                 
-                Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
-                $res = redirect()->route('recetas.categoria.create');
-                break;
-
-            case "App\Models\CategoriaReceta":
-                Tools::notificaUIFlash("info", "Categoría creada con éxito");
-
-            default:
-                $res = redirect()->route("recetas.categoria.index");
+            if($th->getCode() == 400){
+                $res = $res = redirect()->route('recetas.categoria.create');
+            }
+            else{
+                $res = redirect()->route('recetas.categoria.index');
+            }
         }
-
-        return $res;
-    }
-
-
-    public function edit(CategoriaReceta $categoria){
-        $categoriasHija = parent::edit($categoria);
-        
-        return view('recetas.categorias.edit',compact(['categoria', 'categoriasHija']));        
-    }
-
-    public function update(Request $request, CategoriaReceta $categoria){
-        $respuesta = parent::update($request,$categoria);
-
-        switch (get_class($respuesta)) {
-            case "Illuminate\Http\Response":                                
-                Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
-                $res = redirect()->route('recetas.categoria.edit',['categoria'=>$categoria->id]);
-                break;                
-
-            case "App\Models\CategoriaReceta":       
-                Tools::notificaUIFlash("info", "Categoría creada con éxito");
-                
-            default:
-                $res = redirect()->route('recetas.categoria.index');                
+        finally{
+            return $res;
         }
-        
-        return $res;
     }
+
+
+    public function edit(CategoriaReceta $categoria)
+    {
+        return parent::edit($categoria);
+    }
+
+
+    public function update(Request $request, CategoriaReceta $categoria)
+    {
+        try {
+            $categoria = parent::update($request, $categoria);
+
+            Tools::notificaOk();
+            $res = redirect()->route('recetas.categoria.index');
+        }
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+
+            if($th->getCode() == 400){
+                $res = redirect()->route('recetas.categoria.edit', compact("categoria"));
+            }
+            else{
+                $res = redirect()->route('recetas.categoria.index');
+            }
+        }
+        finally{
+            return $res;
+        }
+    }
+
 
     public function destroy(CategoriaReceta $categoria)
     {
-        $respuesta = parent::destroy($categoria);
+        try {
+            parent::destroy($categoria);
 
-        Tools::notificaUIFlash($respuesta->original["tipo"], $respuesta->original["mensaje"]);
-
-        return redirect()->route('recetas.categoria.index'); 
+            Tools::notificaOk();
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+        }
+        finally{
+            return redirect()->route('recetas.categoria.index');
+        }
     }
 }
