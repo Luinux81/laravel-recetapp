@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Throwable;
 use App\Helpers\Tools;
 use App\Models\Receta;
 use App\Models\PasoReceta;
@@ -12,35 +13,71 @@ use App\Http\Controllers\PasoRecetaController as PasoRecetaBaseController;
 class PasoRecetaController extends PasoRecetaBaseController
 {
 
-    public function index(Receta $receta){
-        return parent::index($receta);
-    }
-
-    public function show(Receta $receta, PasoReceta $paso){
-        return parent::show($receta, $paso);
-    }
-
-    public function store(Receta $receta, Request $request){
-        $paso = parent::store($receta, $request);
-
-        switch (get_class($paso)) {
-            case "\App\Models\PasoReceta":
-                $res = response($paso,201);
-                break;
-            
-            default:
-                $res = Tools::getResponse($paso->original["tipo"], $paso->original["mensaje"], 200);
-                break;
+    public function index(Receta $receta)
+    {
+        try {
+            $res = parent::index($receta);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
         }
-
-        return $res;
+        finally{
+            return $res;
+        }
     }
 
-    public function update(Receta $receta, PasoReceta $paso, Request $request){
-        return parent::update($receta, $paso, $request);
+
+    public function show(Receta $receta, PasoReceta $paso)
+    {
+        try {
+            $res = parent::show($receta, $paso);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
+
+
+    public function store(Receta $receta, Request $request)
+    {
+        try {
+            $res = parent::store($receta, $request);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
+    }
+
+
+    public function update(Receta $receta, PasoReceta $paso, Request $request)
+    {
+        try {
+            $res = parent::update($receta, $paso, $request);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
+    }
+
 
     public function destroy(Receta $receta, PasoReceta $paso){
-        return parent::destroy($receta, $paso);
+        try {
+            $res = parent::destroy($receta, $paso);
+        } 
+        catch (Throwable $th) {
+            $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
+        }
+        finally{
+            return $res;
+        }
     }
 }

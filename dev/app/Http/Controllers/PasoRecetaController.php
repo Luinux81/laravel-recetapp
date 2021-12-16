@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Helpers\Tools;
 use App\Models\Receta;
@@ -15,35 +16,26 @@ class PasoRecetaController extends Controller
         'texto' => 'required',
     ];
 
-    protected function index(Receta $receta){
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != NULL){
-            if($receta->user_id != $user->id){
-                return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
-            }
-        }
+    protected function index(Receta $receta)
+    {
+        $this->checkOrFail($receta);
 
         return $receta->pasos()->get();
     }
 
 
-    protected function show(Receta $receta, PasoReceta $paso){
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != NULL){
-            if($receta->user_id != $user->id){
-                return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
-            }
-        }
+    protected function show(Receta $receta, PasoReceta $paso)
+    {
+        $this->checkOrFail($receta);
 
         return $receta->pasos()->where("id",$paso->id)->first();
     }
 
 
-    protected function create(Receta $receta){
+    protected function create(Receta $receta)
+    {
+        $this->checkOrFail($receta);
+
         return view('recetas.pasos.create', compact('receta'));
     }
 
@@ -56,13 +48,9 @@ class PasoRecetaController extends Controller
      * 
      * @return \Illuminate\Http\Response|\App\Models\PasoReceta
      */
-    protected function store(Receta $receta, Request $request){
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != $user->id){
-            return Tools::getResponse("error","No tiene permiso para realizar esta acción",401);
-        }
+    protected function store(Receta $receta, Request $request)
+    {
+        $this->checkOrFail($receta);
 
         $max = $receta->pasos()->count() + 1;
         $this->rules['orden'] = $this->rules['orden'] . "|max:" . $max;
@@ -84,7 +72,6 @@ class PasoRecetaController extends Controller
         }
 
         return $paso;
-        return redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
     }
 
 
@@ -95,15 +82,9 @@ class PasoRecetaController extends Controller
      * @param PasoReceta $paso
      * @return 
      */
-    protected function edit(Receta $receta, PasoReceta $paso){
-        /** @var User */
-        $user = auth()->user();
-
-        if ($receta->user_id == NULL){
-            if($receta->user_id != $user->id){
-                return Tools::getResponse("error","No tiene pemiso para realizar esta acción",401);
-            }
-        }
+    protected function edit(Receta $receta, PasoReceta $paso)
+    {
+        $this->checkOrFail($receta);
 
         $assets = $paso->assets()->get();
         
@@ -111,16 +92,12 @@ class PasoRecetaController extends Controller
     }
 
 
-    protected function update(Receta $receta, PasoReceta $paso, Request $request){
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != $user->id){
-            return Tools::getResponse("error","No tiene permiso para realizar está acción", 401);
-        }
+    protected function update(Receta $receta, PasoReceta $paso, Request $request)
+    {
+        $this->checkOrFail($receta);
 
         if($receta->pasos()->find($paso->id) == NULL){
-            return Tools::getResponse("error","El paso no pertenece a la receta", 200);
+            throw new Exception("El paso no pertenece a la receta", 400);            
         }
 
         $max = $receta->pasos()->count();
@@ -170,21 +147,16 @@ class PasoRecetaController extends Controller
             $p->update(['orden' => $newValue]);
         }
 
-        return $paso;
-        // return redirect()->route('recetas.edit', compact('receta'));
+        return $paso;        
     }
 
 
-    protected function destroy(Receta $receta, PasoReceta $paso){
-        /** @var User */
-        $user = auth()->user();
+    protected function destroy(Receta $receta, PasoReceta $paso)
+    {
+        $this->checkOrFail($receta);
 
-        if($receta->user_id != $user->id){
-            return Tools::getResponse("error", "No tiene permiso para realizar esta acción", 401);
-        }
-
-        if($receta->id != $paso->receta_id){
-            return Tools::getResponse("error", "El paso no pertence a la receta", 401);
+        if($receta->pasos()->find($paso->id) == NULL){
+            throw new Exception("El paso no pertenece a la receta", 400);            
         }
 
         $pasosParaOrdenar = $receta
@@ -207,7 +179,19 @@ class PasoRecetaController extends Controller
         }
 
         return Tools::getResponse("info","La acción se ha realizado correctamente",200);
+    }
 
-        //return redirect()->route('recetas.edit', compact('receta'));
+
+    private function user() : User
+    {
+        return auth()->user();
+    }
+
+
+    private function checkOrFail(Receta $receta)
+    {
+        if($receta->user_id != NULL && $receta->user_id != $this->user()->id ){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
     }
 }

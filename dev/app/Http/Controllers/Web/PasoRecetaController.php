@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use Throwable;
 use App\Helpers\Tools;
 use App\Models\Receta;
 use App\Models\PasoReceta;
@@ -17,7 +18,16 @@ class PasoRecetaController extends PasoRecetaBaseController
      */
     public function create(Receta $receta)
     {
-        return parent::create($receta);
+        try {
+            $res = parent::create($receta);
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+            $res = redirect()->route('recetas.edit', compact("receta"));
+        }
+        finally{
+            return $res;
+        }
     }
 
     /**
@@ -30,23 +40,19 @@ class PasoRecetaController extends PasoRecetaBaseController
      */
     public function store(Receta $receta, Request $request)
     {
-        $paso = parent::store($receta, $request);
+        try {
+            $paso = parent::store($receta, $request);
 
-        switch (get_class($paso)) {
-            case "\Illuminate\Http\Response":                
-                Tools::notificaUIFlash($paso->original["tipo"], $paso->original["mensaje"]);
-                $res = redirect()->route('recetas.paso.create',["receta"=>$receta->id]);
-                break;
-
-            case "\App\Models\PasoReceta":
-                Tools::notificaOk();
-                
-            default:
-                $res = redirect()->route('recetas.paso.edit', compact(['receta', 'paso']));
-                break;
+            Tools::notificaOk();
+            $res = redirect()->route('recetas.paso.edit', compact("receta", "paso"));
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+            $res = redirect()->route('receta.edit', compact("receta"));
         }
-
-        return $res;
+        finally{
+            return $res;
+        }
     }
 
 
@@ -60,21 +66,16 @@ class PasoRecetaController extends PasoRecetaBaseController
      */
     public function edit(Receta $receta, PasoReceta $paso)
     {
-        $resultado = parent::edit($receta, $paso);
-
-        switch (get_class($resultado)) {
-            case "\Illuminate\Http\Response":
-                Tools::notificaUIFlash($resultado->original["tipo"], $resultado->original["mensaje"]);
-                $res = redirect()->route('recetas.edit',["receta"=>$receta->id]);
-                break;
-            
-            default:
-                // El resultado es una vista, la devolvemos directamente
-                $res = $resultado;
-                break;
+        try {
+            $res = parent::edit($receta, $paso);
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+            $res = redirect()->route('receta.edit', compact("receta"));
         }
-
-        return $res;
+        finally{
+            return $res;
+        }
     }
 
     /**
@@ -89,23 +90,19 @@ class PasoRecetaController extends PasoRecetaBaseController
      */
     public function update(Receta $receta, PasoReceta $paso, Request $request)
     {
-        $paso = parent::update($receta, $paso, $request);
+        try {
+            $paso = parent::update($receta, $paso, $request);
 
-        switch (get_class($paso)) {
-            case "\Illuminate\Http\Response":
-                Tools::notificaUIFlash($paso->original["tipo"], $paso->original["mensaje"]);
-                $res = redirect()->route('recetas.paso.edit',compact("receta","paso"));
-                break;
-            
-            case "\App\Models\PasoReceta":
-                Tools::notificaOk();
-
-            default:
-                $res = redirect()->route('recetas.edit',compact("receta"));
-                break;
+            Tools::notificaOk();
+            $res = redirect()->route('recetas.edit', compact("receta"));
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+            $res = redirect()->route('receta.paso.edit', compact("receta", "paso"));
         }
-
-        return $res;
+        finally{
+            return $res;
+        }
     }
 
     /**
@@ -118,10 +115,17 @@ class PasoRecetaController extends PasoRecetaBaseController
      */
     protected function destroy(Receta $receta, PasoReceta $paso)
     {
-        $resultado = parent::destroy($receta, $paso);
+        try {
+            parent::destroy($receta, $paso);
 
-        Tools::notificaUIFlash($resultado->original["tipo"], $resultado->orginal["mensaje"]);
-
-        return redirect()->route("recetas.edit",["receta"=>$receta->id]);
+            Tools::notificaOk();
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+        }
+        finally{
+            return redirect()->route("recetas.edit", compact("receta"));
+        }
     }
+    
 }
