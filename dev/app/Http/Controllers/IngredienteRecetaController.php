@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Helpers\Tools;
 use App\Models\Receta;
@@ -9,9 +10,10 @@ use App\Models\Ingrediente;
 use Illuminate\Http\Request;
 use stdClass;
 
-class IngredienteRecetaBaseController extends Controller
+class IngredienteRecetaController extends Controller
 {
 
+    //TODO: HACER CHECKS DE INGREDIENTES IGUAL QUE LAS RECETAS EN STORE Y UPDATE
     protected $rules = [
         'ingrediente' => 'required',
         'cantidad' => 'numeric|required',
@@ -23,14 +25,9 @@ class IngredienteRecetaBaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Receta $receta)
-    {
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != NULL && $receta->user_id != $user->id ){
-            return response(["tipo"=>"error","mensaje"=>"No tiene permiso para realizar esta acción"]);
-        }
+    protected function index(Receta $receta)
+    {        
+        $this->checkOrFail($receta);
 
         return $receta->ingredientes()->get();
     }
@@ -43,18 +40,13 @@ class IngredienteRecetaBaseController extends Controller
      * @param  \App\Models\Ingrediente  $ingrediente
      * @return \Illuminate\Http\Response|Ingrediente
      */
-    public function show(Receta $receta, Ingrediente $ingrediente)
+    protected function show(Receta $receta, Ingrediente $ingrediente)
     {
-        /** @var User */
-        $user = auth()->user();
-
-        if($receta->user_id != NULL && $receta->user_id != $user->id ){
-            return response(["tipo"=>"error","mensaje"=>"No tiene permiso para realizar esta acción"]);
-        }
+        $this->checkOrFail($receta);
 
         $res = $receta->ingredientes()->find($ingrediente);
         if(!$res){
-            $res = response(['tipo'=>'error','mensaje' => "El ingrediente " . $ingrediente->nombre . " no está en la receta"]);
+            throw new Exception("El ingrediente " . $ingrediente->nombre . " no está en la receta", 400);
         }
 
         return $res;
@@ -69,14 +61,13 @@ class IngredienteRecetaBaseController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, Receta $receta)
+    protected function create(Request $request, Receta $receta)
     {
-        /** @var User */
-        $user = auth()->user();
-        
+        $this->checkOrFail($receta);
+
         $request->session()->flash('url_retorno', route('recetas.ingrediente.create', ['receta'=>$receta->id ]));
         
-        $ingredientes = $user->getAllIngredientesAccesibles();        
+        $ingredientes = $this->user()->getAllIngredientesAccesibles();        
 
         return view('recetas.ingredientes.create', compact(['receta','ingredientes']));
     }
@@ -90,24 +81,25 @@ class IngredienteRecetaBaseController extends Controller
      * 
      * @return \Illuminate\Http\Response|stdClass
      */
-    public function store(Request $request, Receta $receta)
+    protected function store(Request $request, Receta $receta)
     {
+        $this->checkOrFail($receta);
+
         $data = $this->validate($request, $this->rules);
 
         $ingrediente = Ingrediente::find($data['ingrediente']);
 
         if(!$ingrediente){
-            return Tools::getResponse("error", "El ingrediente no existe", 200);
+            throw new Exception("El ingrediente no existe", 400);
         }
 
         if($receta->ingredientes()->find($data['ingrediente'])){
-            return Tools::getResponse("error", "El ingrediente ya existe en la receta", 200);
+            throw new Exception("El ingrediente ya existe en la receta", 400);
         }
 
         $receta->ingredientes()->attach($ingrediente, ['cantidad' => $data['cantidad'], 'unidad_medida' => $data['unidad_medida']]);
         
         $resultado = (object)[
-            'tipo' => 'info',
             'ingrediente' => $ingrediente,
             'cantidad' => $data['cantidad'],
             'unidad_medida' => $data['unidad_medida']
@@ -125,11 +117,12 @@ class IngredienteRecetaBaseController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function edit(Receta $receta, Ingrediente $ingrediente)
+    protected function edit(Receta $receta, Ingrediente $ingrediente)
     {
+        $this->checkOrFail($receta);
+
         return view('recetas.ingredientes.edit', compact(['receta','ingrediente']));
     }
-
 
 
     /**
@@ -140,20 +133,20 @@ class IngredienteRecetaBaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response|stdClass
      */
-    public function update(Request $request, Receta $receta, Ingrediente $ingrediente)
+    protected function update(Request $request, Receta $receta, Ingrediente $ingrediente)
     {
+        $this->checkOrFail($receta);
+
         $data = $this->validate($request, $this->rules);
 
         if($receta->ingredientes()->find($ingrediente) == NULL){
-            Tools::notificaUIFlash("error","El ingrediente no está en la receta");
-            return Tools::getResponse("error","El ingrediente no está en la receta",200);
+            throw new Exception("El ingrediente no existe en la receta", 400);
         }
         
         $receta->ingredientes()->detach($ingrediente);
         $receta->ingredientes()->attach($ingrediente,["cantidad"=>$data['cantidad'], "unidad_medida"=>$data['unidad_medida']]);
 
         $res = (object)[
-            'tipo' => 'info',
             'ingrediente' => $ingrediente,
             'cantidad' => $data['cantidad'],
             'unidad_medida' => $data['unidad_medida']
@@ -163,7 +156,6 @@ class IngredienteRecetaBaseController extends Controller
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      *
@@ -171,14 +163,28 @@ class IngredienteRecetaBaseController extends Controller
      * @param \App\Models\Ingrediente $ingrediente
      * @return \Illuminate\Http\Response|stdClass
      */
-    public function destroy(Receta $receta, Ingrediente $ingrediente)
+    protected function destroy(Receta $receta, Ingrediente $ingrediente)
     {
+        $this->checkOrFail($receta);
+
         if($receta->ingredientes()->find($ingrediente) == NULL){
-            return Tools::getResponse("error","El ingrediente no está en la receta",200);
+            throw new Exception("El ingrediente no existe en la receta", 400);
         }
 
         $receta->ingredientes()->detach($ingrediente);
         
         return Tools::getResponse("info","La acción se ha realizado correctamente",200);
+    }
+
+    private function user() : User
+    {
+        return auth()->user();
+    }
+
+    private function checkOrFail(Receta $receta) : void
+    {
+        if($receta->user_id != NULL && $receta->user_id != $this->user()->id ){
+            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        }
     }
 }
