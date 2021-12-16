@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\User;
 use App\Helpers\Tools;
 use App\Models\Receta;
 use App\Models\PasoReceta;
@@ -18,7 +17,7 @@ class PasoRecetaController extends Controller
 
     protected function index(Receta $receta)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta);
 
         return $receta->pasos()->get();
     }
@@ -26,7 +25,7 @@ class PasoRecetaController extends Controller
 
     protected function show(Receta $receta, PasoReceta $paso)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta);
 
         return $receta->pasos()->where("id",$paso->id)->first();
     }
@@ -34,7 +33,7 @@ class PasoRecetaController extends Controller
 
     protected function create(Receta $receta)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         return view('recetas.pasos.create', compact('receta'));
     }
@@ -50,7 +49,7 @@ class PasoRecetaController extends Controller
      */
     protected function store(Receta $receta, Request $request)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         $max = $receta->pasos()->count() + 1;
         $this->rules['orden'] = $this->rules['orden'] . "|max:" . $max;
@@ -84,7 +83,7 @@ class PasoRecetaController extends Controller
      */
     protected function edit(Receta $receta, PasoReceta $paso)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         $assets = $paso->assets()->get();
         
@@ -94,7 +93,7 @@ class PasoRecetaController extends Controller
 
     protected function update(Receta $receta, PasoReceta $paso, Request $request)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         if($receta->pasos()->find($paso->id) == NULL){
             throw new Exception("El paso no pertenece a la receta", 400);            
@@ -153,7 +152,7 @@ class PasoRecetaController extends Controller
 
     protected function destroy(Receta $receta, PasoReceta $paso)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         if($receta->pasos()->find($paso->id) == NULL){
             throw new Exception("El paso no pertenece a la receta", 400);            
@@ -181,17 +180,4 @@ class PasoRecetaController extends Controller
         return Tools::getResponse("info","La acción se ha realizado correctamente",200);
     }
 
-
-    private function user() : User
-    {
-        return auth()->user();
-    }
-
-
-    private function checkOrFail(Receta $receta)
-    {
-        if($receta->user_id != NULL && $receta->user_id != $this->user()->id ){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Models\User;
 use App\Models\Ingrediente;
 use App\Helpers\Tools;
@@ -35,7 +34,8 @@ class IngredienteController extends Controller
     ];
 
 
-    protected function index(Request $request){    
+    protected function index(Request $request)
+    {    
         $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
         $ingredientesPropios = $this->user()->ingredientes()->get();
 
@@ -82,18 +82,16 @@ class IngredienteController extends Controller
     }
 
 
-    protected function show(Ingrediente $ingrediente){
-        if($ingrediente->user_id != NULL){
-            if($ingrediente->user_id != $this->user()->id){
-                throw new Exception("No tiene permiso para realizar esta acción", 401);
-            }
-        }
+    protected function show(Ingrediente $ingrediente)
+    {
+        Tools::checkOrFail($ingrediente);
 
         return $ingrediente;
     }
 
 
-    protected function create(Request $request){
+    protected function create(Request $request)
+    {
         $request->session()->reflash();
 
         $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
@@ -102,7 +100,8 @@ class IngredienteController extends Controller
     }
 
 
-    protected function store(Request $request){        
+    protected function store(Request $request)
+    {     
         $data = $request->validate($this->rules);
 
         if(empty($data['categoria'])){
@@ -146,30 +145,19 @@ class IngredienteController extends Controller
     }
 
 
-    protected function edit(Request $request, Ingrediente $ingrediente){
-        if($ingrediente->user_id == NULL && !$this->user()->can('public_edit')){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-        
-        if($ingrediente->user_id != NULL && $ingrediente->user_id != $this->user()->id){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-        
-        
+    protected function edit(Request $request, Ingrediente $ingrediente)
+    {
+        Tools::checkOrFail($ingrediente, "public_edit");
+
         $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
 
         return view('ingredientes.edit', compact(['categorias','ingrediente']));        
     }
 
 
-    protected function update(Request $request, Ingrediente $ingrediente){
-        if($ingrediente->user_id == NULL && !$this->user()->can('public_edit')){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);            
-        }
-
-        if($ingrediente->user_id != NULL && $ingrediente->user_id != $this->user()->id){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
+    protected function update(Request $request, Ingrediente $ingrediente)
+    {
+        Tools::checkOrFail($ingrediente, "public_edit");
 
         $data = $this->validate($request, $this->rules);
 
@@ -217,14 +205,9 @@ class IngredienteController extends Controller
     }
 
 
-    protected function destroy(Ingrediente $ingrediente){
-        if($ingrediente->user_id == NULL && !$this->user()->can('public_destroy')){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-
-        if($ingrediente->user_id != NULL && $this->user()->id != $ingrediente->user_id){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
+    protected function destroy(Ingrediente $ingrediente)
+    {
+        Tools::checkOrFail($ingrediente, "public_destroy");
         
         if(Storage::disk('public')->exists($ingrediente->imagen)){
             Storage::disk('public')->delete($ingrediente->imagen);

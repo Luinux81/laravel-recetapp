@@ -13,7 +13,6 @@ use stdClass;
 class IngredienteRecetaController extends Controller
 {
 
-    //TODO: HACER CHECKS DE INGREDIENTES IGUAL QUE LAS RECETAS EN STORE Y UPDATE
     protected $rules = [
         'ingrediente' => 'required',
         'cantidad' => 'numeric|required',
@@ -27,7 +26,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function index(Receta $receta)
     {        
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta);
 
         return $receta->ingredientes()->get();
     }
@@ -42,7 +41,8 @@ class IngredienteRecetaController extends Controller
      */
     protected function show(Receta $receta, Ingrediente $ingrediente)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta);
+        Tools::checkOrFail($ingrediente);
 
         $res = $receta->ingredientes()->find($ingrediente);
         if(!$res){
@@ -63,7 +63,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function create(Request $request, Receta $receta)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         $request->session()->flash('url_retorno', route('recetas.ingrediente.create', ['receta'=>$receta->id ]));
         
@@ -83,7 +83,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function store(Request $request, Receta $receta)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         $data = $this->validate($request, $this->rules);
 
@@ -96,6 +96,9 @@ class IngredienteRecetaController extends Controller
         if($receta->ingredientes()->find($data['ingrediente'])){
             throw new Exception("El ingrediente ya existe en la receta", 400);
         }
+
+        Tools::checkOrFail($ingrediente);
+
 
         $receta->ingredientes()->attach($ingrediente, ['cantidad' => $data['cantidad'], 'unidad_medida' => $data['unidad_medida']]);
         
@@ -119,7 +122,8 @@ class IngredienteRecetaController extends Controller
      */
     protected function edit(Receta $receta, Ingrediente $ingrediente)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($ingrediente);
 
         return view('recetas.ingredientes.edit', compact(['receta','ingrediente']));
     }
@@ -135,13 +139,16 @@ class IngredienteRecetaController extends Controller
      */
     protected function update(Request $request, Receta $receta, Ingrediente $ingrediente)
     {
-        $this->checkOrFail($receta);
+        Tools::checkOrFail($receta, "public_edit");
 
         $data = $this->validate($request, $this->rules);
 
         if($receta->ingredientes()->find($ingrediente) == NULL){
             throw new Exception("El ingrediente no existe en la receta", 400);
         }
+
+        Tools::checkOrFail($ingrediente);
+
         
         $receta->ingredientes()->detach($ingrediente);
         $receta->ingredientes()->attach($ingrediente,["cantidad"=>$data['cantidad'], "unidad_medida"=>$data['unidad_medida']]);
@@ -165,26 +172,23 @@ class IngredienteRecetaController extends Controller
      */
     protected function destroy(Receta $receta, Ingrediente $ingrediente)
     {
-        $this->checkOrFail($receta);
-
+        Tools::checkOrFail($receta, "public_edit");
+        
         if($receta->ingredientes()->find($ingrediente) == NULL){
             throw new Exception("El ingrediente no existe en la receta", 400);
         }
+
+        Tools::checkOrFail($ingrediente);
+
 
         $receta->ingredientes()->detach($ingrediente);
         
         return Tools::getResponse("info","La acción se ha realizado correctamente",200);
     }
 
+
     private function user() : User
     {
         return auth()->user();
-    }
-
-    private function checkOrFail(Receta $receta) : void
-    {
-        if($receta->user_id != NULL && $receta->user_id != $this->user()->id ){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
     }
 }

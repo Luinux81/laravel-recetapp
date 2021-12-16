@@ -31,9 +31,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function show(CategoriaIngrediente $categoria)
     {
-        if($categoria->user_id != NULL && $categoria->user_id != $this->user()->id ){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);            
-        }
+        Tools::checkOrFail($categoria);
 
         return $categoria;
     }
@@ -69,6 +67,8 @@ class CategoriaIngredienteController extends Controller
 
     protected function edit(CategoriaIngrediente $categoria)
     {
+        Tools::checkOrFail($categoria,"public_edit");
+
         $categoriasHija = $categoria->categoriasHija(true);
 
         return view('ingredientes.categorias.edit',compact(['categoria', 'categoriasHija']));
@@ -77,13 +77,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function update(Request $request,CategoriaIngrediente $categoria)
     {
-        if($categoria->user_id == NULL && !$this->user()->can('public_edit')){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-
-        if($categoria->user_id != NULL && $categoria->user_id != $this->user()->id){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
+        Tools::checkOrFail($categoria, "public_edit");
 
         $data = $this->validate($request, $this->rules);
 
@@ -115,13 +109,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function destroy(CategoriaIngrediente $categoria)
     {        
-        if($categoria->user_id == NULL && !$this->user()->can('public_destroy')){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
-
-        if($categoria->user_id != NULL && $categoria->user_id != $this->user()->id){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
-        }
+        Tools::checkOrFail($categoria, "public_destroy");
 
         $categoria->delete();
         
