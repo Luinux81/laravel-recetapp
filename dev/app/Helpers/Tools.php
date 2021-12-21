@@ -27,7 +27,7 @@ class Tools{
     }
 
 
-    public static function checkOrFail(object $modelo, string $permiso = "") : void
+    public static function checkOrFail(object $modelo, string $permiso = "") : bool
     {
         /** @var User */
         $user = auth()->user();
@@ -35,12 +35,17 @@ class Tools{
         // Miramos la clase del objeto de entrada y hacemos la verificación
         $class = get_class($modelo); 
         
+        if($class[0] != "\\"){
+            $class = "\\" . $class;
+        }
+
         switch ($class) {
             case "\App\Models\Receta":
             case "\App\Models\Ingrediente":
             case "\App\Models\CategoriaIngrediente":
             case "\App\Models\CategoriaReceta":
                 $temp = new $class();
+                $temp = $modelo;
                 break;
             
             default:
@@ -48,31 +53,25 @@ class Tools{
                 break;
         }
 
-        // switch (get_class($modelo)) {
-        //     case "\App\Models\Receta":
-        //         $temp = new Receta();
-        //         $temp = $modelo;
-        //         break;
-
-        //     case "\App\Models\Ingrediente":
-        //         $temp = new Ingrediente();
-        //         $temp = $modelo;
-        //         break;
-            
-        //     default:
-        //         throw new Exception("Acción no permitida", 400);
-        //         break;
-        // }
 
         // Los modelos que se dejen pasar deben tener una propiedad publica user_id
         if ($permiso){
-            if($temp->user_id == NULL && $user->can($permiso)){
+            if($temp->user_id == NULL && !$user->can($permiso)){
                 throw new Exception("No tiene permiso para realizar esta acción", 401);
             }
         }
-
-        if ($temp->user_id != NULL && ($temp->user_id != $user->id)){
-            throw new Exception("No tiene permiso para realizar esta acción", 401);
+        else{
+            if ($temp->user_id == NULL){
+                throw new Exception("No tiene permiso para realizar esta acción", 401);
+            }
+            else{
+                if ($temp->user_id != $user->id){
+                    throw new Exception("No tiene permiso para realizar esta acción", 401);
+                }
+            }
         }
+        
+
+        return true;
     }
 }

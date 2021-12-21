@@ -21,7 +21,7 @@ class IngredienteController extends IngredienteBaseController
 
         $ingredientes = parent::index($request);
 
-        return redirect()->route('ingredientes.index', compact("categorias","ingredientes"));
+        return view('ingredientes.index', compact("categorias","ingredientes"));
     }
 
 
@@ -29,7 +29,7 @@ class IngredienteController extends IngredienteBaseController
     {
         try {
             parent::show($ingrediente);
-            $res = redirect()->route('ingredientes.show',compact("ingrediente"));
+            $res = view('ingredientes.show',compact("ingrediente"));
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());

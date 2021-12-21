@@ -167,4 +167,9 @@ class RecetaController extends Controller
         return redirect()->route('recetas.index');
     }
 
+    private function user() : User
+    {
+        return auth()->user();
+    }
+
 }

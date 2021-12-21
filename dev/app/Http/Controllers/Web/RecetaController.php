@@ -23,7 +23,7 @@ class RecetaController extends RecetaBaseController
     {
         try {
             parent::show($receta);
-            $res = redirect()->route('recetas.show', compact("receta"));
+            $res = view('recetas.show', compact("receta"));
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
