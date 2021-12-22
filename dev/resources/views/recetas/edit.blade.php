@@ -158,9 +158,9 @@
                             <td class="text-center">{{ $p->orden }}</td>
                             <td>{{ $p->texto }}</td>                            
                             <td class="flex gap-3" style=>
-                                <a href="{{ route('recetas.pasos.edit',['receta'=>$receta->id, 'paso'=>$p->id])}}" class="boton boton--gris">Editar</a>
+                                <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$p->id])}}" class="boton boton--gris">Editar</a>
                                 <x-form.boton-post
-                                    url="{{ route('recetas.pasos.destroy', ['receta'=>$receta->id, 'paso'=>$p->id]) }}"
+                                    url="{{ route('recetas.paso.destroy', ['receta'=>$receta->id, 'paso'=>$p->id]) }}"
                                     metodo="DELETE"
                                     class="boton boton--rojo"
                                     onclick="confirmarBorrado(event)"    
@@ -173,7 +173,7 @@
                 </tbody>
             </table>
 
-            <a href="{{ route('recetas.pasos.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
+            <a href="{{ route('recetas.paso.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
 
         </section>
 
