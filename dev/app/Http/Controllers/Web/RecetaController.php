@@ -35,12 +35,14 @@ class RecetaController extends RecetaBaseController
     }
 
 
-    public function create(){
+    public function create()
+    {
         return parent::create();
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $receta = parent::store($request);
 
