@@ -14,7 +14,7 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     {
         $categorias = parent::index();
 
-        return view('ingredientes.categoria.index',compact('categorias'));
+        return view('ingredientes.categorias.index',compact('categorias'));
     }
 
 

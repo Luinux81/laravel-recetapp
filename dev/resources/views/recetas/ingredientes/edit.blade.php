@@ -4,7 +4,7 @@
     <a href="{{ route('recetas.edit', compact('receta')) }}" class="boton boton--rojo">Cancelar</a>
 </x-slot>
 <x-content>
-    <form method="post" action="{{ route('recetas.ingrediente.update',['receta'=>$receta->id,'ingrediente'=>$ingrediente->id]) }}" class="flex flex-col">
+    <form method="post" action="{{ route('recetas.ingredientes.update',['receta'=>$receta->id,'ingrediente'=>$ingrediente->id]) }}" class="flex flex-col">
         @csrf
         @method('PUT')
 

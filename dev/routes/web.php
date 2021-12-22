@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
         Route::group(['prefix'=>"{receta}"], function(){
             Route::prefix("pasos/{paso}")
-                    ->name('paso.')
+                    ->name('pasos.')
                     ->group(function(){
                         Route::resource("asset",AssetController::class)->only(['store','destroy']);
                     });
