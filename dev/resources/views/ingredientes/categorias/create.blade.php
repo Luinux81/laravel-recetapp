@@ -16,11 +16,11 @@
         <form id="create_form_cat_ingrediente" class="flex flex-col" method="post" action="{{ route('ingredientes.categoria.store')}}" >
             @csrf
 
-            <x-form.input-text nombre="cat_nombre" titulo="Nombre" tipo="text">  </x-form.input-text>
+            <x-form.input-text nombre="nombre" titulo="Nombre" tipo="text">  </x-form.input-text>
             
-            <x-form.input-text nombre="cat_descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
+            <x-form.input-text nombre="descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
-            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
+            <x-form.select nombre="categoria" titulo="Categoria Superior">
                     <option value="" selected>Ninguna</option>
                     @foreach ($categorias as $cat)
                         <option value="{{$cat->id}}">{{$cat->nombre}}</option>

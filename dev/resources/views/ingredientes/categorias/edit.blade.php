@@ -23,22 +23,22 @@
             @method('PUT')
             
             <x-form.input-text 
-                nombre="cat_nombre" 
+                nombre="nombre" 
                 titulo="Nombre" 
                 tipo="text"
-                valor="{{ old('cat_nombre')?old('cat_nombre'):$categoria->nombre }}"
+                valor="{{ old('nombre')?old('nombre'):$categoria->nombre }}"
             >
             </x-form.input-text>
 
             <x-form.input-text 
-                nombre="cat_descripcion" 
+                nombre="descripcion" 
                 titulo="Descripcion" 
                 tipo="text"
-                valor="{{ old('cat_descripcion')?old('cat_descripcion'):$categoria->descripcion }}"
+                valor="{{ old('descripcion')?old('descripcion'):$categoria->descripcion }}"
             >
             </x-form.input-text>
 
-            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
+            <x-form.select nombre="categoria" titulo="Categoria Superior">
                 <option value="" selected>Ninguna</option>
                 @foreach (\App\Models\CategoriaIngrediente::all() as $cat)
                     @if ($cat->id != $categoria->id)

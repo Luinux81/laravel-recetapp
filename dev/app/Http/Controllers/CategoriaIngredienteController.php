@@ -12,9 +12,9 @@ use Illuminate\Http\Request;
 class CategoriaIngredienteController extends Controller
 {
     protected $rules= [
-        'cat_nombre'=>'required',
-        'cat_descripcion'=>'',
-        'cat_parent'=>'',
+        'nombre'=>'required',
+        'descripcion'=>'',
+        'categoria'=>'',
     ];
 
 
@@ -49,16 +49,19 @@ class CategoriaIngredienteController extends Controller
     {
         $data = $this->validate($request,$this->rules);
         
-        $nuevaCatSuperior = CategoriaIngrediente::find($data['cat_parent']);
+        if($data['categoria'] != ""){
+            $nuevaCatSuperior = CategoriaIngrediente::find($data['categoria']);
 
-        if(!$nuevaCatSuperior){
-            throw new Exception("No existe la categoria superior", 200);
+            if(!$nuevaCatSuperior){
+                throw new Exception("No existe la categoria superior", 200);
+            }
         }
+        
 
         $categoria = $this->user()->categoriasIngrediente()->create([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
-            'catParent_id' => $data['cat_parent'],
+            'catParent_id' => $data['categoria'],
         ]);
 
         return $categoria;
@@ -81,11 +84,11 @@ class CategoriaIngredienteController extends Controller
 
         $data = $this->validate($request, $this->rules);
 
-        if(empty($data['cat_parent'])){
-            $data['cat_parent'] = NULL;
+        if(empty($data['categoria'])){
+            $data['categoria'] = NULL;
         }
         else{
-            $nuevaCatSuperior = CategoriaIngrediente::find($data['cat_parent']);
+            $nuevaCatSuperior = CategoriaIngrediente::find($data['categoria']);
         
             if(!$nuevaCatSuperior){
                 throw new Exception("No existe la categoría superior", 400);
@@ -100,7 +103,7 @@ class CategoriaIngredienteController extends Controller
         $categoria->update([
             "nombre"=>$data['nombre'],
             "descripcion"=>$data['descripcion'],
-            "catParent_id"=>$data['cat_parent'],
+            "catParent_id"=>$data['categoria'],
         ]);
 
         return $categoria;

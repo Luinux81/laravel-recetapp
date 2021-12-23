@@ -23,7 +23,7 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
         try {
             $categoria = parent::show($categoria);
 
-            $res = redirect()->route('ingredientes.categoria.show', compact("categoria"));
+            $res = view('ingredientes.categorias.show', compact("categoria"));
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
