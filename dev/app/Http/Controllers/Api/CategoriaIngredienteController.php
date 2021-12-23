@@ -12,11 +12,14 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
 {
     public function index()
     {
-        return parent::index();
+        $categorias = parent::index();
+
+        return $categorias;
     }
 
 
-    public function show(CategoriaIngrediente $categoria){
+    public function show(CategoriaIngrediente $categoria)
+    {
         try {
             $res = parent::show($categoria);
         } 
@@ -29,10 +32,11 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     }
 
 
-    //TODO: Cambiar en postman el nombre del parametro categoria o cambiar el nombre del parametro en la vista y en $rules
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $res = parent::store($request);
+            $res = response($res, 201);
         } 
         catch (Throwable $th) {
             $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
@@ -43,7 +47,8 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     }
 
 
-    public function update(Request $request, CategoriaIngrediente $categoria){
+    public function update(Request $request, CategoriaIngrediente $categoria)
+    {
         try {
             $res = parent::update($request, $categoria);
         } 
@@ -56,7 +61,8 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     }
 
 
-    public function destroy(CategoriaIngrediente $categoria){
+    public function destroy(CategoriaIngrediente $categoria)
+    {
         try {
             $res = parent::destroy($categoria);
         } 

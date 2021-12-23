@@ -29,12 +29,12 @@ Route::post('/login',[AuthController::class, 'login']);
 Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('/logout',[AuthController::class, 'logout']);
 
-    Route::prefix("v1")->name("v1.")->group(function(){        
+    Route::prefix("v1")->name("api.v1.")->group(function(){        
         
         Route::prefix("ingredientes")
                 ->name("ingredientes.")
                 ->group(function(){
-                    Route::apiResource("categorias",CategoriaIngredienteController::class);
+                    Route::apiResource("categoria",CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);
                 });
 
         Route::apiResource("ingredientes",IngredienteController::class);        
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
                 ->name("recetas.")
                 ->group(function(){
                     Route::group([], function(){
-                        Route::apiResource("categorias",CategoriaRecetaController::class);
+                        Route::apiResource("categoria",CategoriaRecetaController::class);
                     });
 
                     Route::group(['prefix'=>'{receta}'],function(){
@@ -55,8 +55,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
                                 });
 
 
-                        Route::apiResource("pasos",PasoRecetaController::class);
-                        Route::apiResource("ingredientes",IngredienteRecetaController::class);
+                        Route::apiResource("paso",PasoRecetaController::class);
+                        Route::apiResource("ingrediente",IngredienteRecetaController::class);
                     });            
 
                 });

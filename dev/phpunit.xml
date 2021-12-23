@@ -11,6 +11,9 @@
         <testsuite name="CRUD">
             <directory suffix="Test.php">./tests/Feature/CRUD</directory>
         </testsuite>
+        <testsuite name="API_v1">
+            <directory suffix="Test.php">./tests/Feature/API/v1</directory>
+        </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
