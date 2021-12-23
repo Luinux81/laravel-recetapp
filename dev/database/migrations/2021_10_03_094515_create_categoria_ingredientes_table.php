@@ -16,7 +16,7 @@ class CreateCategoriaIngredientesTable extends Migration
         Schema::create('categorias_ingrediente', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('catParent_id')->nullable();
             $table->foreign('catParent_id')->references('id')->on('categorias_ingrediente');
