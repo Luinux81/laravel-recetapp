@@ -17,6 +17,23 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
         return view('recetas.categorias.index',compact('categorias'));
     }
 
+    
+    public function show(CategoriaReceta $categoria)
+    {
+        try {
+            $categoria = parent::show($categoria);
+
+            $res = view('recetas.categorias.show', compact("categoria"));
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+            $res = redirect()->route('recetas.categoria.index');
+        }
+        finally{
+            return $res;
+        }
+    }
+
 
     public function create()
     {

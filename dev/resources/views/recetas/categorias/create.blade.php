@@ -17,7 +17,7 @@
             
             <x-form.input-text nombre="descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
-            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
+            <x-form.select nombre="categoria" titulo="Categoria Superior">
                     <option value="" selected>Ninguna</option>
                     @foreach ($categorias as $cat)
                         <option value="{{$cat->id}}">{{$cat->nombre}}</option>

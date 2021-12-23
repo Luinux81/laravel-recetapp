@@ -13,7 +13,7 @@ class CategoriaRecetaController extends Controller
     protected $rules = [
         "nombre" => "required",
         "descripcion"=>"",
-        "cat_parent"=>"",
+        "categoria"=>"",
     ];
 
     protected function show(CategoriaReceta $categoria)
@@ -53,16 +53,19 @@ class CategoriaRecetaController extends Controller
     {
         $data = $request->validate($this->rules);
 
-        $nuevaCatSuperior = CategoriaReceta::find($data['cat_parent']);
+        if($data["categoria"] != "")
+        {
+            $nuevaCatSuperior = CategoriaReceta::find($data['categoria']);
         
-        if(!$nuevaCatSuperior){
-            throw new Exception("No existe la categoría superior", 400);
+            if(!$nuevaCatSuperior){
+                throw new Exception("No existe la categoría superior", 400);
+            }
         }
         
         $categoria = $this->user()->categoriasReceta()->create([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
-            'catParent_id' => $data['cat_parent'],
+            'catParent_id' => $data['categoria'],
         ]);
 
         return $categoria;
@@ -92,7 +95,7 @@ class CategoriaRecetaController extends Controller
         
         $data = $this->validate($request, $this->rules);
 
-        if(empty($data['cat_parent'])){
+        if(empty($data['categoria'])){
             $data['cat_parent'] = NULL;
         }
         else{

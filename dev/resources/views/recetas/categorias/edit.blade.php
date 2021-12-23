@@ -38,7 +38,7 @@
             >
             </x-form.input-text>
 
-            <x-form.select nombre="cat_parent" titulo="Categoria Superior">
+            <x-form.select nombre="categoria" titulo="Categoria Superior">
                 <option value="" selected>Ninguna</option>
                 @foreach (\App\Models\CategoriaReceta::all()->sortBy('nombre') as $cat)
                     @if ($cat->id != $categoria->id)
