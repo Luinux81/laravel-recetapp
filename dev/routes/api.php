@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
                 ->name("recetas.")
                 ->group(function(){
                     Route::group([], function(){
-                        Route::apiResource("categoria",CategoriaRecetaController::class);
+                        Route::apiResource("categoria",CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
                     });
 
                     Route::group(['prefix'=>'{receta}'],function(){
