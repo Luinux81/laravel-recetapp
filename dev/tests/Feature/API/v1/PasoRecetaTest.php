@@ -121,7 +121,7 @@ class PasoRecetaTest extends TestCase
 
         $this->assertTrue($this->comparaPasoReceta(PasoReceta::find($response->json()["id"]), $data));
 
-        //TODO : Comprobar que todos los pasos están en orden
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -148,7 +148,7 @@ class PasoRecetaTest extends TestCase
 
         $this->assertTrue($this->comparaPasoReceta(PasoReceta::find($response->json()["id"]), $data));
 
-        //TODO : Comprobar que todos los pasos están en orden
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -164,6 +164,7 @@ class PasoRecetaTest extends TestCase
         $response->assertOk();
 
         $this->assertEquals(2, $receta->pasos()->count());
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -187,5 +188,24 @@ class PasoRecetaTest extends TestCase
         if ($paso->texto != $data["texto"]) return false;
 
         return true;
+    }
+
+    private function pasosEnOrden(Receta $receta)
+    {
+        $pasos = $receta->pasos()->orderBy('orden')->get();
+        $res = true;
+        $i = 1;
+
+        foreach ($pasos as $paso) {
+            if($paso->orden != $i){
+                $res = false;
+                break;
+            }
+            else{
+                $i++;
+            }
+        }
+
+        return $res;
     }
 }

@@ -70,7 +70,8 @@ class PasoRecetaController extends PasoRecetaBaseController
     }
 
 
-    public function destroy(Receta $receta, PasoReceta $paso){
+    public function destroy(Receta $receta, PasoReceta $paso)
+    {
         try {
             $res = parent::destroy($receta, $paso);
         } 
