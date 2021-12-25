@@ -45,6 +45,7 @@ class PasoRecetaController extends PasoRecetaBaseController
     {
         try {
             $res = parent::store($receta, $request);
+            $res = response($res, 201);
         } 
         catch (Throwable $th) {
             $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
