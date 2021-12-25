@@ -43,6 +43,10 @@ class IngredienteRecetaController extends IngredienteRecetaBaseController
     public function store(Request $request, Receta $receta){
         try {
             $res = parent::store($request, $receta);
+
+            $res = json_decode(json_encode($res), true);  // Convertimos objeto stdclass en array
+
+            $res = response($res, 201);
         } 
         catch (Throwable $th) {
             $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
