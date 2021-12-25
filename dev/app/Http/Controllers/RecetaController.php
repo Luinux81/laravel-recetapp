@@ -57,7 +57,8 @@ class RecetaController extends Controller
     }
 
 
-    protected function store(Request $request){
+    protected function store(Request $request)
+    {
         $data = $this->validate($request, $this->rules);
 
         if(empty($data['categoria'])){

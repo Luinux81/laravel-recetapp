@@ -31,7 +31,8 @@ class RecetaController extends RecetaBaseController
 
     public function store(Request $request){
         try {
-            $res = parent::store($request);            
+            $res = parent::store($request);
+            $res = response($res, 201);            
         } 
         catch (Throwable $th) {
             $res = Tools::getResponse("error", $th->getMessage(), $th->getCode());
