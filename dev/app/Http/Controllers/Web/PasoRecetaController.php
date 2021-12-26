@@ -48,7 +48,12 @@ class PasoRecetaController extends PasoRecetaBaseController
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
-            $res = redirect()->route('receta.edit', compact("receta"));
+            // $res = redirect()->route('recetas.edit', compact("receta"));
+            $res = redirect()
+                    ->route('recetas.paso.create', compact("receta"))
+                    ->withErrors($th->validator)
+                    ->withInput()
+            ;
         }
         finally{
             return $res;

@@ -40,7 +40,7 @@
             nombre="cantidad" 
             titulo="Cantidad" 
             tipo="number" 
-            valor="100"
+            min="1"            
         >
         </x-form.input-text>
 

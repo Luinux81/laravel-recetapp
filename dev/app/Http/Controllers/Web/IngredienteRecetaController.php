@@ -54,7 +54,11 @@ class IngredienteRecetaController extends IngredienteRecetaBaseController
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
-            $res = redirect()->route('recetas.ingrediente.create', compact("receta"));
+            $res = redirect()
+                    ->route('recetas.ingrediente.create', compact("receta"))
+                    ->withErrors($th->validator)
+                    ->withInput()
+                ;
         }
         finally{
             return $res;
