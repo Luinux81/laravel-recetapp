@@ -84,7 +84,7 @@ class IngredienteController extends Controller
 
     protected function show(Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($ingrediente, "public_index");
 
         return $ingrediente;
     }

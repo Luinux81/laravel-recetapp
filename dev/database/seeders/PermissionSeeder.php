@@ -34,6 +34,8 @@ class PermissionSeeder extends Seeder
 
         Permission::create(['name'=>'seeder_save']);
 
+        Permission::create(['name'=>'private_access']);
+
         // Asignación de permisos a roles
         $admin->givePermissionTo([
             'permisos_index',
@@ -45,6 +47,7 @@ class PermissionSeeder extends Seeder
             'public_edit',
             'public_destroy',
             'seeder_save',
+            'private_access',
         ]);
 
         $empleado->givePermissionTo([

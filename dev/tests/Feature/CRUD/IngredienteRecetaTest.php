@@ -90,18 +90,22 @@ class IngredienteRecetaTest extends TestCase
     {
         $this->actingAs($this->user);
 
+        $receta = $this->receta;
         $ingrediente = $this->receta->ingredientes()->first();
-        $ruta_edit_ingrediente_receta = route("recetas.ingrediente.edit", ["receta" => $this->receta->id, "ingrediente" => $ingrediente->id]);
-        $ruta_update_ingrediente_receta = route("recetas.ingrediente.update", ["receta" => $this->receta->id, "ingrediente" => $ingrediente->id]);
+        
+        $ruta_edit_ingrediente_receta = route("recetas.ingrediente.edit", compact("receta", "ingrediente"));
+        $ruta_update_ingrediente_receta = route("recetas.ingrediente.update", compact("receta", "ingrediente"));
         $ruta_receta_edit = route("recetas.edit", ["receta" => $this->receta->id]);
 
         $response = $this->get($ruta_edit_ingrediente_receta);        
         $response->assertViewIs("recetas.ingredientes.edit");
 
-        $response = $this->put($ruta_update_ingrediente_receta, $this->getFormData());
+        $formData = $this->getFormData(["ingrediente"=>$ingrediente->id]);
+
+        $response = $this->put($ruta_update_ingrediente_receta, $formData);
         $response->assertRedirect($ruta_receta_edit);
 
-        //TODO: Comprobar que el registro se ha cambiado
+        $this->assertTrue($this->comparaIngredienteReceta($this->receta, $ingrediente, $formData));
     }
 
 
@@ -130,6 +134,18 @@ class IngredienteRecetaTest extends TestCase
             'cantidad' => $this->faker->randomNumber(3),
             'unidad_medida' => 'gr',
         ], $overrides);
+    }
+
+
+    private function comparaIngredienteReceta(Receta $receta, Ingrediente $ingrediente, $data) : bool
+    {
+        $ingrediente = $receta->ingredientes()->find($ingrediente);
+
+        if($ingrediente->id != $data["ingrediente"]) return false;
+        if($ingrediente->pivot->cantidad != $data["cantidad"]) return false;
+        if($ingrediente->pivot->unidad_medida != $data["unidad_medida"]) return false;
+
+        return true;
     }
 
 }

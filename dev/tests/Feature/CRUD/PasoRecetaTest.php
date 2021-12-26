@@ -77,7 +77,6 @@ class PasoRecetaTest extends TestCase
         $response->assertViewIs("recetas.edit");
     }
 
-    // TODO: En crear, editar y borrar comprobar que los ordenes de los pasos están bien
     
     public function test_usuario_puede_crear_paso_en_receta()
     {
@@ -98,6 +97,8 @@ class PasoRecetaTest extends TestCase
         $this->assertEquals(1, $paso->count());
 
         $response->assertRedirect(route('recetas.paso.edit', ["receta" => $this->receta->id, "paso" => $paso->first()->id]));
+        
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -118,6 +119,8 @@ class PasoRecetaTest extends TestCase
         $formData = $this->getFormData(false);
         $response = $this->put($ruta_update_paso_receta, $formData);
         $response->assertRedirect($ruta_receta_edit);
+
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -134,6 +137,8 @@ class PasoRecetaTest extends TestCase
         $response->assertRedirect($ruta_receta_edit);
 
         $this->assertEquals(2, $receta->pasos()->count());
+
+        $this->assertTrue($this->pasosEnOrden($this->receta));
     }
 
 
@@ -150,5 +155,24 @@ class PasoRecetaTest extends TestCase
             'orden' => $this->faker->numberBetween(1, $max),
             'texto' => $this->faker->text(100)
             ], $overrides);
+    }
+
+    private function pasosEnOrden(Receta $receta)
+    {
+        $pasos = $receta->pasos()->orderBy('orden')->get();
+        $res = true;
+        $i = 1;
+
+        foreach($pasos as $paso){
+            if($paso->orden != $i){
+                $res = false;
+                break;
+            }
+            else{
+                $i++;
+            }
+        }
+
+        return $res;
     }
 }

@@ -13,6 +13,7 @@ use Database\Seeders\PermissionSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 // use PHPUnit\Framework\TestCase;
 
@@ -38,6 +39,7 @@ class ToolsTest extends TestCase
 
         $this->admin = User::where('id',1)->first();
         $this->user = User::factory()->create();
+        $this->user->assignRole(Role::findByName("Cliente"));
     }
 
 
@@ -90,12 +92,16 @@ class ToolsTest extends TestCase
         $this->actingAs($this->user);
 
         $this->assertTrue(Tools::checkOrFail(Ingrediente::factory()->make(["user_id" => $this->user->id])));
+        $this->assertTrue(Tools::checkOrFail(Ingrediente::factory()->make(["user_id" => NULL]), "public_index"));
 
         $this->assertTrue(Tools::checkOrFail(Receta::factory()->make(["user_id" => $this->user->id])));
+        $this->assertTrue(Tools::checkOrFail(Receta::factory()->make(["user_id" => NULL]), "public_index"));
 
         $this->assertTrue(Tools::checkOrFail(CategoriaIngrediente::factory()->make(["user_id" => $this->user->id])));
+        $this->assertTrue(Tools::checkOrFail(CategoriaIngrediente::factory()->make(["user_id" => NULL]), "public_index"));
 
         $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id])));
+        $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id]), "public_index"));
 
 
         $asset = new Asset();

@@ -9,6 +9,7 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class IngredientesTest extends TestCase
@@ -35,10 +36,11 @@ class IngredientesTest extends TestCase
 
         $this->admin = User::find(1);
         $this->user = User::factory()->create();
+        $this->user->assignRole(Role::findByName("Cliente"));
     }
 
 
-    private function test_usuario_puede_ver_listado_ingredientes()
+    public function test_usuario_puede_ver_listado_ingredientes()
     {
         $this->actingAs($this->user);
 
@@ -53,7 +55,7 @@ class IngredientesTest extends TestCase
         $this->actingAs($this->user);
 
         $ingredientePrivado = Ingrediente::factory()->create(["user_id"=>$this->user->id]);
-        $ingredientePublico = Ingrediente::factory()->create();
+        $ingredientePublico = Ingrediente::factory()->create(["user_id"=>NULL]);
 
         $ruta_ing_privado = route("ingredientes.show", ["ingrediente" => $ingredientePrivado]);
         $ruta_ing_publico = route("ingredientes.show", ["ingrediente" => $ingredientePublico]);
@@ -61,20 +63,6 @@ class IngredientesTest extends TestCase
         // La ruta ingredientes.show debe devolver la vista
         $response = $this->get($ruta_ing_privado);
         $response->assertViewIs("ingredientes.show");
-
-        // Por ahora si es público no se puede hacer show
-        // TODO: Ver como hacer que un user sin permiso pueda hacer show ingrediente si es publico
-        $response = $this->get($ruta_ing_publico);
-        $response->assertRedirect(route("ingredientes.index"));
-
-
-
-        $this->actingAs($this->admin);
-
-        // Esto falla y redirige a login en vez de a index
-        // TODO: Arreglar esto
-        $response = $this->get($ruta_ing_privado);
-        //$response->assertRedirect(route("ingredientes.index"));
 
         $response = $this->get($ruta_ing_publico);
         $response->assertViewIs("ingredientes.show");
@@ -140,6 +128,24 @@ class IngredientesTest extends TestCase
         $response->assertRedirect(route("ingredientes.index"));
 
         $this->assertEquals(0, Ingrediente::count());
+    }
+
+
+    public function test_admin_puede_ver_ingrediente()
+    {
+        $this->actingAs($this->admin);
+
+        $ingredientePrivado = Ingrediente::factory()->create(["user_id"=>$this->user->id]);
+        $ingredientePublico = Ingrediente::factory()->create(["user_id"=>NULL]);
+
+        $ruta_ing_privado = route("ingredientes.show", ["ingrediente" => $ingredientePrivado]);
+        $ruta_ing_publico = route("ingredientes.show", ["ingrediente" => $ingredientePublico]);
+
+        $response = $this->get($ruta_ing_privado);
+        $response->assertViewIs("ingredientes.show");
+
+        $response = $this->get($ruta_ing_publico);
+        $response->assertViewIs("ingredientes.show");
     }
 
 

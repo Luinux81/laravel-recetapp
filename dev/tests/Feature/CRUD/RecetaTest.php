@@ -25,7 +25,6 @@ class RecetaTest extends TestCase
     /** @var Receta */
     private $receta;
 
-    //TODO: Comprobar en store y update que el registro se ha guardado correctamente
     
     public function setUp() : void
     {
@@ -82,6 +81,7 @@ class RecetaTest extends TestCase
         $this->assertEquals(2, Receta::all()->count());
         $receta = Receta::find(2);
         $this->assertNotNull($receta);
+        $this->assertTrue($this->comparaReceta($receta, $formData));
 
         $response->assertRedirect( route("recetas.edit", compact("receta")) );
     }
@@ -101,6 +101,9 @@ class RecetaTest extends TestCase
         $formData = $this->getFormData();
         $response = $this->put($ruta_update_receta, $formData);
         $response->assertRedirect($ruta_editar_receta);
+        $receta = Receta::find(1);
+        $this->assertNotNull($receta);
+        $this->assertTrue($this->comparaReceta($receta, $formData));
     }
 
 
@@ -134,5 +137,21 @@ class RecetaTest extends TestCase
             //'imagen' => 'image|nullable',
         ]
         , $overrides);
+    }
+
+    private function comparaReceta(Receta $receta, array $data) : bool
+    {
+        $res = true;
+
+        foreach($data as $key => $value){
+            if($key != "categoria"){
+                if($receta->$key != $value){
+                    $res = false;
+                    break;
+                }
+            }
+        }
+
+        return $res;
     }
 }
