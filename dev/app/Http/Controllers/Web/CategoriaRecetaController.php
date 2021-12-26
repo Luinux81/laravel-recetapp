@@ -52,12 +52,16 @@ class CategoriaRecetaController extends CategoriaRecetaBaseController
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
 
-            if($th->getCode() == 400){
-                $res = $res = redirect()->route('recetas.categoria.create');
-            }
-            else{
-                $res = redirect()->route('recetas.categoria.index');
-            }
+            $res = redirect()
+                    ->route('recetas.categoria.create')
+                    ->withErrors($th->validator)
+                    ->withInput();
+            // if($th->getCode() == 400){
+            //     $res = $res = redirect()->route('recetas.categoria.create');
+            // }
+            // else{
+            //     $res = redirect()->route('recetas.categoria.index');
+            // }
         }
         finally{
             return $res;

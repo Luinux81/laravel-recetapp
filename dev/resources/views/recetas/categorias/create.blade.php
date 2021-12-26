@@ -18,9 +18,9 @@
             <x-form.input-text nombre="descripcion" titulo="Descripcion" tipo="text">  </x-form.input-text>
 
             <x-form.select nombre="categoria" titulo="Categoria Superior">
-                    <option value="" selected>Ninguna</option>
+                    <option value="" @if(old('categoria') == "") selected @endif>Ninguna</option>
                     @foreach ($categorias as $cat)
-                        <option value="{{$cat->id}}">{{$cat->nombre}}</option>
+                        <option value="{{$cat->id}}" @if(old('categoria') == $cat->id) selected @endif>{{$cat->nombre}}</option>
                     @endforeach
             </x-form.select>
 
