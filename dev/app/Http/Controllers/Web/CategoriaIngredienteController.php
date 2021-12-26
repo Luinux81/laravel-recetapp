@@ -44,15 +44,21 @@ class CategoriaIngredienteController extends CategoriaIngredienteBaseController
     public function store(Request $request)
     {
         try {
-            parent::store($request);
-
-            Tools::notificaOk();                        
+            parent::store($request);                        
+            Tools::notificaOk();    
+            $res = redirect()->route('ingredientes.categoria.index');
         } 
         catch (Throwable $th) {
-            Tools::notificaUIFlash("error", $th->getMessage());            
+            Tools::notificaUIFlash("error", $th->getMessage());       
+
+            $res = redirect()
+                    ->route('ingredientes.categoria.create')
+                    ->withErrors($th->validator)
+                    ->withInput()
+                    ;
         }
         finally{
-            return redirect()->route('ingredientes.categoria.index');
+            return $res;
         }
     }
 
