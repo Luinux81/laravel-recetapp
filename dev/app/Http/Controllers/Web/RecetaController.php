@@ -51,7 +51,11 @@ class RecetaController extends RecetaBaseController
         } 
         catch (Throwable $th) {
             Tools::notificaUIFlash("error", $th->getMessage());
-            $res = redirect()->route('recetas.index');
+            $res = redirect()
+                    ->route('recetas.create')
+                    ->withErrors($th->validator)
+                    ->withInput()
+                    ;
         }
         finally
         {
