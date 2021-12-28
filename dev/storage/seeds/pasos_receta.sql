@@ -50,7 +50,12 @@ INSERT INTO `pasos_receta` (`id`, `receta_id`, `orden`, `texto`, `media_assets`)
 (25, 5, 2, 'Pelar y trocear todo.', NULL),
 (26, 5, 3, 'Usaremos una olla rápida. Ponemos las lentejas al fondo, con las verduras y el pollo encima.', NULL),
 (27, 5, 4, 'Poner agua hasta casi cubrir todo. Añadimos el aceite, la sal y las especias.', NULL),
-(28, 5, 5, 'Ponemos la olla a fuego fuerte hasta que suba la presión. Mantenemos a fuego mínimo 25 minutos.', NULL);
+(28, 5, 5, 'Ponemos la olla a fuego fuerte hasta que suba la presión. Mantenemos a fuego mínimo 25 minutos.', NULL),
+(29, 6, 1, 'Pelar y trocear todo.', NULL),
+(30, 6, 2, 'Poner en la Thermomix el aceite, cebolla, pimiento y zanahoria. 5seg Temp.0 Vel.5', NULL),
+(31, 6, 3, 'Programar 10 min Temp.120 Vel.1', NULL),
+(32, 6, 4, 'Poner en la Thermomix el caldo, el resto de las verduras, la sal y las especias. Programamos 25 min Temp.120 Vel.1', NULL),
+(33, 6, 5, 'Pasar al gusto. (Aprox 1 min Vel.10 para conseguir textura de crema)', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

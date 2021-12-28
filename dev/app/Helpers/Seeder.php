@@ -5,11 +5,12 @@ use App\Models\Receta;
 
 class Seeder{
 
-    public static function actualizaSeedFileRecetas(Receta $receta){
+    public static function actualizaSeedFileRecetas(Receta $receta)
+    {
         $path = base_path() . "/storage/seeds/recetas.sql";        
         $content = file_get_contents($path);
 
-        $lineas = explode("\n",$content);
+        $lineas = explode(PHP_EOL,$content);        
         $res = [];
 
         $encontrado = false;
@@ -39,11 +40,17 @@ class Seeder{
             }
         }
 
+        $content = implode(PHP_EOL,$res);
+
+
         if(!$encontrado){            
-            $content = str_replace(";\nCOMMIT;",",\n" . $sql_receta . ";\nCOMMIT;",$content);
+            $buscar = ";" . PHP_EOL . "COMMIT;";
+            $reemplazo = "," . PHP_EOL . $sql_receta . ";" . PHP_EOL . "COMMIT;";
+
+            $content = str_replace($buscar ,$reemplazo,$content);
         }
         else{
-            $content = implode("\n",$res);
+            $content = implode(PHP_EOL,$res);
         }
 
         file_put_contents($path,$content);
@@ -53,7 +60,7 @@ class Seeder{
         $path = base_path() . "/storage/seeds/ingrediente_receta.sql";        
         $content = file_get_contents($path);
 
-        $lineas = explode("\n",$content);
+        $lineas = explode(PHP_EOL,$content);
         $res = [];
 
         foreach ($lineas as $linea){
@@ -73,8 +80,12 @@ class Seeder{
             }
         }
 
-        $content = implode("\n",$res);
-        $content = str_replace(";\nCOMMIT;", ",\n" . Seeder::transformaIngredientesRecetaASql($receta) . ";\nCOMMIT;", $content);
+        $content = implode(PHP_EOL,$res);
+
+        $buscar = ";" . PHP_EOL . "COMMIT;";
+        $reemplazo = ",". PHP_EOL . Seeder::transformaIngredientesRecetaASql($receta) . ";" . PHP_EOL . "COMMIT;";
+
+        $content = str_replace($buscar, $reemplazo, $content);
 
         file_put_contents($path,$content);
     }
@@ -83,7 +94,7 @@ class Seeder{
         $path = base_path() . "/storage/seeds/pasos_receta.sql";
         $content = file_get_contents($path);
 
-        $lineas = explode("\n",$content);
+        $lineas = explode(PHP_EOL,$content);
         $res = [];
 
         foreach($lineas as $linea){
@@ -103,8 +114,12 @@ class Seeder{
             }
         }
 
-        $content = implode("\n",$res);
-        $content = str_replace(";\nCOMMIT;", ",\n" .Seeder::transformaPasosRecetaASql($receta) . ";\nCOMMIT;", $content);
+        $content = implode(PHP_EOL,$res);
+
+        $buscar = ";" . PHP_EOL . "COMMIT;";
+        $reemplazo = "," . PHP_EOL .Seeder::transformaPasosRecetaASql($receta) . ";" . PHP_EOL . "COMMIT;";
+
+        $content = str_replace($buscar, $reemplazo, $content);
 
         file_put_contents($path,$content);
     }
