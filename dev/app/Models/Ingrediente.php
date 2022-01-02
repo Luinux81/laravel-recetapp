@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\OpenFoodFacts;
 use App\Models\User;
 use App\Models\Receta;
 use App\Models\CategoriaIngrediente;
@@ -17,15 +18,29 @@ class Ingrediente extends Model
     protected $guarded = [];
 
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function categoria(){
+    public function categoria()
+    {
         return $this->belongsTo(CategoriaIngrediente::class,"cat_id");
     }
 
-    public function recetas(){
+    public function recetas()
+    {
         return $this->belongsToMany(Receta::class, "ingrediente_receta")->withPivot('cantidad', 'unidad_medida');
     }
+
+
+    public static function getIngredienteOpenFoodFact($codigo) : Ingrediente
+    {
+        $data = OpenFoodFacts::getProductoOFFByCode($codigo);
+
+        $ingrediente = new Ingrediente($data);
+
+        return $ingrediente;
+    }
+
 }

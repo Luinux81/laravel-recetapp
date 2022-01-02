@@ -97,7 +97,7 @@ class IngredienteRecetaController extends Controller
             throw new Exception("El ingrediente ya existe en la receta", 400);
         }
 
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($ingrediente, "public_index");
 
 
         $receta->ingredientes()->attach($ingrediente, ['cantidad' => $data['cantidad'], 'unidad_medida' => $data['unidad_medida']]);
