@@ -13,7 +13,7 @@
                     
                     <x-form.boton-post
                         url="{{ route('recetas.destroy',['receta'=>$receta->id]) }}"
-                        metodo="post"
+                        metodo="DELETE"
                         onclick="confirmarBorrado(event)"
                         class="boton boton--rojo"
                     >
