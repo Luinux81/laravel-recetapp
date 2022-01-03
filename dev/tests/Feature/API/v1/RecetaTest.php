@@ -36,7 +36,9 @@ class RecetaTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_ver_listado()
     {
         $this->actingAs($this->user);
@@ -83,7 +85,9 @@ class RecetaTest extends TestCase
     }
 
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_ver_receta()
     {
         $this->actingAs($this->user);
@@ -125,7 +129,9 @@ class RecetaTest extends TestCase
         $this->assertTrue($this->comparaReceta($receta, $response->json()));
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_crear_receta()
     {
         $this->actingAs($this->user);
@@ -143,7 +149,9 @@ class RecetaTest extends TestCase
         $this->assertTrue($this->comparaReceta($receta, $data));
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_editar_receta()
     {
         $this->actingAs($this->user);
@@ -161,7 +169,9 @@ class RecetaTest extends TestCase
         $this->assertTrue($this->comparaReceta($receta, $data));
     }
 
-
+    /**
+     * @group recetas
+     */
     Public function test_usuario_puede_eliminar_receta()
     {
         $this->actingAs($this->user);

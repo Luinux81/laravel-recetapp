@@ -8,7 +8,8 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "test" : "php artisan test --testsuite=Unit,CRUD --stop-on-failure"
+        "test" : "php artisan test --testsuite=Unit,CRUD --stop-on-failure",
+        "test-recetas" : "php artisan test --group recetas"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.3.1",

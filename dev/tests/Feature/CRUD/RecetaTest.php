@@ -42,6 +42,9 @@ class RecetaTest extends TestCase
     }
 
 
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_ver_listado_recetas()
     {
         $this->actingAs($this->user);
@@ -51,7 +54,9 @@ class RecetaTest extends TestCase
         $response->assertViewIs("recetas.index");
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_ususario_puede_ver_receta()
     {
         $this->actingAs($this->user);
@@ -63,7 +68,9 @@ class RecetaTest extends TestCase
         $response->assertViewIs("recetas.show");
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_ususario_puede_crear_receta()
     {
         $this->actingAs($this->user);
@@ -86,7 +93,9 @@ class RecetaTest extends TestCase
         $response->assertRedirect( route("recetas.edit", compact("receta")) );
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_editar_receta()
     {
         $this->actingAs($this->user);
@@ -106,7 +115,9 @@ class RecetaTest extends TestCase
         $this->assertTrue($this->comparaReceta($receta, $formData));
     }
 
-
+    /**
+     * @group recetas
+     */
     public function test_usuario_puede_eliminar_receta()
     {
         $this->actingAs($this->user);
