@@ -9,7 +9,8 @@
         "prod": "npm run production",
         "production": "mix --production",
         "test" : "php artisan test --testsuite=Unit,CRUD --stop-on-failure",
-        "test-recetas" : "php artisan test --group recetas"
+        "test-recetas" : "php artisan test --group recetas",
+        "test-ingredientes" : "php artisan test --group ingredientes"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.3.1",

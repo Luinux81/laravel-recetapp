@@ -39,6 +39,9 @@ class IngredienteTest extends TestCase
     }
 
 
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_ver_listado()
     {
         $this->actingAs($this->user);
@@ -84,7 +87,9 @@ class IngredienteTest extends TestCase
 
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_ver_ingrediente()
     {
         $this->actingAs($this->user);
@@ -128,7 +133,9 @@ class IngredienteTest extends TestCase
         $this->assertTrue($this->comparaIngrediente($ingrediente, $response->json() ));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_crear_ingrediente()
     {
         $this->actingAs($this->user);
@@ -146,7 +153,9 @@ class IngredienteTest extends TestCase
         $this->assertTrue($this->comparaIngrediente($ingrediente, $data));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_editar_ingrediente()
     {
         $this->actingAs($this->user);
@@ -168,7 +177,9 @@ class IngredienteTest extends TestCase
     }
 
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_eliminar_ingrediente()
     {
         $this->actingAs($this->user);

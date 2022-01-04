@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use App\Models\Ingrediente;
 use App\Helpers\Tools;
+use App\Models\CategoriaIngrediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -107,22 +109,17 @@ class IngredienteController extends Controller
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
         }
-
-        if(array_key_exists('imagen',$data)){
-            if($data['imagen']){
-                $data['imagen'] = request('imagen')->store('ingredientes','public');
-            }
-        }
         else{
-            $data['imagen'] = "";
+            if(CategoriaIngrediente::where("id",$data['categoria'])->count() == 0){
+                throw new Exception("La categoría de recetas no existe", 200);
+            }
         }
 
         $ingrediente = Ingrediente::create([
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
             "marca" => $data['marca'],
-            "barcode" => $data['barcode'],
-            "imagen" => $data['imagen'],        
+            "barcode" => $data['barcode'],   
             "url" => $data['url'],   
             "calorias" => $data['calorias'],     
             "fat_total" => $data['fat_total'],        
@@ -141,6 +138,11 @@ class IngredienteController extends Controller
             "user_id" => $this->user()->id,
         ]);
 
+        if(array_key_exists('imagen',$data)){
+            $ingrediente->setImagen($data['imagen']);
+        }
+        
+
         return $ingrediente;
     }
 
@@ -150,6 +152,10 @@ class IngredienteController extends Controller
         Tools::checkOrFail($ingrediente, "public_edit");
 
         $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
+
+        if(!empty($ingrediente->imagen)){
+            $ingrediente->imagen = Tools::getImagen64($ingrediente->imagen);
+        }
 
         return view('ingredientes.edit', compact(['categorias','ingrediente']));        
     }
@@ -164,26 +170,18 @@ class IngredienteController extends Controller
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
         }
-
-        if(array_key_exists('imagen',$data)){
-            if($data['imagen']){
-                $data['imagen'] = request('imagen')->store('ingredientes','public');
-
-                if(Storage::disk('public')->exists($ingrediente->imagen)){
-                    Storage::disk('public')->delete($ingrediente->imagen);
-                }
-            }            
-        }
         else{
-            $data['imagen'] = $ingrediente->imagen;
+            if(CategoriaIngrediente::where("id",$data['categoria'])->count() == 0){
+                throw new Exception("La categoría de recetas no existe", 200);
+            }
         }
+
 
         $ingrediente->update([
             "nombre" => $data['nombre'],
             "descripcion" => $data['descripcion'],
             "marca" => $data['marca'],
-            "barcode" => $data['barcode'],
-            "imagen" => $data['imagen'],        
+            "barcode" => $data['barcode'],    
             "url" => $data['url'],   
             "calorias" => $data['calorias'],     
             "fat_total" => $data['fat_total'],        
@@ -201,6 +199,10 @@ class IngredienteController extends Controller
             "cat_id" => $data['categoria'],
         ]);       
         
+        if(array_key_exists('imagen',$data)){
+            $ingrediente->setImagen($data['imagen']);
+        }
+
         return $ingrediente;
     }
 
@@ -209,11 +211,7 @@ class IngredienteController extends Controller
     {
         Tools::checkOrFail($ingrediente, "public_destroy");
         
-        if(Storage::disk('public')->exists($ingrediente->imagen)){
-            Storage::disk('public')->delete($ingrediente->imagen);
-        }
-        
-        $ingrediente->delete();
+        $ingrediente->borradoCompleto();
 
         return Tools::getResponse("info", "Acción realizada con éxito", 200);        
     }

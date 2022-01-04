@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\CategoriaIngrediente;
 use App\Models\Ingrediente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,28 +28,38 @@ class IngredienteFactory extends Factory
      */
     public function definition()
     {
+        $categorias = CategoriaIngrediente::pluck('id')->toArray();
+
+        if(!empty($categorias)){
+            $cat = $this->faker->randomElement($categorias);
+        }
+        else{
+            $cat = NULL;
+        }
+
         return [
-            'user_id'            =>'1',
-            'nombre'             =>$this->faker->passthrough($this->getRandomNombreIngrediente()),
-            'descripcion'        =>$this->faker->text(),
-            'marca'              =>$this->faker->word(),
-            'barcode'            =>$this->faker->ean13(),
-            'imagen'             =>$this->faker->imageUrl(640, 480, 'food', true, 'fresh'),
-            'url'                =>$this->faker->url(),
+            'user_id'            => NULL,
+            'cat_id'             => $cat,
+            'nombre'             => $this->faker->passthrough($this->getRandomNombreIngrediente()),
+            'descripcion'        => $this->faker->text(),
+            'marca'              => $this->faker->word(),
+            'barcode'            => $this->faker->ean13(),
+            'imagen'             => NULL,
+            'url'                => $this->faker->url(),
                 
-            'calorias'           =>$this->faker->randomNumber(3, false),
-            'fat_total'          =>$this->faker->randomFloat(1,20,30),
-            'fat_saturadas'      =>$this->faker->randomFloat(1,20,30),
-            'fat_poliinsaturadas'=>$this->faker->randomFloat(1,20,30),
-            'fat_monoinsaturadas'=>$this->faker->randomFloat(1,20,30),
-            'fat_trans'          =>$this->faker->randomFloat(1,20,30),
-            'colesterol'         =>$this->faker->randomFloat(1,20,30),
-            'sodio'              =>$this->faker->randomFloat(1,20,30),
-            'potasio'            =>$this->faker->randomFloat(1,20,30),
-            'fibra'              =>$this->faker->randomFloat(1,20,30),
-            'carb_total'         =>$this->faker->randomFloat(1,20,30),
-            'carb_azucar'        =>$this->faker->randomFloat(1,20,30),
-            'proteina'           =>$this->faker->randomFloat(1,20,30),
+            'calorias'           => $this->faker->randomNumber(3, false),
+            'fat_total'          => $this->faker->randomFloat(1,20,30),
+            'fat_saturadas'      => $this->faker->randomFloat(1,20,30),
+            'fat_poliinsaturadas'=> $this->faker->randomFloat(1,20,30),
+            'fat_monoinsaturadas'=> $this->faker->randomFloat(1,20,30),
+            'fat_trans'          => $this->faker->randomFloat(1,20,30),
+            'colesterol'         => $this->faker->randomFloat(1,20,30),
+            'sodio'              => $this->faker->randomFloat(1,20,30),
+            'potasio'            => $this->faker->randomFloat(1,20,30),
+            'fibra'              => $this->faker->randomFloat(1,20,30),
+            'carb_total'         => $this->faker->randomFloat(1,20,30),
+            'carb_azucar'        => $this->faker->randomFloat(1,20,30),
+            'proteina'           => $this->faker->randomFloat(1,20,30),
         ];
     }
 

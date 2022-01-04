@@ -9,6 +9,8 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -23,7 +25,7 @@ class IngredientesTest extends TestCase
     /** @var Authenticatable */
     private $user;
 
-
+    private $imageDir;
 
     public function setUp() : void
     {
@@ -37,9 +39,16 @@ class IngredientesTest extends TestCase
         $this->admin = User::find(1);
         $this->user = User::factory()->create();
         $this->user->assignRole(Role::findByName("Cliente"));
+
+        $this->imageDir = "users/" . $this->user->id . '/ingredientes/';
+        Storage::fake(config('filesystems.default'));
+        Storage::makeDirectory($this->imageDir);
     }
 
 
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_ver_listado_ingredientes()
     {
         $this->actingAs($this->user);
@@ -49,7 +58,9 @@ class IngredientesTest extends TestCase
         $response->assertViewHas(["ingredientes", "categorias"]);
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_ver_ingrediente()
     {
         $this->actingAs($this->user);
@@ -68,7 +79,9 @@ class IngredientesTest extends TestCase
         $response->assertViewIs("ingredientes.show");
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_crear_ingrediente()
     {
         $this->actingAs($this->user);
@@ -80,12 +93,15 @@ class IngredientesTest extends TestCase
         $response = $this->get($ruta_create);
         $response->assertViewIs("ingredientes.create");
 
-        $response = $this->post($ruta_store, $this->formCreateUpdateData(["user_id"=>$this->user->id]));
+        $response = $this->post($ruta_store, $this->getFormData(["user_id"=>$this->user->id]));
         $response->assertRedirect($ruta_index);
         $this->assertEquals(1, Ingrediente::count());
+        $this->assertFileExists(Storage::path(Ingrediente::find(1)->imagen));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_editar_ingrediente()
     {
         $this->actingAs($this->user);
@@ -100,7 +116,7 @@ class IngredientesTest extends TestCase
         $response->assertViewIs("ingredientes.edit");
         $response->assertViewHas("ingrediente");
 
-        $formData =  $this->formCreateUpdateData(["user_id"=>$this->user->id]);
+        $formData =  $this->getFormData(["user_id"=>$this->user->id]);
 
         $response = $this->put($ruta_update, $formData);
         $response->assertRedirect($ruta_index);
@@ -113,24 +129,34 @@ class IngredientesTest extends TestCase
         $this->assertTrue($ingrediente->is($ingredienteBD));
 
         $this->assertTrue($this->comparaIngrediente($ingredienteBD, $formData));
+        $this->assertFileExists(Storage::path($ingredienteBD->imagen));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_usuario_puede_eliminar_ingrediente()
     {
         $this->actingAs($this->user);
 
-        $ingrediente = Ingrediente::factory()->create(["user_id"=>$this->user->id]);
+        $ingrediente = Ingrediente::factory()->create([
+            "user_id" => $this->user->id,
+            "imagen" => $this->getNuevaRutaImagen()
+        ]);
 
         $this->assertEquals(1, Ingrediente::count());
+        $this->assertFileExists(Storage::path($ingrediente->imagen));
 
         $response = $this->delete(route('ingredientes.destroy', ["ingrediente" => $ingrediente]));
         $response->assertRedirect(route("ingredientes.index"));
 
         $this->assertEquals(0, Ingrediente::count());
+        $this->assertFileDoesNotExist(Storage::path($ingrediente->imagen));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_admin_puede_ver_ingrediente()
     {
         $this->actingAs($this->admin);
@@ -148,7 +174,9 @@ class IngredientesTest extends TestCase
         $response->assertViewIs("ingredientes.show");
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_admin_puede_crear_ingrediente_publico()
     {
         $ruta_index = route("ingredientes.index");
@@ -161,7 +189,7 @@ class IngredientesTest extends TestCase
         $response->assertViewIs("ingredientes.create");
 
         
-        $formData = $this->formCreateUpdateData(["user_id" => NULL]);
+        $formData = $this->getFormData(["user_id" => NULL]);
         
         $response = $this->post($ruta_store, $formData);    
         $response->assertRedirect($ruta_index);
@@ -172,9 +200,12 @@ class IngredientesTest extends TestCase
         $this->assertNotNull($ingrediente);
 
         $this->assertTrue($this->comparaIngrediente($ingrediente, $formData));
+        $this->assertFileExists(Storage::path($ingrediente->imagen));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_admin_puede_editar_ingrediente_publico()
     {
         $this->actingAs($this->admin);
@@ -189,7 +220,7 @@ class IngredientesTest extends TestCase
         $response->assertViewIs("ingredientes.edit");
         $response->assertViewHas("ingrediente");
 
-        $formData =  $this->formCreateUpdateData(["user_id" => NULL]);
+        $formData =  $this->getFormData(["user_id" => NULL]);
 
         $response = $this->put($ruta_update, $formData);
         $response->assertRedirect($ruta_index);
@@ -202,21 +233,29 @@ class IngredientesTest extends TestCase
         $this->assertTrue($ingrediente->is($ingredienteBD));
 
         $this->assertTrue($this->comparaIngrediente($ingredienteBD, $formData));
+        $this->assertFileExists(Storage::path($ingredienteBD->imagen));
     }
 
-
+    /**
+     * @group ingredientes
+     */
     public function test_admin_puede_eliminar_ingrediente_publico()
     {
         $this->actingAs($this->admin);
 
-        $ingrediente = Ingrediente::factory()->create(["user_id"=>NULL]);
+        $ingrediente = Ingrediente::factory()->create([
+            "user_id"=>NULL,
+            "imagen" => $this->getNuevaRutaImagen()
+        ]);
 
         $this->assertEquals(1, Ingrediente::count());
+        $this->assertFileExists(Storage::path($ingrediente->imagen));
 
         $response = $this->delete(route('ingredientes.destroy', ["ingrediente" => $ingrediente]));
         $response->assertRedirect(route("ingredientes.index"));
 
         $this->assertEquals(0, Ingrediente::count());
+        $this->assertFileDoesNotExist(Storage::path($ingrediente->imagen));
     }
 
 
@@ -224,7 +263,7 @@ class IngredientesTest extends TestCase
 
 
     
-    private function formCreateUpdateData($overrides = [])
+    private function getFormData($overrides = [])
     {
         /** @var Ingrediente */ $ingrediente = Ingrediente::factory()->make();
 
@@ -234,7 +273,7 @@ class IngredientesTest extends TestCase
             "descripcion"           => $ingrediente->descripcion,
             "marca"                 => $ingrediente->marca,
             "barcode"               => $ingrediente->barcode,
-            //"imagen"                => $ingrediente->imagen,
+            "imagen"                => UploadedFile::fake()->image("ingrediente.jpg"), // para usar image hay que activar en php.ini la extension gd
             "url"                   => $ingrediente->url,
             "calorias"              => $ingrediente->calorias,
             "fat_total"             => $ingrediente->fat_total,
@@ -258,14 +297,29 @@ class IngredientesTest extends TestCase
         $res = true;
 
         foreach ($data as $key => $value) {
+            if ($key == 'imagen'){
+                continue;
+            }
+
+            if ($key == 'categoria'){
+                $key = 'cat_id';
+            }   
+            
             if($ingrediente->$key != $value){
                 if($key != "user_id" && $ingrediente->user_id != NULL){
                     $res = false;
                     break;
                 }
             }
+
+            
         }
 
         return $res;
+    }
+
+    private function getNuevaRutaImagen()
+    {
+        return $this->imageDir . $this->faker->file('/tmp',Storage::path($this->imageDir),false);
     }
 }
