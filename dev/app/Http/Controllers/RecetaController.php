@@ -64,12 +64,10 @@ class RecetaController extends Controller
         if(empty($data['categoria'])){
             $data['categoria'] = NULL;
         }
-
-        if(array_key_exists('imagen',$data)){
-            $data['imagen'] = request('imagen')->store('recetas','public');
-        }
         else{
-            $data['imagen'] = "";
+            if(CategoriaReceta::where("id",$data['categoria'])->count() == 0){
+                throw new Exception("La categoría de recetas no existe", 200);
+            }
         }
 
         $receta = Receta::create([
@@ -78,10 +76,13 @@ class RecetaController extends Controller
             "calorias" => $data['calorias'],
             "raciones" => $data['raciones'],
             "tiempo" => $data['tiempo'],
-            "imagen" => $data['imagen'],
             "cat_id" => $data['categoria'],
             "user_id" => auth()->user()->id,
         ]);
+
+        if(array_key_exists('imagen', $data)){
+            $receta->setImagen(request('imagen'));
+        }
 
         return $receta;
     }
@@ -92,6 +93,10 @@ class RecetaController extends Controller
         Tools::checkOrFail($receta, "public_edit");
 
         $categorias = $this->user()->categoriasReceta()->get();
+
+        if($receta->imagen){
+            $receta->imagen = Tools::getImagen64($receta->imagen);
+        }
 
         return view('recetas.edit',compact(['receta','categorias']));
     }
@@ -107,31 +112,23 @@ class RecetaController extends Controller
             $data['categoria'] = NULL;
         }
         else{
-            if(CategoriaReceta::where("cat_id",$data['categoria'])->count() == 0){
+            if(CategoriaReceta::where("id",$data['categoria'])->count() == 0){
                 throw new Exception("La categoría de recetas no existe", 200);
             }
         }
 
-        if(array_key_exists('imagen',$data)){
-            $data['imagen'] = request('imagen')->store('recetas','public');
-
-            if(Storage::disk('public')->exists($receta->imagen)){
-                Storage::disk('public')->delete($receta->imagen);
-            }
-        }
-        else{
-            $data['imagen'] = $receta->imagen;
-        }
-
-        $receta = $receta->update([
+        $receta->update([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'calorias' => $data['calorias'],
             "raciones" => $data['raciones'],
             "tiempo" => $data['tiempo'],
-            'imagen' => $data['imagen'],
             'cat_id' => $data['categoria'],
         ]);
+
+        if(array_key_exists('imagen', $data)){
+            $receta->setImagen(request('imagen'));
+        }
 
         return $receta;
     }
@@ -141,17 +138,7 @@ class RecetaController extends Controller
     {
         Tools::checkOrFail($receta, "public_destroy");
 
-        if(Storage::disk('public')->exists($receta->imagen)){
-            Storage::disk('public')->delete($receta->imagen);
-        }
-
-        foreach ($receta->pasos as $paso) {
-            $paso->borradoCompleto();
-        }
-
-        $receta->ingredientes()->sync([]);
-
-        $receta->delete();
+        $receta->borradoCompleto();
 
         return Tools::getResponse("info", "Acción realizada correctamente", 200);
     }

@@ -9,6 +9,8 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class RecetaTest extends TestCase
@@ -25,6 +27,7 @@ class RecetaTest extends TestCase
     /** @var Receta */
     private $receta;
 
+    private $imageDir;
     
     public function setUp() : void
     {
@@ -38,7 +41,19 @@ class RecetaTest extends TestCase
         $this->admin = User::find(1);
         $this->user = User::factory()->create();
         
-        $this->receta = Receta::factory()->create(["user_id" => $this->user->id]);
+        // Falseamos el sistema de archivos, creamos un directorio y una ruta a archivo(no se crea el archivo en si, solo la ruta)
+        Storage::fake(config('filesystems.default'));
+        $this->imageDir = "users/" . $this->user->id . "/recetas/";
+        Storage::makeDirectory($this->imageDir);
+        
+
+        $this->receta = Receta::factory()->create([
+            "user_id" => $this->user->id,
+            "imagen" => $this->getNuevaRutaImagen(),
+        ]);
+
+        // Creamos el archivo a partir de la ruta obtenida con $this->getNuevaRutaImagen()
+        Storage::put($this->receta->imagen,'');
     }
 
 
@@ -89,6 +104,7 @@ class RecetaTest extends TestCase
         $receta = Receta::find(2);
         $this->assertNotNull($receta);
         $this->assertTrue($this->comparaReceta($receta, $formData));
+        $this->assertFileExists(Storage::path($receta->imagen));
 
         $response->assertRedirect( route("recetas.edit", compact("receta")) );
     }
@@ -110,9 +126,11 @@ class RecetaTest extends TestCase
         $formData = $this->getFormData();
         $response = $this->put($ruta_update_receta, $formData);
         $response->assertRedirect($ruta_editar_receta);
+
         $receta = Receta::find(1);
         $this->assertNotNull($receta);
         $this->assertTrue($this->comparaReceta($receta, $formData));
+        $this->assertFileExists(Storage::path($receta->imagen));
     }
 
     /**
@@ -130,6 +148,7 @@ class RecetaTest extends TestCase
         $response->assertRedirect($ruta_index);
 
         $this->assertEquals(0, Receta::all()->count());
+        $this->assertFileDoesNotExist(Storage::path($receta->imagen));
     }
 
 
@@ -145,7 +164,7 @@ class RecetaTest extends TestCase
             'raciones' => $receta->raciones,
             'tiempo' => $receta->tiempo,
             'categoria' => $receta->categoria,
-            //'imagen' => 'image|nullable',
+            'imagen' => UploadedFile::fake()->image('imagen.jpg'), // para usar image hay que activar en php.ini la extension gd
         ]
         , $overrides);
     }
@@ -155,7 +174,7 @@ class RecetaTest extends TestCase
         $res = true;
 
         foreach($data as $key => $value){
-            if($key != "categoria"){
+            if($key != "imagen"){
                 if($receta->$key != $value){
                     $res = false;
                     break;
@@ -164,5 +183,10 @@ class RecetaTest extends TestCase
         }
 
         return $res;
+    }
+
+    private function getNuevaRutaImagen()
+    {
+        return $this->imageDir . $this->faker->file('/tmp',Storage::path($this->imageDir),false);
     }
 }
