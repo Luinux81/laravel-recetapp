@@ -73,7 +73,7 @@ class RecetaController extends RecetaBaseController
     public function update(Request $request, Receta $receta)
     {
         try {
-            $receta = parent::update($request, $receta);
+            parent::update($request, $receta);
             Tools::notificaOk();
 
             $res = redirect()->route('recetas.edit', compact("receta"));
