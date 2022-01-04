@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Receta;
 use App\Models\Ingrediente;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class Tools{
 
@@ -86,5 +87,14 @@ class Tools{
         
 
         return true;
+    }
+
+    public static function getImagen64($ruta)
+    {
+        $full_path = Storage::path($ruta);
+        $base64 = base64_encode(Storage::get($ruta));
+        $image_data = 'data:'.mime_content_type($full_path) . ';base64,' . $base64;
+
+        return $image_data;
     }
 }
