@@ -78,6 +78,7 @@
                             titulo="calorias"
                             tipo="number"
                             min="0"
+                            step="1"
                             valor="{{ old('calorias')?old('calorias'):$ingrediente->calorias }}"
                         >
                         </x-form.input-text>
