@@ -18,7 +18,12 @@
         @else
             value="{{ old($nombre) ? old($nombre) : '' }}"
         @endif        
-        {{ $attributes->merge(['class'=>'form-input bg-gray-200 rounded-md mb-3']) }}
+        @if($tipo == "number")
+            @if(!$attributes->has("step"))
+                step=".01"
+            @endif
+        @endif
+        {{ $attributes->merge(['class'=>'form-input bg-gray-200 rounded-md mb-3']) }}        
     />
     
     @if($errors->has($nombre))
