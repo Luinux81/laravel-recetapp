@@ -53,6 +53,7 @@ class PasoRecetaTest extends TestCase
         }
     }
 
+    /** @group pasos_receta */
     public function test_usuario_puede_ver_pasos_receta()
     {
         $this->actingAs($this->user);
@@ -75,6 +76,7 @@ class PasoRecetaTest extends TestCase
     }
 
 
+    /** @group pasos_receta */
     public function test_usuario_puede_ver_paso_receta()
     {
         $this->actingAs($this->user);
@@ -99,6 +101,7 @@ class PasoRecetaTest extends TestCase
     }
 
 
+    /** @group pasos_receta */
     public function test_usuario_puede_crear_paso_receta()
     {
         $this->actingAs($this->user);
@@ -125,6 +128,7 @@ class PasoRecetaTest extends TestCase
     }
 
 
+    /** @group pasos_receta */
     public function test_usuario_puede_editar_paso_receta()
     {
         $this->actingAs($this->user);
@@ -152,6 +156,7 @@ class PasoRecetaTest extends TestCase
     }
 
 
+    /** @group pasos_receta */
     public function test_usuario_puede_eliminar_paso_receta()
     {
         $this->actingAs($this->user);

@@ -7,7 +7,8 @@
     </label>
 
     @if($imagen)
-        <img src="{{ '/storage/' . $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96">
+        {{-- <img src="{{ '/storage/' . $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96"> --}}
+        <img src="{{ $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96">
     @else
         <img src="#" id="{{ $nombre }}-imagen" class="invisible col-md-8 pl-0 py-3 pr-0 w-96">
     @endif

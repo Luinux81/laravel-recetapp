@@ -19,7 +19,13 @@ class AssetController extends Controller
 
         $this->validate($request, ['imagen' => 'image|required']);
         
-        $img = request('imagen')->store('pasos','public');
+        if($receta->esRecetaPublica()){
+            $img = request('imagen')->store('pasos','public');
+        }
+        else{
+            $img = request('imagen')->store('users/' . auth()->user()->id . '/pasos/');
+        }
+        
 
         $asset = new Asset([
             'tipo' => 'local',
@@ -38,11 +44,7 @@ class AssetController extends Controller
 
         $this->checkCondiciones($receta, $paso);
 
-        if(Storage::disk('public')->exists($asset->ruta)){
-            Storage::disk('public')->delete($asset->ruta);
-        }
-
-        $asset->delete();
+        $asset->borradoCompleto();
 
         return Tools::getResponse("info","Acción realizada con éxito", 200);
     }

@@ -42,7 +42,7 @@
     <div>
         @foreach ($assets as $asset)
             <div class="relative">
-                <img src="/storage/{{ $asset->ruta }}" alt="" />
+                <img src="{{ \App\Helpers\Tools::getImagen64($asset->ruta) }}" alt="" />
                 <form method="post" action="{{ route('recetas.pasos.asset.destroy', compact(['receta', 'paso', 'asset'])) }}">
                     @csrf
                     @method('delete')
