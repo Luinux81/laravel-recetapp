@@ -57,7 +57,7 @@ class Tools{
 
         // Los modelos que se dejen pasar deben tener una propiedad publica user_id
         if ($permiso){
-            if($temp->user_id == NULL)
+            if($temp->esPublico())
             {
                 if(!$user->can($permiso)) 
                     throw new Exception("No tiene permiso para realizar esta acción", 401);
@@ -67,15 +67,9 @@ class Tools{
                 if(($temp->user_id != $user->id) && !$user->can("private_access"))
                     throw new Exception("No tiene permiso para realizar esta acción", 401);
             }
-            // if($temp->user_id == NULL && !$user->can($permiso)){
-            //     throw new Exception("No tiene permiso para realizar esta acción", 401);
-            // }
-            // if($temp->user_id != NULL && $temp->user_id != $user->id){
-            //     throw new Exception("No tiene permiso para realizar esta acción", 401);
-            // }
         }
         else{
-            if ($temp->user_id == NULL){
+            if ($temp->esPublico()){
                 throw new Exception("No tiene permiso para realizar esta acción", 401);
             }
             else{

@@ -19,7 +19,7 @@ class AssetController extends Controller
 
         $this->validate($request, ['imagen' => 'image|required']);
         
-        if($receta->esRecetaPublica()){
+        if($receta->esPublico()){
             $img = request('imagen')->store('pasos','public');
         }
         else{

@@ -28,7 +28,8 @@ class CategoriaIngrediente extends Model
         return $this->belongsTo(CategoriaIngrediente::class);
     }
 
-    public function categoriasHija($recursivo = false){
+    public function categoriasHija($recursivo = false)
+    {
         $out = new Collection();
         
         $hijas = CategoriaIngrediente::where('catParent_id','=',$this->id)->get();        
@@ -57,8 +58,15 @@ class CategoriaIngrediente extends Model
         return $out;
     }
 
-    public function categoriaRaiz(){
+    public function categoriaRaiz()
+    {
         return $this->catParent_id == NULL;
+    }
+
+    public function esPublico() : bool
+    {
+        return ($this->user_id == NULL);
+        // return $this->publicado;
     }
 }
 

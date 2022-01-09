@@ -27,7 +27,8 @@ class CategoriaReceta extends Model
         return $this->belongsTo(CategoriaReceta::class);
     }
 
-    public function categoriasHija($recursivo = false){
+    public function categoriasHija($recursivo = false)
+    {
         $out = new Collection();
         
         $hijas = CategoriaReceta::where('catParent_id','=',$this->id)->get();        
@@ -54,5 +55,11 @@ class CategoriaReceta extends Model
         }
 
         return $out;
+    }
+
+    public function esPublico() : bool
+    {
+        return ($this->user_id == NULL);
+        // return $this->publicado;
     }
 }

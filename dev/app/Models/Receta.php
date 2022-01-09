@@ -55,7 +55,7 @@ class Receta extends Model
         Tools::checkOrFail($this, "public_edit");
 
         if ($imagen != null){
-            if($this->esRecetaPublica()){
+            if($this->esPublico()){
                 $ruta = $imagen->store('public/recetas');
             }
             else{
@@ -74,8 +74,9 @@ class Receta extends Model
         return $ruta;
     }
 
-    public function esRecetaPublica() : bool
+    public function esPublico() : bool
     {
         return ($this->user_id == NULL);
+        // return $this->publicado;
     }
 }

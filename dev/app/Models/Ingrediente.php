@@ -36,15 +36,24 @@ class Ingrediente extends Model
         return $this->belongsToMany(Receta::class, "ingrediente_receta")->withPivot('cantidad', 'unidad_medida');
     }
 
+    /**
+     * Función para eliminar completamente el ingrediente si no es publico y hacer softdelete si lo es
+     * //TODO: Comprobar que el ingrediente no está en ninguna receta, si esta en una publica no borrar, si esta en receta borrar?
+     * @return void
+     */
     public function borradoCompleto()
     {
-        if(!empty($this->imagen)){
-            if(Storage::exists($this->imagen)){
-                Storage::delete($this->imagen);
+        if(!$this->esPublico()){
+            if(!empty($this->imagen)){
+                if(Storage::exists($this->imagen)){
+                    Storage::delete($this->imagen);
+                }
             }
+            $this->forceDelete();
         }
-        
-        $this->delete();
+        else{
+            $this->delete();
+        }
     }
 
     public function setImagen(UploadedFile $imagen = null)
@@ -73,7 +82,11 @@ class Ingrediente extends Model
 
     public function esPublico() : bool
     {
-        return ($this->user_id == NULL);
+        if ($this->publicado == NULL){
+            $this->publicado = false;
+        }
+        
+        return $this->publicado;
     }
 
 

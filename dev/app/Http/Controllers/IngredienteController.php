@@ -115,27 +115,32 @@ class IngredienteController extends Controller
             }
         }
 
+        if(empty($data["publicado"])){
+            $data["publicado"] = false;
+        }        
+
         $ingrediente = Ingrediente::create([
-            "nombre" => $data['nombre'],
-            "descripcion" => $data['descripcion'],
-            "marca" => $data['marca'],
-            "barcode" => $data['barcode'],   
-            "url" => $data['url'],   
-            "calorias" => $data['calorias'],     
-            "fat_total" => $data['fat_total'],        
-            "fat_saturadas" => $data['fat_saturadas'],        
-            "fat_poliinsaturadas" => $data['fat_poliinsaturadas'],        
-            "fat_monoinsaturadas" => $data['fat_monoinsaturadas'],        
-            "fat_trans" => $data['fat_trans'],        
-            "colesterol" => $data['colesterol'],        
-            "sodio" => $data['sodio'],        
-            "potasio" => $data['potasio'],        
-            "fibra" => $data['fibra'],        
-            "carb_total" => $data['carb_total'],        
-            "carb_azucar" => $data['carb_azucar'],        
-            "proteina" => $data['proteina'],
-            "cat_id" => $data['categoria'],
-            "user_id" => $this->user()->id,
+            "nombre"                => $data['nombre'],
+            "descripcion"           => $data['descripcion'],
+            "marca"                 => $data['marca'],
+            "barcode"               => $data['barcode'],   
+            "url"                   => $data['url'],   
+            "calorias"              => $data['calorias'],     
+            "fat_total"             => $data['fat_total'],        
+            "fat_saturadas"         => $data['fat_saturadas'],        
+            "fat_poliinsaturadas"   => $data['fat_poliinsaturadas'],        
+            "fat_monoinsaturadas"   => $data['fat_monoinsaturadas'],        
+            "fat_trans"             => $data['fat_trans'],        
+            "colesterol"            => $data['colesterol'],        
+            "sodio"                 => $data['sodio'],        
+            "potasio"               => $data['potasio'],        
+            "fibra"                 => $data['fibra'],        
+            "carb_total"            => $data['carb_total'],        
+            "carb_azucar"           => $data['carb_azucar'],        
+            "proteina"              => $data['proteina'],
+            "publicado"             => $data['publicado'],
+            "cat_id"                => $data['categoria'],
+            "user_id"               => $this->user()->id,
         ]);
 
         if(array_key_exists('imagen',$data)){
@@ -178,25 +183,25 @@ class IngredienteController extends Controller
 
 
         $ingrediente->update([
-            "nombre" => $data['nombre'],
-            "descripcion" => $data['descripcion'],
-            "marca" => $data['marca'],
-            "barcode" => $data['barcode'],    
-            "url" => $data['url'],   
-            "calorias" => $data['calorias'],     
-            "fat_total" => $data['fat_total'],        
-            "fat_saturadas" => $data['fat_saturadas'],        
-            "fat_poliinsaturadas" => $data['fat_poliinsaturadas'],        
-            "fat_monoinsaturadas" => $data['fat_monoinsaturadas'],        
-            "fat_trans" => $data['fat_trans'],        
-            "colesterol" => $data['colesterol'],        
-            "sodio" => $data['sodio'],        
-            "potasio" => $data['potasio'],        
-            "fibra" => $data['fibra'],        
-            "carb_total" => $data['carb_total'],        
-            "carb_azucar" => $data['carb_azucar'],        
-            "proteina" => $data['proteina'],
-            "cat_id" => $data['categoria'],
+            "nombre"                => $data['nombre'],
+            "descripcion"           => $data['descripcion'],
+            "marca"                 => $data['marca'],
+            "barcode"               => $data['barcode'],    
+            "url"                   => $data['url'],   
+            "calorias"              => $data['calorias'],     
+            "fat_total"             => $data['fat_total'],        
+            "fat_saturadas"         => $data['fat_saturadas'],        
+            "fat_poliinsaturadas"   => $data['fat_poliinsaturadas'],        
+            "fat_monoinsaturadas"   => $data['fat_monoinsaturadas'],        
+            "fat_trans"             => $data['fat_trans'],        
+            "colesterol"            => $data['colesterol'],        
+            "sodio"                 => $data['sodio'],        
+            "potasio"               => $data['potasio'],        
+            "fibra"                 => $data['fibra'],        
+            "carb_total"            => $data['carb_total'],        
+            "carb_azucar"           => $data['carb_azucar'],        
+            "proteina"              => $data['proteina'],
+            "cat_id"                => $data['categoria'],
         ]);       
         
         if(array_key_exists('imagen',$data)){
