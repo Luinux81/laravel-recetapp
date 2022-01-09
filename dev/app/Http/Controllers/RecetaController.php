@@ -32,12 +32,7 @@ class RecetaController extends Controller
 
     protected function index()
     {
-        $recetas_privadas = $this->user()->recetas()->get();
-        $recetas_publicas = Receta::where('user_id',NULL)->get();
-
-        $recetas = $recetas_privadas->concat($recetas_publicas)->sortBy('nombre');
-
-        return $recetas;
+        return $this->user()->getAllRecetas();
     }
 
 

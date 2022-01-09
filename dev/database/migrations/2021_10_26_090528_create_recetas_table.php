@@ -41,6 +41,9 @@ class CreateRecetasTable extends Migration
             $table->decimal("carb_azucar",4,2)->nullable();
             $table->decimal("proteina",4,2)->nullable();
 
+            $table->boolean("publicado")->default(false);
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

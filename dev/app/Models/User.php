@@ -102,4 +102,25 @@ class User extends Authenticatable
 
         return $ingredientes;
     }
+
+
+    public function getAllRecetas(){
+        /** @var User */
+        $user = auth()->user();
+
+        $publicos       = Receta::where('publicado', 1)->whereNull('user_id')->withTrashed();
+        $publicosUsers  = Receta::where('publicado',1)->where('user_id', '!=', $user->id)->withTrashed();
+        $publicoPropio  = Receta::where('publicado',1)->where('user_id', $user->id)->withTrashed();
+
+        $recetasPublicas = $publicos
+                                ->union($publicosUsers)
+                                ->union($publicoPropio)
+                                ;
+        $recetas = $recetasPublicas
+                        ->union($user->recetas())
+                        ->orderBy('nombre')
+                        ->get();
+
+        return $recetas;
+    }
 }

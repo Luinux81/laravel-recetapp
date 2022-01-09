@@ -8,12 +8,14 @@ use App\Models\PasoReceta;
 use App\Models\Ingrediente;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class Receta extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $guarded = [];
 
@@ -32,21 +34,27 @@ class Receta extends Model
         return $this->hasMany(PasoReceta::class)->orderBy('orden');
     }
 
+
     public function borradoCompleto()
     {
-        if(!empty($this->imagen)){
-            if(Storage::exists($this->imagen)){
-                Storage::delete($this->imagen);
+        if($this->esPublico()){
+            $this->delete();
+        }
+        else{
+            if(!empty($this->imagen)){
+                if(Storage::exists($this->imagen)){
+                    Storage::delete($this->imagen);
+                }
             }
+    
+            foreach ($this->pasos as $paso) {
+                $paso->borradoCompleto();
+            }
+    
+            $this->ingredientes()->sync([]);
+    
+            $this->forceDelete();
         }
-
-        foreach ($this->pasos as $paso) {
-            $paso->borradoCompleto();
-        }
-
-        $this->ingredientes()->sync([]);
-
-        $this->delete();
     }
 
 
@@ -74,9 +82,13 @@ class Receta extends Model
         return $ruta;
     }
 
+
     public function esPublico() : bool
     {
-        return ($this->user_id == NULL);
-        // return $this->publicado;
+        if ($this->publicado == NULL){
+            $this->publicado = false;
+        }
+        
+        return $this->publicado;
     }
 }
