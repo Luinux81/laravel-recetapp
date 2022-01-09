@@ -14,6 +14,22 @@ class CategoriaRecetaSeeder extends Seeder
      */
     public function run()
     {
+        $this->setCategoriasAutoFile();
+        //$this->setCategoriasManual();
+    }
+
+
+    private function setCategoriasAutoFile(){
+        $path = "storage/seeds/categorias_receta.sql";
+        
+        DB::unprepared(file_get_contents($path));
+
+        $this->command->info('CategoriasReceta table seeded!');
+    }
+
+
+    private function setCategoriasManual()
+    {
         DB::table("categorias_receta")->insert([
             "user_id"=>"1",
             "nombre"=>"Sopas",
@@ -30,6 +46,20 @@ class CategoriaRecetaSeeder extends Seeder
             "user_id"=>"1",
             "nombre"=>"Carnes",
             "descripcion"=>"Carnes",
+        ]);
+
+        DB::table("categorias_receta")->insert([
+            "user_id"=>"1",
+            "nombre"=>"Pollo",
+            "descripcion"=>"Pollo",
+            "catParent_id"=>"3"
+        ]);
+
+        DB::table("categorias_receta")->insert([
+            "user_id"=>"1",
+            "nombre"=>"Cerdo",
+            "descripcion"=>"Cerdo",
+            "catParent_id"=>"3"
         ]);
 
         DB::table("categorias_receta")->insert([
