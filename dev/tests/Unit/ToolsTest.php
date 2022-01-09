@@ -72,8 +72,8 @@ class ToolsTest extends TestCase
             [$rec2],
             // [$cat1],
             // [$cat2],
-            // [$cati1],
-            // [$cati2],
+            [$cati1],
+            [$cati2],
         ];
     }
 
@@ -89,6 +89,9 @@ class ToolsTest extends TestCase
         $items["receta"]["public"]  = Receta::factory()->make(["user_id" => NULL, "publicado" => 1]);
         $items["receta"]["public2"]  = Receta::factory()->make(["user_id" => $this->user->id, "publicado" => 1]);
         
+        $items["cat_ingrediente"]["private"] = CategoriaIngrediente::factory()->make(["user_id" => $this->user->id, "publicado" => 0]);
+        $items["cat_ingrediente"]["public"]  = CategoriaIngrediente::factory()->make(["user_id" => NULL, "publicado" => 1]);
+        $items["cat_ingrediente"]["public2"]  = CategoriaIngrediente::factory()->make(["user_id" => $this->user->id, "publicado" => 1]);
 
         return $items;
     }
@@ -118,11 +121,13 @@ class ToolsTest extends TestCase
         $test->assertTrue(Tools::checkOrFail($items["receta"]["public"], "public_index"));
         $test->assertTrue(Tools::checkOrFail($items["receta"]["public2"], "public_index"));
 
-        $this->assertTrue(Tools::checkOrFail(CategoriaIngrediente::factory()->make(["user_id" => $this->user->id])));
-        $this->assertTrue(Tools::checkOrFail(CategoriaIngrediente::factory()->make(["user_id" => NULL]), "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["private"]));
+        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public2"], "public_index"));
 
-        $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id])));
-        $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id]), "public_index"));
+
+        // $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id])));
+        // $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id]), "public_index"));
 
 
         $asset = new Asset();

@@ -81,7 +81,8 @@ class User extends Authenticatable
         return $this->hasMany(CategoriaReceta::class);
     }
 
-    public function getAllIngredientes(){
+    public function getAllIngredientes()
+    {
         /** @var User */
         $user = auth()->user();
         
@@ -104,7 +105,8 @@ class User extends Authenticatable
     }
 
 
-    public function getAllRecetas(){
+    public function getAllRecetas()
+    {
         /** @var User */
         $user = auth()->user();
 
@@ -122,5 +124,28 @@ class User extends Authenticatable
                         ->get();
 
         return $recetas;
+    }
+
+
+    public function getAllCategoriasIngrediente()
+    {
+        /** @var User */
+        $user = auth()->user();
+
+        $publicos       = CategoriaIngrediente::where('publicado', 1)->whereNull('user_id')->withTrashed();
+        $publicosUsers  = CategoriaIngrediente::where('publicado',1)->where('user_id', '!=', $user->id)->withTrashed();
+        $publicoPropio  = CategoriaIngrediente::where('publicado',1)->where('user_id', $user->id)->withTrashed();
+
+        $catIngredientesPublicos = $publicos
+                                ->union($publicosUsers)
+                                ->union($publicoPropio)
+                                ;
+
+        $categorias = $catIngredientesPublicos
+                        ->union($user->categoriasIngrediente())
+                        ->orderBy('nombre')
+                        ->get();
+
+        return $categorias;
     }
 }

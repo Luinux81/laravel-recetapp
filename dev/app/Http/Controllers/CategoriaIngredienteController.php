@@ -20,12 +20,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function index()
     {
-        $publicas = CategoriaIngrediente::where('user_id', NULL)->get();
-        $privadas = $this->user()->categoriasIngrediente()->get();
-
-        $categorias = $publicas->concat($privadas)->sortBy('id');
-
-        return $categorias;
+        return $this->user()->getAllCategoriasIngrediente();
     }
 
 
@@ -114,7 +109,7 @@ class CategoriaIngredienteController extends Controller
     {        
         Tools::checkOrFail($categoria, "public_destroy");
 
-        $categoria->delete();
+        $categoria->borradoCompleto();
         
         return Tools::getResponse("info", "Acción realizada con éxito", 200);
     }

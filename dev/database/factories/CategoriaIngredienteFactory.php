@@ -22,9 +22,10 @@ class CategoriaIngredienteFactory extends Factory
     public function definition()
     {
         return [
-            "user_id" => 1,
+            "user_id" => NULL,
             "nombre" => $this->faker->text(20),            
             "descripcion" => $this->faker->text(60),
+            "publicado" => false,
         ];
     }
 }
