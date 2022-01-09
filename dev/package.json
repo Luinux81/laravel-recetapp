@@ -12,7 +12,9 @@
         "test-unit" : "php artisan test --testsuite=Unit --stop-on-failure",
         "test-recetas" : "php artisan test --group recetas",
         "test-ingredientes" : "php artisan test --group ingredientes",
-        "test-pasos" : "php artisan test --group pasos_receta"
+        "test-pasos" : "php artisan test --group pasos_receta",
+        "test-cat-ing" : "php artisan test --group categoria-ingrediente",
+        "test-cat-rec" : "php artisan test --group categoria-receta"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.3.1",
