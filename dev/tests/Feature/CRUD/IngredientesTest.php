@@ -289,6 +289,7 @@ class IngredientesTest extends TestCase
             "carb_azucar"           => $ingrediente->carb_azucar,
             "proteina"              => $ingrediente->proteina,
             "categoria"             => $ingrediente->categoria,
+            "publicado"             => $ingrediente->publicado,
         ], $overrides);
     }
 

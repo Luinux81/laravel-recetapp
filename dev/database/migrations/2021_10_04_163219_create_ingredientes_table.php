@@ -42,6 +42,8 @@ class CreateIngredientesTable extends Migration
             $table->decimal("carb_azucar",5,2)->nullable();
             $table->decimal("proteina",5,2)->nullable();
 
+            $table->boolean("publicado")->default(false);
+
             $table->softDeletes();
             $table->timestamps();
         });

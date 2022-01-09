@@ -26,7 +26,7 @@ class IngredienteSeeder extends Seeder
     }
 
     public function seedIngredientesAutoFile(){
-        $path = "storage/seeds/ingredientes_publicos_data.sql";
+        $path = "storage/seeds/ingredientes.sql";
         
         DB::unprepared(file_get_contents($path));
 

@@ -60,6 +60,7 @@ class IngredienteFactory extends Factory
             'carb_total'         => $this->faker->randomFloat(1,20,30),
             'carb_azucar'        => $this->faker->randomFloat(1,20,30),
             'proteina'           => $this->faker->randomFloat(1,20,30),
+            'publicado'          => false,
         ];
     }
 
