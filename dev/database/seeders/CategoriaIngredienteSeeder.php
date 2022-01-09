@@ -22,7 +22,7 @@ class CategoriaIngredienteSeeder extends Seeder
     }
 
     private function setCategoriasAutoFile(){
-        $path = "storage/seeds/categorias_ingrediente_data.sql";
+        $path = "storage/seeds/categorias_ingrediente.sql";
         
         DB::unprepared(file_get_contents($path));
 
