@@ -65,19 +65,23 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function ingredientes(){
+    public function ingredientes()
+    {
         return $this->hasMany(Ingrediente::class);
     }
 
-    public function categoriasIngrediente(){
+    public function categoriasIngrediente()
+    {
         return $this->hasMany(CategoriaIngrediente::class);
     }
 
-    public function recetas(){
+    public function recetas()
+    {
         return $this->hasMany(Receta::class);
     }
 
-    public function categoriasReceta(){
+    public function categoriasReceta()
+    {
         return $this->hasMany(CategoriaReceta::class);
     }
 
@@ -143,6 +147,29 @@ class User extends Authenticatable
 
         $categorias = $catIngredientesPublicos
                         ->union($user->categoriasIngrediente())
+                        ->orderBy('nombre')
+                        ->get();
+
+        return $categorias;
+    }
+
+
+    public function getAllCategoriasReceta()
+    {
+        /** @var User */
+        $user = auth()->user();
+
+        $publicos       = CategoriaReceta::where('publicado', 1)->whereNull('user_id')->withTrashed();
+        $publicosUsers  = CategoriaReceta::where('publicado', 1)->where('user_id', '!=', $user->id)->withTrashed();
+        $publicoPropio  = CategoriaReceta::where('publicado', 1)->where('user_id', $user->id)->withTrashed();
+
+        $catRecetasPublicas = $publicos
+                                ->union($publicosUsers)
+                                ->union($publicoPropio)
+                                ;
+
+        $categorias = $catRecetasPublicas
+                        ->union($user->categoriasReceta())
                         ->orderBy('nombre')
                         ->get();
 

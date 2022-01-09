@@ -70,8 +70,8 @@ class ToolsTest extends TestCase
             [$ing2],
             [$rec1],
             [$rec2],
-            // [$cat1],
-            // [$cat2],
+            [$cat1],
+            [$cat2],
             [$cati1],
             [$cati2],
         ];
@@ -93,6 +93,9 @@ class ToolsTest extends TestCase
         $items["cat_ingrediente"]["public"]  = CategoriaIngrediente::factory()->make(["user_id" => NULL, "publicado" => 1]);
         $items["cat_ingrediente"]["public2"]  = CategoriaIngrediente::factory()->make(["user_id" => $this->user->id, "publicado" => 1]);
 
+        $items["cat_receta"]["private"] = CategoriaIngrediente::factory()->make(["user_id" => $this->user->id, "publicado" => 0]);
+        $items["cat_receta"]["public"]  = CategoriaIngrediente::factory()->make(["user_id" => NULL, "publicado" => 1]);
+        $items["cat_receta"]["public2"]  = CategoriaIngrediente::factory()->make(["user_id" => $this->user->id, "publicado" => 1]);
         return $items;
     }
 
@@ -125,9 +128,9 @@ class ToolsTest extends TestCase
         $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public"], "public_index"));
         $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public2"], "public_index"));
 
-
-        // $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id])));
-        // $this->assertTrue(Tools::checkOrFail(CategoriaReceta::factory()->make(["user_id" => $this->user->id]), "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["private"]));
+        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public2"], "public_index"));
 
 
         $asset = new Asset();

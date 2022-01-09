@@ -6,24 +6,29 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CategoriaReceta extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "categorias_receta";
 
     protected $guarded = [];
 
-    // public function ingredientes(){
-    //     return $this->hasMany(Ingrediente::class);
-    // }
+    public function recetas()
+    {
+        return $this->hasMany(Receta::class);
+    }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function categoriaPadre(){
+    public function categoriaPadre()
+    {
         return $this->belongsTo(CategoriaReceta::class);
     }
 
@@ -59,7 +64,28 @@ class CategoriaReceta extends Model
 
     public function esPublico() : bool
     {
-        return ($this->user_id == NULL);
-        // return $this->publicado;
+        if($this->publicado == NULL){
+            $this->publicado = false;
+        }
+
+        return $this->publicado;
+    }
+
+    public function borradoCompleto()
+    {
+        $hijas = $this->categoriasHija(true);
+
+        foreach ($hijas as $cat) {
+            $cat->update([
+                "catParent_id" => NULL,
+            ]);
+        }
+        
+        if($this->esPublico()){
+            $this->delete();
+        }
+        else{
+            $this->forceDelete();
+        }
     }
 }

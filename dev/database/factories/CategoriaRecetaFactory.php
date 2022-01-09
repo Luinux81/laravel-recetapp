@@ -25,6 +25,7 @@ class CategoriaRecetaFactory extends Factory
             "user_id" => 1,
             "nombre" => $this->faker->text(20),            
             "descripcion" => $this->faker->text(60),
+            "publicado" => false,
         ];
     }
 }

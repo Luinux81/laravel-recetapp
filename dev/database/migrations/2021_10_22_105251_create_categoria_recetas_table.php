@@ -24,6 +24,9 @@ class CreateCategoriaRecetasTable extends Migration
             $table->string("nombre");
             $table->string("descripcion")->nullable();
         
+            $table->boolean("publicado")->default(false);
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

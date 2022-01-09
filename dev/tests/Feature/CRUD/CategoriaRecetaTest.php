@@ -38,6 +38,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_ver_listado_categorias()
     {
         $this->actingAs($this->user);
@@ -47,6 +50,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_ver_categoria()
     {
         $this->actingAs($this->user);
@@ -58,6 +64,10 @@ class CategoriaRecetaTest extends TestCase
         $response->assertViewHas("categoria");
     }
 
+
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_crear_categoria()
     {
         $this->actingAs($this->user);
@@ -81,6 +91,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_editar_categoria()
     {
         $this->actingAs($this->user);
@@ -106,6 +119,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_eliminar_categoria()
     {
         $this->actingAs($this->user);

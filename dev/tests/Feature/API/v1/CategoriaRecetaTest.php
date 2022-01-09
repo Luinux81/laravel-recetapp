@@ -37,12 +37,15 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_ver_listado()
     {
         $this->actingAs($this->user);
 
         CategoriaReceta::factory()->count(3)->create(["user_id"=>$this->user->id]);
-        CategoriaReceta::factory()->create(["user_id" => NULL]);
+        CategoriaReceta::factory()->create(["user_id" => NULL, "publicado" => 1]);
 
         $ruta = route("api.v1.recetas.categoria.index");
 
@@ -64,6 +67,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_ver_categoria()
     {
         $this->actingAs($this->user);
@@ -85,6 +91,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_crear_categoria()
     {
         $this->actingAs($this->user);
@@ -104,6 +113,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_editar_categoria()
     {
         $this->actingAs($this->user);
@@ -122,6 +134,9 @@ class CategoriaRecetaTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-receta
+     */
     public function test_usuario_puede_eliminar_categoria()
     {
         $this->actingAs($this->user);

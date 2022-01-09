@@ -26,18 +26,13 @@ class CategoriaRecetaController extends Controller
 
     protected function index()
     {
-        $publicas = CategoriaReceta::where('user_id', NULL)->get();
-        $privadas = $this->user()->categoriasReceta()->get();
-
-        $categorias = $publicas->concat($privadas)->sortBy('id');
-
-        return $categorias;    
+        return $this->user()->getAllCategoriasReceta();
     }
 
 
     protected function create()
     {
-        $categorias = $this->user()->categoriasReceta()->get();
+        $categorias = $this->user()->getAllCategoriasReceta();
 
         return view('recetas.categorias.create',compact('categorias'));
     }
@@ -125,7 +120,7 @@ class CategoriaRecetaController extends Controller
     {
         Tools::checkOrFail($categoria, "public_destroy");
 
-        $categoria->delete();
+        $categoria->borradoCompleto();
         
         return Tools::getResponse("info", "Acción realizada con éxito", 200);
     }
