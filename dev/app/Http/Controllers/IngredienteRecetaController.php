@@ -67,7 +67,7 @@ class IngredienteRecetaController extends Controller
 
         $request->session()->flash('url_retorno', route('recetas.ingrediente.create', ['receta'=>$receta->id ]));
         
-        $ingredientes = $this->user()->getAllIngredientesAccesibles();        
+        $ingredientes = $this->user()->getAllIngredientes();        
 
         return view('recetas.ingredientes.create', compact(['receta','ingredientes']));
     }
