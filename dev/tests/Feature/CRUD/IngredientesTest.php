@@ -63,19 +63,19 @@ class IngredientesTest extends TestCase
      */
     public function test_usuario_puede_ver_ingrediente()
     {
-        $this->actingAs($this->user);
+        $test = $this->actingAs($this->user);
 
         $ingredientePrivado = Ingrediente::factory()->create(["user_id"=>$this->user->id]);
-        $ingredientePublico = Ingrediente::factory()->create(["user_id"=>NULL]);
+        $ingredientePublico = Ingrediente::factory()->create(["user_id"=>NULL, "publicado" => 1]);
 
         $ruta_ing_privado = route("ingredientes.show", ["ingrediente" => $ingredientePrivado]);
         $ruta_ing_publico = route("ingredientes.show", ["ingrediente" => $ingredientePublico]);
 
         // La ruta ingredientes.show debe devolver la vista
-        $response = $this->get($ruta_ing_privado);
+        $response = $test->get($ruta_ing_privado);
         $response->assertViewIs("ingredientes.show");
 
-        $response = $this->get($ruta_ing_publico);
+        $response = $test->get($ruta_ing_publico);
         $response->assertViewIs("ingredientes.show");
     }
 
