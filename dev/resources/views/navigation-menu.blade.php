@@ -127,13 +127,18 @@
 
                         <x-slot name="content">
                             <!-- Admin section -->
-                            @canany(['permisos_index'])
+                            @canany(['permisos_index', 'public_create'])
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('Admin Area') }}
                                 </div>
                                 @can('permisos_index')
                                     <x-jet-dropdown-link href="{{ route('permisos') }}">
                                         {{ __('Permisos') }}
+                                    </x-jet-dropdown-link>
+                                @endcan
+                                @can('public_create')
+                                    <x-jet-dropdown-link href="{{ route('admin.review-publish-queue') }}">
+                                        {{ __('Cola de publicación') }}
                                     </x-jet-dropdown-link>
                                 @endcan
                             @endcan
