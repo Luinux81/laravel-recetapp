@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AssetController;
 use App\Http\Controllers\Web\RecetaController;
@@ -27,17 +28,31 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');
 
+    // Sección admin
+
     Route::prefix('admin')->name('admin.')->group(function(){
         Route::prefix('seed')->name('seed.')->group(function(){
             Route::post('receta/{receta}',[RecetaController::class, 'saveSeed'])->name('receta');
         });
+        
+        Route::get('/review-published-queue',[AdminController::class,'reviewPublishedQueue'])->name('review-publish-queue');
+        Route::post('/confirm-published',[AdminController::class,'confirmPublish'])->name('confirm-publish');
     });
     
+
+    // Ingredientes y categorias de ingrediente
+
     Route::prefix('ingredientes')->name('ingredientes.')->group(function(){
         Route::resource('categoria', CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);
+
+        Route::post('publish/{ingrediente}', [IngredienteController::class, 'publish'])->name('publish');
     });
 
     Route::resource('ingredientes', IngredienteController::class);
+
+
+
+    // Recetas, categorias de receta, ingredientes y pasos de recetas
 
     Route::prefix('recetas')->name('recetas.')->group(function(){
         Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
