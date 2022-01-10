@@ -23,17 +23,25 @@
                         case "App\Models\Receta":
                             $saltar = false;
 
-                            if($row->user_id == NULL){
+                            if($row->esPublico()){
                                 if(!auth()->user()->can('public_edit') && $action->action == "edit"){
                                     $saltar = true;
                                 }
                                 if(!auth()->user()->can('public_destroy') && $action->action == "destroy"){
                                     $saltar = true;
                                 }
+                                if($action->action == "publish"){
+                                    $saltar = true;
+                                }
                             }
                             else{
                                 if(auth()->user()->id != $row->user_id){
                                     $saltar = true;
+                                }
+                                else{
+                                    if(!$row->esPublicable() && $action->action == "publish"){
+                                        $saltar = true;
+                                    }
                                 }
                             
                             break;

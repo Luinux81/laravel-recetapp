@@ -8,6 +8,7 @@ use App\Models\Ingrediente;
 use App\Helpers\Tools;
 use App\Models\CategoriaIngrediente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class IngredienteController extends Controller
@@ -219,6 +220,22 @@ class IngredienteController extends Controller
         $ingrediente->borradoCompleto();
 
         return Tools::getResponse("info", "Acción realizada con éxito", 200);        
+    }
+
+
+    protected function publish(Ingrediente $ingrediente)
+    {
+        Tools::checkOrFail($ingrediente, "public_edit");
+
+        if(!$ingrediente->esPublicable()) throw new Exception("El ingrediente no es publicable", 401);
+
+        DB::table('publish_queue')->insert([
+            'tipo' => 'I',
+            'model_id' => $ingrediente->id,
+            'created_at' => now(),
+        ]);
+
+        return Tools::getResponse("info", "Ingrediente " . $ingrediente->nombre . " añadido a cola de publicación", 200);        
     }
 
 

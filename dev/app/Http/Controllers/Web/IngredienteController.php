@@ -117,4 +117,21 @@ class IngredienteController extends IngredienteBaseController
         }
     }
 
+
+    public function publish(Ingrediente $ingrediente)
+    {
+        try 
+        {
+            $res = parent::publish($ingrediente);
+            
+            Tools::notificaUIFlash($res->original["tipo"], $res->original["mensaje"]);
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+        }
+        finally
+        {
+            return redirect()->route('ingredientes.index');
+        }
+    }
 }

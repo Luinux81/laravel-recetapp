@@ -6,6 +6,7 @@ use App\Models\Ingrediente;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use App\Models\CategoriaIngrediente;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -33,12 +34,10 @@ final class IngredientesTable extends PowerGridComponent
     */
     public function datasource(): ?Collection
     {
-        $ingredientesPublicos = Ingrediente::where('user_id',NULL)->get();
-        $ingredientesPrivados = Auth::user()->ingredientes()->get();
-
-        $ingredientes = $ingredientesPublicos->merge($ingredientesPrivados)->sortBy('nombre');
-
-        return $ingredientes;
+        /** @var User */
+        $user = auth()->user();
+        
+        return $user->getAllIngredientes();
     }
 
     /*
@@ -88,14 +87,17 @@ final class IngredientesTable extends PowerGridComponent
     |
 
     */
-     /**
+    /**
      * PowerGrid Columns.
      *
      * @return array<int, \PowerComponents\LivewirePowerGrid\Column>
      */
     public function columns(): array
     {
-        $categorias = Auth::user()->categoriasIngrediente()->orderBy('nombre')->get();
+        /** @var User */
+        $user = auth()->user();
+
+        $categorias = $user->categoriasIngrediente()->orderBy('nombre')->get();
 
         return [
             Column::add()
@@ -135,7 +137,14 @@ final class IngredientesTable extends PowerGridComponent
                 ->class('boton boton--rojo')
                 ->route('ingredientes.destroy',['ingrediente'=>'id'])
                 ->method('delete')
-
+                ,
+            
+            Button::add('publish')
+                ->target('')
+                ->caption(__('Publicar'))
+                ->class('boton boton--gris')
+                ->route('ingredientes.publish',['ingrediente'=>'id'])
+                ->method('post')
         ];
     }
 }
