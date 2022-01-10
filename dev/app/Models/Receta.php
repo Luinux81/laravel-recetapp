@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class Receta extends Model
@@ -90,5 +91,19 @@ class Receta extends Model
         }
         
         return $this->publicado;
+    }
+
+    public function esPublicable() : bool
+    {   
+        if($this->esPublico()) return false;  // La receta ya es pública
+
+        $res = DB::table('publish_queue')
+            ->select('*')
+            ->where('tipo', '=' ,'R')
+            ->where('model_id', '=', $this->id);
+
+        if($res->count()>0) return false;   // La receta ya está en la cola de publicación
+
+        return true;
     }
 }

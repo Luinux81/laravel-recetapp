@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class Ingrediente extends Model
@@ -26,15 +27,18 @@ class Ingrediente extends Model
         return $this->belongsTo(User::class);
     }
 
+
     public function categoria()
     {
         return $this->belongsTo(CategoriaIngrediente::class,"cat_id");
     }
 
+
     public function recetas()
     {
         return $this->belongsToMany(Receta::class, "ingrediente_receta")->withPivot('cantidad', 'unidad_medida');
     }
+
 
     /**
      * Función para eliminar completamente el ingrediente si no es publico y hacer softdelete si lo es
@@ -55,6 +59,8 @@ class Ingrediente extends Model
             $this->delete();
         }
     }
+
+
 
     public function setImagen(UploadedFile $imagen = null)
     {
@@ -87,6 +93,21 @@ class Ingrediente extends Model
         }
         
         return $this->publicado;
+    }
+
+
+    public function esPublicable() : bool
+    {   
+        if($this->esPublico()) return false;  // El ingrediente ya es público
+
+        $res = DB::table('publish_queue')
+            ->select('*')
+            ->where('tipo', '=' ,'I')
+            ->where('model_id', '=', $this->id);
+
+        if($res->count()>0) return false;   // El ingrediente ya esta en la cola de publicación
+
+        return true;
     }
 
 
