@@ -36,7 +36,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         });
         
         Route::get('/review-published-queue',[AdminController::class,'reviewPublishedQueue'])->name('review-publish-queue');
-        Route::post('/confirm-published',[AdminController::class,'confirmPublish'])->name('confirm-publish');
+        Route::get('/review-publish/{id}', [AdminController::class, 'reviewPublish'])->name('review-publish');
+        Route::post('/confirm-publish/{id}',[AdminController::class,'confirmPublish'])->name('confirm-publish');
+        Route::post('/deny-publish/{id}',[AdminController::class,'denyPublish'])->name('deny-publish');
     });
     
 
