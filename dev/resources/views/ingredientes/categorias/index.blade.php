@@ -15,11 +15,12 @@
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Categoria Superior</th>
+                    <th>Ingredientes</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach ($categorias as $c)
+            @foreach ($categorias as $c)                
                 <tr>
                     <td>{{$c->nombre}}</td>
                     <td>{{$c->descripcion}}</td>
@@ -28,6 +29,9 @@
                             {{ \App\Models\CategoriaIngrediente::find($c->catParent_id)->nombre }}
                         @endif
                     </td>
+                    <td>
+                        {{ $c->ingredientes()->count() }}
+                    </td>
                     <td class="p-3 flex flex-row flex-between gap-2">
                         <a href="{{ route('ingredientes.categoria.edit',['categoria'=>$c->id])}}" class="boton boton--gris">Editar</a>
                         <form method="post" action="{{ route('ingredientes.categoria.destroy',['categoria'=>$c->id]) }}">
@@ -35,8 +39,7 @@
                             @method('DELETE')
                             {{-- <input type="submit" class="boton boton--rojo" value="Borrar" onsumbit="confirmarBorrado(event)" /> --}}
                             <button class="boton boton--rojo" onclick="confirmarBorrado(event)">Borrar</button>
-                        </form>
-                        
+                        </form>                            
                     </td>
                 </tr>
             @endforeach

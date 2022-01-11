@@ -20,7 +20,14 @@ class CategoriaIngredienteController extends Controller
 
     protected function index()
     {
-        return $this->user()->getAllCategoriasIngrediente();
+        $categorias = $this->user()->getAllCategoriasIngrediente();
+
+        $resultado = collect();
+        $recorridos = collect();
+
+        $resultado = CategoriaIngrediente::arbol($categorias);
+
+        return $resultado;
     }
 
 
