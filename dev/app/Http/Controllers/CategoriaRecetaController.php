@@ -26,7 +26,11 @@ class CategoriaRecetaController extends Controller
 
     protected function index()
     {
-        return $this->user()->getAllCategoriasReceta();
+        $categorias = $this->user()->getAllCategoriasReceta();
+
+        $resultado = CategoriaReceta::arbol($categorias);
+
+        return $resultado;
     }
 
 
@@ -71,7 +75,7 @@ class CategoriaRecetaController extends Controller
     {
         Tools::checkOrFail($categoria, "public_edit");
 
-        $categoriasHija = $categoria->categoriasHija(true);
+        $categoriasHija = $categoria->hijos(true);
 
         return view('recetas.categorias.edit',compact(['categoria', 'categoriasHija'])); 
     }
@@ -101,7 +105,7 @@ class CategoriaRecetaController extends Controller
             }
 
             // No permitir bucles de categorias
-            if($categoria->categoriasHija(true)->contains($nuevaCatSuperior)){
+            if($categoria->hijos(true)->contains($nuevaCatSuperior)){
                 throw new Exception("No se permite esa asignación de categoría superior", 400);
             }
         }

@@ -38,12 +38,16 @@ class CategoriaIngredienteTest extends TestCase
         $this->user = User::factory()->create();
     }
 
+
+    /**
+     * @group categoria-ingrediente
+     */
     public function test_usuario_puede_ver_listado()
     {
         $this->actingAs($this->user);
 
         CategoriaIngrediente::factory()->count(3)->create(["user_id"=>$this->user->id]);
-        CategoriaIngrediente::factory()->create(["user_id" => NULL]);
+        CategoriaIngrediente::factory()->create(["user_id" => NULL, "publicado" => 1]);
 
         $ruta = route("api.v1.ingredientes.categoria.index");
 
@@ -65,6 +69,9 @@ class CategoriaIngredienteTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-ingrediente
+     */
     public function test_usuario_puede_ver_categoria()
     {
         $this->actingAs($this->user);
@@ -86,6 +93,9 @@ class CategoriaIngredienteTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-ingrediente
+     */
     public function test_usuario_puede_crear_categoria()
     {
         $this->actingAs($this->user);
@@ -105,6 +115,9 @@ class CategoriaIngredienteTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-ingrediente
+     */
     public function test_usuario_puede_editar_categoria()
     {
         $this->actingAs($this->user);
@@ -123,6 +136,9 @@ class CategoriaIngredienteTest extends TestCase
     }
 
 
+    /**
+     * @group categoria-ingrediente
+     */
     public function test_usuario_puede_eliminar_categoria()
     {
         $this->actingAs($this->user);

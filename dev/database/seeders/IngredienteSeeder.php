@@ -211,7 +211,7 @@ class IngredienteSeeder extends Seeder
 
         foreach($categorias as $categoria){
             
-            if($categoria->categoriaRaiz()){
+            if($categoria->esRaiz()){
                 $ingredientes = WebScrapper::getIngredientesPorCategoriaFatSecret($categoria->descripcion);
                 
                 if(!empty($ingredientes)){

@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CategoriaReceta extends Model
+class CategoriaReceta extends Categoria
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,75 +15,25 @@ class CategoriaReceta extends Model
 
     protected $guarded = [];
 
+
+    protected function elementos()
+    {
+        return $this->recetas();    
+    }
+
+    public function padre()
+    {
+        return $this->belongsTo(CategoriaReceta::class);
+    }
+
     public function recetas()
     {
         return $this->hasMany(Receta::class);
     }
 
-    public function user()
+
+    public static function arbol(Collection $categorias)
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function categoriaPadre()
-    {
-        return $this->belongsTo(CategoriaReceta::class);
-    }
-
-    public function categoriasHija($recursivo = false)
-    {
-        $out = new Collection();
-        
-        $hijas = CategoriaReceta::where('catParent_id','=',$this->id)->get();        
-        $visitados = collect();        
-        $i = 0;
-
-        if($recursivo){            
-            while($i < $hijas->count()){
-                $cat = $hijas->all()[$i];
-                if (!$visitados->contains($cat)){
-                    $visitados->add($cat);
-
-                    $subHijas = CategoriaReceta::where('catParent_id','=',$cat->id)->get();
-                    foreach ($subHijas as $key => $subHija) {
-                        $hijas->add($subHija);
-                    }
-                }
-                $i++;
-            }  
-            $out = $hijas;      
-        }
-        else{
-            $out = $hijas;
-        }
-
-        return $out;
-    }
-
-    public function esPublico() : bool
-    {
-        if($this->publicado == NULL){
-            $this->publicado = false;
-        }
-
-        return $this->publicado;
-    }
-
-    public function borradoCompleto()
-    {
-        $hijas = $this->categoriasHija(true);
-
-        foreach ($hijas as $cat) {
-            $cat->update([
-                "catParent_id" => NULL,
-            ]);
-        }
-        
-        if($this->esPublico()){
-            $this->delete();
-        }
-        else{
-            $this->forceDelete();
-        }
+        return Categoria::arbol($categorias);
     }
 }
