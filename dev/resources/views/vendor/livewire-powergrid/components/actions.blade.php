@@ -23,6 +23,10 @@
                         case "App\Models\Receta":
                             $saltar = false;
 
+                            if($action->action == "seed" && !auth()->user()->can('seeder_save')){
+                                $saltar = true;
+                            }
+
                             if($row->esPublico()){
                                 if(!auth()->user()->can('public_edit') && $action->action == "edit"){
                                     $saltar = true;

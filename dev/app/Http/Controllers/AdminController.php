@@ -47,7 +47,7 @@ class AdminController extends Controller
             case 'I':
                 $res = redirect()->route('ingredientes.show', ['ingrediente' => Ingrediente::findOrFail($item->model_id)]);
                 break;
-            case 'I':
+            case 'R':
                 $res = redirect()->route('recetas.show', ['receta' => Receta::findOrFail($item->model_id)]);
                 break;
             

@@ -9,7 +9,8 @@
     </x-slot>
 
     <x-content>
-        <table>
+        <livewire:recetas-table/>
+        {{-- <table>
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -49,7 +50,8 @@
                 </tr>
             @endforeach
             </tbody>
-        </table>
+        </table> --}}
+
     </x-content>
 
     @push('custom-scripts')

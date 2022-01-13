@@ -9,6 +9,7 @@ use App\Helpers\Seeder;
 use App\Helpers\Tools;
 use App\Models\CategoriaReceta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class RecetaController extends Controller
@@ -155,4 +156,19 @@ class RecetaController extends Controller
         return auth()->user();
     }
 
+
+    protected function publish(Receta $receta)
+    {
+        Tools::checkOrFail($receta, "public_edit");
+
+        if(!$receta->esPublicable()) throw new Exception("La receta no es publicable", 401);
+
+        DB::table('publish_queue')->insert([
+            'tipo' => 'R',
+            'model_id' => $receta->id,
+            'created_at' => now(),
+        ]);
+
+        return Tools::getResponse("info", "Receta " . $receta->nombre . " añadido a cola de publicación", 200);        
+    }
 }

@@ -109,4 +109,22 @@ class RecetaController extends RecetaBaseController
         }
     }
 
+
+    public function publish(Receta $receta)
+    {
+        try 
+        {
+            $res = parent::publish($receta);
+            
+            Tools::notificaUIFlash($res->original["tipo"], $res->original["mensaje"]);
+        } 
+        catch (Throwable $th) {
+            Tools::notificaUIFlash("error", $th->getMessage());
+        }
+        finally
+        {
+            return redirect()->route('recetas.index');
+        }
+    }
+
 }

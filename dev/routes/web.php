@@ -9,7 +9,6 @@ use App\Http\Controllers\Web\IngredienteController;
 use App\Http\Controllers\Web\IngredienteRecetaController;
 use App\Http\Controllers\Web\CategoriaIngredienteController;
 use App\Http\Controllers\Web\CategoriaRecetaController;
-use App\Models\Ingrediente;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +59,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     Route::prefix('recetas')->name('recetas.')->group(function(){
         Route::resource('categoria', CategoriaRecetaController::class)->parameters(['categoria'=>'categoria']);
+        
+        Route::post('publish/{receta}', [RecetaController::class, 'publish'])->name('publish');
 
         Route::group(['prefix'=>"{receta}"], function(){
             Route::prefix("pasos/{paso}")
