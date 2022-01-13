@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Models\Ingrediente;
 use Illuminate\Support\Collection;
 use OpenFoodFacts\Laravel\Facades\OpenFoodFacts as OFFs;
 
@@ -40,12 +39,12 @@ class OpenFoodFacts
         $res = [];
         $data = OFFs::barcode($codigo);
 
-        //dd($data);
-
         if(!empty($data)){
             $res = OpenFoodFacts::validar($data);
         }
         
+        dd($res, $data);
+
         return $res;
     }
 

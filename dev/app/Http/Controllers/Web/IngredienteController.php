@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Helpers\OpenFoodFacts;
 use Throwable;
 use App\Models\User;
 use App\Helpers\Tools;
@@ -133,5 +134,25 @@ class IngredienteController extends IngredienteBaseController
         {
             return redirect()->route('ingredientes.index');
         }
+    }
+
+
+    public function offsearch(Request $request)
+    {
+        $data = request()->validate([
+            'offcode' => 'required',
+        ]);
+
+        $res = OpenFoodFacts::getProductoOFFByCode($data["offcode"]);
+
+        dd($res);
+        
+        if(empty($res)){
+            Tools::notificaUIFlash("error", "Producto no encontrado");
+        }
+        else{
+            Tools::notificaUIFlash("success", "Datos de producto obtenidos con éxito");
+        }
+        return back()->withInput($res);
     }
 }

@@ -7,8 +7,20 @@
             </h2>
 
             <div class="flex gap-5">
+                <form method="post" action="{{ route('ingredientes.offsearch') }}" class="flex relative">
+                    @csrf
+
+                    <x-form.input-text
+                        titulo=""
+                        nombre="offcode"
+                        style="margin:0;"
+                    >
+                    </x-form.input-text>
+                    <button type="submit" class="boton boton--gris">Buscar barcode</button>
+                </form>
+                    
                 <a href="{{ route('ingredientes.store') }}" class="boton boton--azul" style="display:none;">Guardar</a>
-                <a href="{{ route('ingredientes.index') }}" class="boton boton--rojo">Cancelar</a>
+                <a href="{{ route('ingredientes.index') }}" class="boton boton--rojo" style="margin:auto;">Cancelar</a>
             </div>
         </div>
     </x-slot>
@@ -95,6 +107,28 @@
             </div>
         </form>
     </x-content>
+
+@push('custom-scripts')
+
+<script>
+    function buscaCodigo(event)
+    {
+        //Obtenemos el valor del input
+        let codigo = document.getElementById('offcode').value;        
+        const url = `https://world.openfoodfacts.org/api/v0/product/${codigo}.json`;
+        
+        //Hacemos una llamada ajax a la api de off
+        axios.get(url)
+            .then(function(response){
+                console.log(response);
+            })
+            .catch(function(error){
+                console.log(`Error: ${error}`);
+            });
+    }
+</script>
+
+@endpush
 
 </x-app-layout>
 

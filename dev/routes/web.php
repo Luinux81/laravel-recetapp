@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\IngredienteController;
 use App\Http\Controllers\Web\IngredienteRecetaController;
 use App\Http\Controllers\Web\CategoriaIngredienteController;
 use App\Http\Controllers\Web\CategoriaRecetaController;
+use App\Models\Ingrediente;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::resource('categoria', CategoriaIngredienteController::class)->parameters(['categoria'=>'categoria']);
 
         Route::post('publish/{ingrediente}', [IngredienteController::class, 'publish'])->name('publish');
+        Route::post('offsearch', [IngredienteController::class, 'offsearch'])->name('offsearch');
     });
 
     Route::resource('ingredientes', IngredienteController::class);
