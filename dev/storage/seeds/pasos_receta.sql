@@ -55,7 +55,12 @@ INSERT INTO `pasos_receta` (`id`, `receta_id`, `orden`, `texto`, `media_assets`)
 (30, 6, 2, 'Poner en la Thermomix el aceite, cebolla, pimiento y zanahoria. 5seg Temp.0 Vel.5', NULL),
 (31, 6, 3, 'Programar 10 min Temp.120 Vel.1', NULL),
 (32, 6, 4, 'Poner en la Thermomix el caldo, el resto de las verduras, la sal y las especias. Programamos 25 min Temp.120 Vel.1', NULL),
-(33, 6, 5, 'Pasar al gusto. (Aprox 1 min Vel.10 para conseguir textura de crema)', NULL);
+(33, 6, 5, 'Pasar al gusto. (Aprox 1 min Vel.10 para conseguir textura de crema)', NULL),
+(34, 7, 1, 'Poner la paisana en la thermomix y programar 5 seg Vel.4', NULL),
+(35, 7, 2, 'Programar 8 min Temp.120 Vel.1', NULL),
+(36, 7, 3, 'Poner en la thermomix el resto de verduras y programar 5 seg Vel.4', NULL),
+(37, 7, 4, 'Poner el caldo en la thermomix y programar 25 min Temp.120  Vel.1', NULL),
+(38, 7, 5, 'Poner especias y programar velocidad alta para pasar al gusto.', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

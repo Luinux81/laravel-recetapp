@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-01-2022 a las 16:31:35
+-- Tiempo de generación: 13-01-2022 a las 17:38:35
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.12
 
@@ -373,7 +373,8 @@ INSERT INTO `categorias_ingrediente` (`id`, `user_id`, `catParent_id`, `nombre`,
 (395, 1, 351, 'Suplementos', 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/alimentos/suplementos', 1, NULL, NULL, NULL),
 (396, 1, 351, 'Tamales', 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/alimentos/tamales', 1, NULL, NULL, NULL),
 (397, 1, 351, 'Taquitos', 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/alimentos/taquitos', 1, NULL, NULL, NULL),
-(398, 1, 351, 'Tempura', 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/alimentos/tempura', 1, NULL, NULL, NULL);
+(398, 1, 351, 'Tempura', 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/alimentos/tempura', 1, NULL, NULL, NULL),
+(399, 1, NULL, 'Especias', 'Especias de todo tipo', 0, NULL, '2022-01-13 15:37:52', '2022-01-13 15:37:52');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

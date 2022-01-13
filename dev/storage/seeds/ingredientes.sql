@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-01-2022 a las 11:47:38
+-- Tiempo de generación: 13-01-2022 a las 17:42:34
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.12
 
@@ -1421,7 +1421,12 @@ INSERT INTO `ingredientes` (`id`, `user_id`, `cat_id`, `nombre`, `descripcion`, 
 (1384, NULL, 312, 'Tomates Rojos', NULL, NULL, NULL, NULL, 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/gen%C3%A9rico/tomates-rojos', 18, '0.20', '0.05', '0.14', '0.05', NULL, '0.00', NULL, '237.00', '1.20', '3.92', '2.63', '0.88', 1, NULL, '2021-11-30 12:45:51', '2021-11-30 12:45:51'),
 (1385, NULL, 312, 'Zanahoria', NULL, NULL, NULL, NULL, 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/gen%C3%A9rico/zanahoria', 41, '0.24', '0.04', '0.01', '0.00', NULL, '0.17', NULL, '0.00', '4.54', '0.12', '9.58', '2.80', 1, NULL, '2021-11-30 12:45:51', '2021-11-30 12:45:51'),
 (1386, NULL, 312, 'Espinacas', NULL, NULL, NULL, NULL, 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/gen%C3%A9rico/espinacas', 23, '0.39', '0.06', '0.17', '0.01', NULL, '0.00', NULL, '558.00', '2.20', '3.63', '0.42', '2.86', 1, NULL, '2021-11-30 12:45:52', '2021-11-30 12:45:52'),
-(1387, NULL, 312, 'Champiñones', NULL, NULL, NULL, NULL, 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/gen%C3%A9rico/champi%C3%B1ones', 22, '0.34', '0.05', '0.16', '0.00', NULL, '0.00', NULL, '318.00', '1.00', '3.28', '1.65', '3.09', 1, NULL, '2021-11-30 12:45:53', '2021-11-30 12:45:53');
+(1387, NULL, 312, 'Champiñones', NULL, NULL, NULL, NULL, 'https://www.fatsecret.es/calor%C3%ADas-nutrici%C3%B3n/gen%C3%A9rico/champi%C3%B1ones', 22, '0.34', '0.05', '0.16', '0.00', NULL, '0.00', NULL, '318.00', '1.00', '3.28', '1.65', '3.09', 1, NULL, '2021-11-30 12:45:53', '2021-11-30 12:45:53'),
+(1388, 1, 349, 'Mix de verduras juliana', 'Zanahoria, col blanca, acelga, nabo, cebolla, apio y puerro', 'Verdifresh', '8437004621153', NULL, 'https://es.openfoodfacts.org/producto/8437004621153/mix-de-verduras-juliana-verdifresh', 39, '0.20', '0.03', NULL, NULL, NULL, NULL, '0.08', NULL, '2.20', '6.80', '3.20', '1.30', 1, NULL, '2022-01-13 15:12:28', '2022-01-13 15:22:07'),
+(1389, 1, 349, 'Verduras paisana', 'Calabacín, zanahoria, cebolla morada y puerro.', 'Hacendado', '8437004621863', NULL, 'https://es.openfoodfacts.org/producto/8437004621863/verduras-paisana-hacendado', 43, '0.25', '0.06', NULL, NULL, NULL, NULL, '0.02', NULL, '1.70', '8.20', '3.70', '1.20', 1, NULL, '2022-01-13 15:18:56', '2022-01-13 15:22:16'),
+(1390, 1, 349, '3 vegetales', 'Brócoli, coliflor y zanahoria.', 'Hacendado', '8437004621535', NULL, 'https://es.openfoodfacts.org/producto/8437004621535/3-vegetales-hacendado', 43, '0.30', '0.07', NULL, NULL, NULL, NULL, '0.04', NULL, '2.40', '6.70', '2.40', '2.10', 1, NULL, '2022-01-13 15:21:30', '2022-01-13 15:22:26'),
+(1391, 1, 399, 'Comino', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2022-01-13 15:40:00', '2022-01-13 15:40:00'),
+(1392, 1, 399, 'Nuez moscada', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2022-01-13 15:40:42', '2022-01-13 15:40:42');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

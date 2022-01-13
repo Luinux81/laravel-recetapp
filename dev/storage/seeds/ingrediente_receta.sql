@@ -75,7 +75,16 @@ INSERT INTO `ingrediente_receta` (`ingrediente_id`, `receta_id`, `cantidad`, `un
 (1180, 6, 300, 'gr'),
 (1204, 6, 100, 'gr'),
 (1206, 6, 100, 'gr'),
-(1385, 6, 100, 'gr');
+(1385, 6, 100, 'gr'),
+(956, 7, 25, 'gr'),
+(1013, 7, 1, 'al gusto'),
+(1019, 7, 1, 'al gusto'),
+(1045, 7, 600, 'gr'),
+(1388, 7, 400, 'gr'),
+(1389, 7, 400, 'gr'),
+(1390, 7, 300, 'gr'),
+(1391, 7, 1, 'al gusto'),
+(1392, 7, 1, 'al gusto');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

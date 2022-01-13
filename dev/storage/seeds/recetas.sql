@@ -31,7 +31,8 @@ INSERT INTO `recetas` (`id`, `user_id`, `cat_id`, `nombre`, `descripcion`, `raci
 (3, 1, 1, 'Salmorejo (Thermomix)', 'Salmorejo clásico andaluz con Thermomix', 6, '15 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-05 11:19:09', '2021-12-05 11:19:09'),
 (4, NULL, NULL, 'Tortilla de patatas', 'Con cebolla, que está más rica. Al microondas si tienes los recipientes adecuados.', 4, '25 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-05 12:30:28', '2021-12-05 12:42:31'),
 (5, NULL, NULL, 'Lentejas con verduras y pollo', 'Además de los ingredientes hay que añadir 1 hoja de laurel, comino al gusto y avecrem (opcional).', 4, '30 min', '', 300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-11 23:08:32', '2021-12-11 23:52:36'),
-(6, NULL, 1, 'Puré de verduras (Thermomix)', 'Puré de verduras (Calabaza, puerro, nabo, zanahoria, cebolla, pimiento) con Themomix', 4, '30 min', NULL, 200, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-27 18:28:40', '2021-12-27 18:28:40');
+(6, NULL, 1, 'Puré de verduras (Thermomix)', 'Puré de verduras (Calabaza, puerro, nabo, zanahoria, cebolla, pimiento) con Themomix', 4, '30 min', NULL, 200, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2021-12-27 18:28:40', '2021-12-27 18:28:40'),
+(7,NULL,'1','Puré de verduras (Thermomix)','Puré de verduras con Themomix y productos de verduras mezcladas',4,'40 min',NULL,200,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2022-01-13 16:29:09','2022-01-13 16:49:20');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
