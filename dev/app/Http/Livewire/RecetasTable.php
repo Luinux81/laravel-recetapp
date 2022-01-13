@@ -126,7 +126,8 @@ final class RecetasTable extends PowerGridComponent
                 ->field('nombre')
                 ->makeInputText('nombre')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('', 'width:45%'),
 
             Column::add()
                 ->title('Categoria')
