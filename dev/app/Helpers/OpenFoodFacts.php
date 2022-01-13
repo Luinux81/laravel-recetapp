@@ -43,8 +43,6 @@ class OpenFoodFacts
             $res = OpenFoodFacts::validar($data);
         }
         
-        dd($res, $data);
-
         return $res;
     }
 

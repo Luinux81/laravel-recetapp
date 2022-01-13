@@ -144,8 +144,6 @@ class IngredienteController extends IngredienteBaseController
         ]);
 
         $res = OpenFoodFacts::getProductoOFFByCode($data["offcode"]);
-
-        dd($res);
         
         if(empty($res)){
             Tools::notificaUIFlash("error", "Producto no encontrado");
