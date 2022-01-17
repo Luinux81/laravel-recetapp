@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\IngredienteController;
 use App\Http\Controllers\Web\IngredienteRecetaController;
 use App\Http\Controllers\Web\CategoriaIngredienteController;
 use App\Http\Controllers\Web\CategoriaRecetaController;
+use App\Http\Controllers\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,11 @@ use App\Http\Controllers\Web\CategoriaRecetaController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
+Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
+
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::view('/dashboard','dashboard')->name('dashboard');

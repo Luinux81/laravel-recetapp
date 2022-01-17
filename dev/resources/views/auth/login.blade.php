@@ -43,6 +43,15 @@
                     {{ __('Log in') }}
                 </x-jet-button>
             </div>
+
+            {{-- Login with Facebook --}}
+            <div class="flex items-center justify-end mt-4" style="display:none;">
+                <a class="btn" href="{{ url('auth/facebook') }}"
+                    style="background: #3B5499; color: #ffffff; padding: 10px; width: 100%; text-align: center; display: block; border-radius:3px;">
+                    Login with Facebook
+                </a>
+            </div>
+
         </form>
     </x-jet-authentication-card>
 </x-guest-layout>
