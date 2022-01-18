@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-01-2022 a las 17:42:34
+-- Tiempo de generación: 18-01-2022 a las 12:48:13
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.12
 
@@ -1426,7 +1426,8 @@ INSERT INTO `ingredientes` (`id`, `user_id`, `cat_id`, `nombre`, `descripcion`, 
 (1389, 1, 349, 'Verduras paisana', 'Calabacín, zanahoria, cebolla morada y puerro.', 'Hacendado', '8437004621863', NULL, 'https://es.openfoodfacts.org/producto/8437004621863/verduras-paisana-hacendado', 43, '0.25', '0.06', NULL, NULL, NULL, NULL, '0.02', NULL, '1.70', '8.20', '3.70', '1.20', 1, NULL, '2022-01-13 15:18:56', '2022-01-13 15:22:16'),
 (1390, 1, 349, '3 vegetales', 'Brócoli, coliflor y zanahoria.', 'Hacendado', '8437004621535', NULL, 'https://es.openfoodfacts.org/producto/8437004621535/3-vegetales-hacendado', 43, '0.30', '0.07', NULL, NULL, NULL, NULL, '0.04', NULL, '2.40', '6.70', '2.40', '2.10', 1, NULL, '2022-01-13 15:21:30', '2022-01-13 15:22:26'),
 (1391, 1, 399, 'Comino', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2022-01-13 15:40:00', '2022-01-13 15:40:00'),
-(1392, 1, 399, 'Nuez moscada', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2022-01-13 15:40:42', '2022-01-13 15:40:42');
+(1392, 1, 399, 'Nuez moscada', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2022-01-13 15:40:42', '2022-01-13 15:40:42'),
+(1393, 1, NULL, 'Hummus classic', 'Garbanzos 57%, aceite de girasol, pasta de sésamo, agua, zumo de limón 2%, aceite de oliva 2%, ajo molido, sal, acidulantes (E330 y E270 de origen vegetal), vinagre en polvo, aromas naturales, conservante E202,', 'Hacendado', '8480000808585', NULL, NULL, 300, '25.50', '3.90', '12.90', '8.70', NULL, NULL, '0.40', NULL, '8.00', '8.70', '0.10', '6.40', 1, NULL, '2022-01-18 10:39:03', '2022-01-18 10:42:39');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
