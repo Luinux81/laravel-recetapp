@@ -33,11 +33,11 @@
         </header>
 
         <main class="main-welcome">
-            <div class="main-headline">
+            <div class="main-welcome__info">
                 <h1>RecetApp</h1>
                 <h2>Cocina y Comparte</h2>
             </div>
-            <div class="main-imagen">
+            <div class="main-welcome__imagen">
                 <img src="images/food.jpg" alt="RecetApp">
                 </div>
         </main>

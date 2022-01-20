@@ -1,4 +1,4 @@
-.main-welcome{
+.main-auth{
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -7,9 +7,11 @@
     text-align: center;
 }
 
-.main-welcome__info{
-    align-self: center;
+.main-auth__info{
+    align-self: start;
     grid-column: 1/2;
+
+    margin-top: 3em;
 
     h1{
         font-family: 'Merienda';
@@ -19,12 +21,28 @@
     h2{
         font-family: 'Lobster Two';
         font-size: 3em;
-        margin-bottom: 3em;
+        margin-bottom: 2em;
     }
     
+    form{
+        text-align: left;
+        
+
+        label{
+            font-size: 1.2em;
+            color:black;
+            margin: 1.5em 0 .5em 0;
+        }
+
+        input[type=submit]{
+            font-size: 1.2em;
+            padding: .75em 1.5em;
+            margin-left: 2em;
+        }
+    }
 }
 
-.main-welcome__imagen{
+.main-auth__imagen{
     grid-column: 2/3;
     height: 100%;
     overflow: hidden;
@@ -33,4 +51,3 @@
         object-fit: cover;
     }
 }
-

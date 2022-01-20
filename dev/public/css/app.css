@@ -2102,25 +2102,73 @@ img {
   text-align: center;
 }
 
-.main-headline {
+.main-welcome__info {
   align-self: center;
   grid-column: 1/2;
 }
-.main-headline h1 {
+.main-welcome__info h1 {
   font-family: "Merienda";
   font-size: 7em;
 }
-.main-headline h2 {
+.main-welcome__info h2 {
   font-family: "Lobster Two";
   font-size: 3em;
+  margin-bottom: 3em;
 }
 
-.main-imagen {
+.main-welcome__imagen {
   grid-column: 2/3;
   height: 100%;
   overflow: hidden;
 }
-.main-imagen img {
+.main-welcome__imagen img {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.main-auth {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  text-align: center;
+}
+
+.main-auth__info {
+  align-self: start;
+  grid-column: 1/2;
+  margin-top: 3em;
+}
+.main-auth__info h1 {
+  font-family: "Merienda";
+  font-size: 7em;
+}
+.main-auth__info h2 {
+  font-family: "Lobster Two";
+  font-size: 3em;
+  margin-bottom: 2em;
+}
+.main-auth__info form {
+  text-align: left;
+}
+.main-auth__info form label {
+  font-size: 1.2em;
+  color: black;
+  margin: 1.5em 0 0.5em 0;
+}
+.main-auth__info form input[type=submit] {
+  font-size: 1.2em;
+  padding: 0.75em 1.5em;
+  margin-left: 2em;
+}
+
+.main-auth__imagen {
+  grid-column: 2/3;
+  height: 100%;
+  overflow: hidden;
+}
+.main-auth__imagen img {
   -o-object-fit: cover;
      object-fit: cover;
 }
