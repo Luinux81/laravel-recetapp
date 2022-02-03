@@ -1,0 +1,29 @@
+.drag-list{
+
+    &__item{
+        display: flex;
+        align-items: center;
+        background-color: #F3F4F6;
+        margin: .3em 0;
+        padding: 1em;
+        flex-grow: 0;
+
+        &__handle{
+            width: 20px;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &__handle > *{
+            color: black;
+            width: 6px;
+        }
+
+        &__texto{
+            margin: 0 .75em;
+            flex-grow: 1;
+        }
+    }
+}
