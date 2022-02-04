@@ -2248,7 +2248,7 @@ img {
 }
 
 .form-input--text{
-	margin-bottom: 0.75rem;
+	margin-bottom: 0px;
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;

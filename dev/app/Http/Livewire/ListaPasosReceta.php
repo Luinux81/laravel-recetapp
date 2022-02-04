@@ -14,7 +14,8 @@ class ListaPasosReceta extends Component
 
     protected $listeners = [
         'new-paso-receta' => 'createPaso',
-        'deletePaso' => 'deletePaso'
+        'deletePaso' => 'deletePaso',
+        'updatePaso' => 'updatePaso',
     ];
 
     public function render()
@@ -65,7 +66,25 @@ class ListaPasosReceta extends Component
 
     public function updatePaso($payload)
     {
+        // if(!$this->checkAuth()) return;
 
+        $paso = PasoReceta::find($payload["paso"]);
+
+        if ($paso == null){
+            $this->dispatchBrowserEvent("msg-err", "La referencia al paso no es correcta");
+            return;
+        }
+
+        if(!$this->receta->pasos()->get()->contains($paso)){
+            $this->dispatchBrowserEvent("msg-err", "El paso " . $paso->id . " no pertence a la receta");
+            return;
+        } 
+
+        // dd($paso, $payload);
+
+        $paso->update([
+            'texto' => $payload["texto"],
+        ]);
     }
 
     private function checkAuth()

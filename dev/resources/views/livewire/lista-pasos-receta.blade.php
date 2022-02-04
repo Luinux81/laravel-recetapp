@@ -11,17 +11,22 @@
     <ul class="drag-list" wire:sortable="updateOrdenPasos">
         
         @foreach ($receta->pasos()->orderBy('orden')->get() as $paso)
-            <li class="drag-list__item" wire:sortable.item="{{ $paso->id }}" wire:key="paso-{{ $paso->id }}">
+            <li class="drag-list__item" wire:sortable.item="{{ $paso->id }}" wire:key="paso-{{ $paso->id }}" data-key="paso-{{ $paso->id }}">
                 
                 <button class="drag-list__item__handle" wire:sortable.handle><x-fas-ellipsis-v /></button>
                 
                 <h4 class="drag-list__item__texto">{{ $paso->texto }}</h4>
                 
                 <div class="drag-list__item__acciones flex gap-3">
-                    <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$paso->id])}}" class="boton boton--gris">
+                    <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$paso->id])}}" class="boton boton--gris invisible">
                         <x-fas-edit style="width: 15px;"/>
                         <span>Editar</span>
                     </a>    
+
+                    <button class="boton boton--gris" onclick="showEditor({{ $paso->id }})">
+                        <x-fas-edit style="width: 15px;"/>
+                        <span>Editar</span>
+                    </button>
 
                     <button 
                         class="boton boton--rojo"                  
@@ -30,17 +35,6 @@
                         <x-fas-trash-alt style="width: 15px;"/>
                         <span>Borrar</span>
                     </button>
-
-                    <x-form.boton-post
-                        url="{{ route('recetas.paso.destroy', ['receta'=>$receta->id, 'paso'=>$paso->id]) }}"
-                        metodo="DELETE"
-                        class="boton boton--rojo flex gap-1"
-                        onclick="confirmarBorradoPaso(event)"    
-                        style="display: none;"
-                    >
-                        <x-fas-trash-alt style="width: 15px;"/>
-                        <span>Borrar</span>
-                    </x-form.boton-post>
                 </div>
 
             </li>
@@ -131,6 +125,53 @@
             });
         })();
 
+        function showEditor(id)
+        {
+            const line = document.querySelector('.drag-list__item[data-key=paso-' + id + ']');
+            const texto = document.querySelector('.drag-list__item[data-key=paso-' + id + '] .drag-list__item__texto');
+
+            const editLine = document.createElement("li");            
+            const editInput = document.createElement("input");
+            const btnEditar = document.createElement("button");
+            const btnCancelar = document.createElement("button");
+
+            editLine.classList.add("drag-list__item");
+            
+            editInput.classList.add("form-input--text","w-1/2","mx-10", "mb-0");
+            editInput.value = texto.innerHTML;
+            editInput.setAttribute("name","texto");
+            editInput.addEventListener("keyup", (e) => {
+                if(editInput.value.trim() != ""){
+                    btnEditar.disabled = false;
+                }
+                else{
+                    btnEditar.disabled = true;
+                }
+            })
+
+            btnEditar.classList.add("boton", "boton--verde", "mx-1", "editando");
+            btnEditar.style.width = "50px";
+            btnEditar.innerHTML = `<x-fas-check style="height:20px"/>`;
+            btnEditar.addEventListener("click", (event) => {
+                window.livewire.emit('updatePaso', {'paso': id, 'texto': editInput.value})
+            })
+
+            btnCancelar.classList.add("boton", "boton--rojo", "mx-1", "editando");
+            btnCancelar.style.width = "50px";
+            btnCancelar.innerHTML = `<x-fas-times style="height:20px"/>`;
+            btnCancelar.addEventListener("click", (event) => {                
+                resetEditarPaso(btnCancelar);
+            })
+
+            editLine.appendChild(editInput);
+            editLine.appendChild(btnEditar);
+            editLine.appendChild(btnCancelar);
+
+            insertAfter(editLine, line);
+
+            enableButtons(false);
+        }
+
         function resetNuevoPaso()
         {
             const li = document.getElementById('new-paso-li');
@@ -144,34 +185,24 @@
             input.value = "";       
         }
 
-        {{-- function confirmacion(id)
-
+        function resetEditarPaso(element)
         {
-            
+            element.parentNode.remove();
+            enableButtons(true);
         }
 
-        function confirmarBorradoPaso(event)
-        {
-            event.preventDefault();
+        function enableButtons(valor){
+            document.querySelectorAll(".drag-list button:not(.editando)").forEach((btn) => {
+                btn.disabled = !valor;
+            })
 
-            if(typeof window.Swal !== "undefined"){
-                window.Swal.fire({
-                    title: 'Confirmar borrado',
-                    text: '¿Estás seguro/a de borrar el registro?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText:'Si',
-                    confirmButtonAriaLabel: 'Yes',
-                    cancelButtonText:'No',
-                    cancelButtonAriaLabel: 'No'
-                }).then(function(value){
-                    return value.isConfirmed;
-                });
-            }
-            else{
-                return confirm("Seguro que quieres borrar el registro?");
-            }      
-        } --}}
+            const btn = document.querySelector("#btnAddPaso");
+            btn.disabled = !valor;
+        }
+
+        function insertAfter(newNode, referenceNode) {
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
     </script>
 </div>
 
