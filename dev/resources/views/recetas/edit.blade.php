@@ -159,7 +159,7 @@
 
     @push('custom-scripts')
         <script>
-            function confirmarBorradoPaso(event)
+            function ___confirmarBorradoPaso(event)
             {
                 event.preventDefault();
 
