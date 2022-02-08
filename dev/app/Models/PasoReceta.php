@@ -15,15 +15,28 @@ class PasoReceta extends Model
     protected $table = "pasos_receta";
     protected $guarded = [];
 
-    public function receta(){
+    public function user()
+    {
+        return $this->receta()->user();
+    }
+
+    public function receta()
+    {
         return $this->belongsTo(Receta::class);
     }
 
-    public function assets(){
+    public function esPublico()
+    {
+        return $this->receta()->first()->esPublico();
+    }
+
+    public function assets()
+    {
         return $this->hasMany(Asset::class,'paso_id');
     }
 
-    public function borradoCompleto(){
+    public function borradoCompleto()
+    {
         foreach ($this->assets as $asset) {
             $asset->borradoCompleto();
         }

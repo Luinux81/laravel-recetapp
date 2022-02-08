@@ -11,19 +11,39 @@
     <ul class="drag-list" wire:sortable="updateOrdenPasos">
         
         @foreach ($receta->pasos()->orderBy('orden')->get() as $paso)
-            <li class="drag-list__item" wire:sortable.item="{{ $paso->id }}" wire:key="paso-{{ $paso->id }}" data-key="paso-{{ $paso->id }}">
+            <li 
+                class="drag-list__item" 
+                wire:sortable.item="{{ $paso->id }}" 
+                wire:key="paso-{{ $paso->id }}" 
+                data-key="paso-{{ $paso->id }}"
+                x-data="{ isOpen : true}"
+            >
                 
                 <button class="drag-list__item__handle" wire:sortable.handle><x-fas-ellipsis-v /></button>
-                
+
+                @if($paso->assets()->count() > 0)
+                    <button 
+                        x-show="!isOpen"
+                        style = "display:none;"
+                        x-on:click=" isOpen = true "
+                        class="mx-2 disabled:text-gray-200"
+                    >
+                        <x-fas-eye style="width: 25px;cursor:pointer;"></x-fas-eye>
+                    </button>
+                    <button 
+                        x-show="isOpen"
+                        style = "display:none;"
+                        x-on:click=" isOpen = false "
+                        class="mx-2 disabled:text-gray-200"
+                    >
+                        <x-fas-eye-slash style="width: 25px;cursor:pointer;"></x-fas-eye-slash>
+                    </button>
+                @endif
+
                 <h4 class="drag-list__item__texto">{{ $paso->texto }}</h4>
                 
                 <div class="drag-list__item__acciones flex gap-3">
-                    <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$paso->id])}}" class="boton boton--gris invisible">
-                        <x-fas-edit style="width: 15px;"/>
-                        <span>Editar</span>
-                    </a>    
-
-                    <button class="boton boton--gris" onclick="showEditor({{ $paso->id }})">
+                    <button class="boton boton--gris" x-on:click=" isOpen = false " onclick="showEditor({{ $paso->id }})">
                         <x-fas-edit style="width: 15px;"/>
                         <span>Editar</span>
                     </button>
@@ -37,6 +57,27 @@
                     </button>
                 </div>
 
+                @if($paso->assets()->count() > 0)
+                    <div class="w-full rounded-md" style="display:none;" x-show="isOpen">
+                        @livewire('asset-loader',[
+                            'origen' => 'PasoReceta',
+                            'id_modelo' => $paso->id, 
+                            'modo' => 'show',
+                            
+                        ], key($paso->id))
+                    </div>
+                @endif
+
+            </li>
+            <li id="paso-edit-{{ $paso->id }}" class="w-full" style="display: none;">
+                <div class="asset-loader w-full ml-7 rounded-md">
+                    @livewire('asset-loader',[
+                        'origen' => 'PasoReceta',
+                        'id_modelo' => $paso->id, 
+                        'modo' => 'edit',
+                        
+                    ], key("edit-" . $paso->id))
+                </div>
             </li>
         @endforeach        
 
@@ -153,6 +194,7 @@
             btnEditar.style.width = "50px";
             btnEditar.innerHTML = `<x-fas-check style="height:20px"/>`;
             btnEditar.addEventListener("click", (event) => {
+                enableButtons(true);
                 window.livewire.emit('updatePaso', {'paso': id, 'texto': editInput.value})
             })
 
@@ -166,6 +208,11 @@
             editLine.appendChild(editInput);
             editLine.appendChild(btnEditar);
             editLine.appendChild(btnCancelar);
+
+            const componenteAssets = document.getElementById("paso-edit-" + id ).cloneNode(true);
+            componenteAssets.style.display = "flex";
+
+            editLine.appendChild(componenteAssets);
 
             insertAfter(editLine, line);
 

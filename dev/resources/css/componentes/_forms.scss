@@ -1,3 +1,18 @@
 .form-input--text{
     @apply form-input bg-gray-200 rounded-md mb-0;
 }
+
+.botonImagen{
+    @apply flex items-center justify-center h-40 w-40 cursor-pointer bg-gray-200 hover:bg-gray-300 border border-gray-300 rounded-md 
+}
+
+.icono-modificador{
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+}
