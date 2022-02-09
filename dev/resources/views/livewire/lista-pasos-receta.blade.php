@@ -93,6 +93,9 @@
         <x-fas-plus style="width: 15px" />
         <span>Añadir paso</span>
     </button>
+</div>
+
+@push('custom-scripts')
 
     <script>
         {{-- IIFE: Expresión de función ejecutada inmediatamente --}}
@@ -143,6 +146,8 @@
                     // Ocultamos item nuevo paso, igual que el boton cancelar
                     resetNuevoPaso();
                 });
+
+                window.disableDrag = false;
 
                 // Confirmacion de borrado con Sweet Alert 2
                 window.addEventListener('swal:confirm', (e) => {
@@ -245,11 +250,23 @@
 
             const btn = document.querySelector("#btnAddPaso");
             btn.disabled = !valor;
+
+            document.querySelectorAll(".drag-list__item__handle").forEach((btn)=>{
+                if(valor){
+                    btn.style.display = "flex";
+                }
+                else{
+                    btn.style.display = "none";
+                }
+            });
+
+            window.disableDrag = !valor;
         }
 
         function insertAfter(newNode, referenceNode) {
             referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
         }
     </script>
-</div>
+
+@endpush
 

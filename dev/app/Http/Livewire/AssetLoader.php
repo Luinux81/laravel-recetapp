@@ -3,15 +3,21 @@
 namespace App\Http\Livewire;
 
 use App\Models\PasoReceta;
+
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AssetLoader extends Component
 {
+    use WithFileUploads;
+
     public $origen;
     public $id_modelo;
     public $modo;
 
     public $modelo;
+
+    public $imagen;
 
 
     // TODO: Detectar si el origen al que pertence el paso es publico o no y obtener prefijo para el path(hacer en el controlador)
@@ -63,5 +69,11 @@ class AssetLoader extends Component
         }
 
         return view('livewire.asset-loader',['modelo' => $this->modelo, 'rutas' => $rutas, 'publico' => $publico ]);
+    }
+
+    
+    public function uploadImagen()
+    {
+
     }
 }

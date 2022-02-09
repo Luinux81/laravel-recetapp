@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\Web\AdminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialController;
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\AssetController;
 use App\Http\Controllers\Web\RecetaController;
 use App\Http\Controllers\Web\PasoRecetaController;
 use App\Http\Controllers\Web\IngredienteController;
+use App\Http\Controllers\Web\CategoriaRecetaController;
 use App\Http\Controllers\Web\IngredienteRecetaController;
 use App\Http\Controllers\Web\CategoriaIngredienteController;
-use App\Http\Controllers\Web\CategoriaRecetaController;
-use App\Http\Controllers\SocialController;
 
 /*
 |--------------------------------------------------------------------------
