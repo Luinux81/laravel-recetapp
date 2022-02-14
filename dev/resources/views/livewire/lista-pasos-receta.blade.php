@@ -16,12 +16,12 @@
                 wire:sortable.item="{{ $paso->id }}" 
                 wire:key="paso-{{ $paso->id }}" 
                 data-key="paso-{{ $paso->id }}"
-                x-data="{ isOpen : true}"
+                {{-- x-data="{ isOpen : true}" --}}
             >
                 
                 <button class="drag-list__item__handle" wire:sortable.handle><x-fas-ellipsis-v /></button>
 
-                @if($paso->assets()->count() > 0)
+                {{-- @if($paso->assets()->count() > 0)
                     <button 
                         x-show="!isOpen"
                         style = "display:none;"
@@ -38,7 +38,7 @@
                     >
                         <x-fas-eye-slash style="width: 25px;cursor:pointer;"></x-fas-eye-slash>
                     </button>
-                @endif
+                @endif --}}
 
                 <h4 class="drag-list__item__texto">{{ $paso->texto }}</h4>
                 
@@ -57,19 +57,19 @@
                     </button>
                 </div>
 
-                @if($paso->assets()->count() > 0)
+                {{-- @if($paso->assets()->count() > 0)
                     <div class="w-full rounded-md" style="display:none;" x-show="isOpen">
                         @livewire('asset-loader',[
                             'origen' => 'PasoReceta',
                             'id_modelo' => $paso->id, 
                             'modo' => 'show',
                             
-                        ], key($paso->id))
+                        ], key("show-" . $paso->id))
                     </div>
-                @endif
+                @endif --}}
 
             </li>
-            <li id="paso-edit-{{ $paso->id }}" class="w-full" style="display: none;">
+            {{-- <li id="paso-edit-{{ $paso->id }}" class="w-full" style="display: none;">
                 <div class="asset-loader w-full ml-7 rounded-md">
                     @livewire('asset-loader',[
                         'origen' => 'PasoReceta',
@@ -78,7 +78,7 @@
                         
                     ], key("edit-" . $paso->id))
                 </div>
-            </li>
+            </li> --}}
         @endforeach        
 
         <li id="new-paso-li" class="flex items-center my-5 invisible">
@@ -214,10 +214,10 @@
             editLine.appendChild(btnEditar);
             editLine.appendChild(btnCancelar);
 
-            const componenteAssets = document.getElementById("paso-edit-" + id ).cloneNode(true);
+            {{-- const componenteAssets = document.getElementById("paso-edit-" + id ).cloneNode(true);
             componenteAssets.style.display = "flex";
 
-            editLine.appendChild(componenteAssets);
+            editLine.appendChild(componenteAssets); --}}
 
             insertAfter(editLine, line);
 

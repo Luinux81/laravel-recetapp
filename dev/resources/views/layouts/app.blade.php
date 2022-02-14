@@ -104,9 +104,7 @@
                     alert(msg);
                 }
             }
-        </script>
 
-        <script>
             function confirmarBorrado(event)
             {
                 event.preventDefault();

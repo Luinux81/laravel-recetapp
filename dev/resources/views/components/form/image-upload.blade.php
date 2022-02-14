@@ -17,8 +17,8 @@
     </label>
 
     @if($imagen)
-        {{-- <img src="{{ '/storage/' . $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96"> --}}
-        <picture class="relative">
+        <img src="{{ '/storage/' . $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96">
+        {{-- <picture class="relative">
             <button 
                 class="absolute boton boton--verde editando" 
                 style="width:30px; top:0; left:0; marign:2px;"
@@ -29,14 +29,15 @@
                 class="absolute boton boton--rojo editando @if($modo != "edit") invisible @endif" 
                 style="width:30px; top:0; right:0; marign:2px;" 
                 data-function="cancelar"
-                {{-- onclick="cancelar(event,'{{ $nombre }}')" --}}
+                {{-- onclick="cancelar(event,'{{ $nombre }}')" -/-}}
             >
                 X
             </button>
             <img src="{{ $imagen }}" id="{{ $nombre }}-imagen" class="col-md-8 pl-0 py-3 pr-0 w-96" style="{{ $imgStyle }}">
-        </picture>
+        </picture> --}}
     @else
-        <picture class="relative">
+        <img src="#" id="{{ $nombre }}-imagen" class="invisible col-md-8 pl-0 py-3 pr-0 w-96" style="{{ $imgStyle }}">
+        {{-- <picture class="relative">
             <button 
                 class="absolute boton boton--verde editando invisible" 
                 style="width:30px; top:0; left:0; marign:2px;"
@@ -47,18 +48,19 @@
                 class="absolute boton boton--rojo editando invisible" 
                 style="width:30px; top:0; right:0; marign:2px;" 
                 data-function="cancelar"
-                {{-- onclick="cancelar(event, '{{ $nombre }}')" --}}
+                {{-- onclick="cancelar(event, '{{ $nombre }}')" -/-}}
             >
                 X
             </button>
             <img src="#" id="{{ $nombre }}-imagen" class="invisible col-md-8 pl-0 py-3 pr-0 w-96" style="{{ $imgStyle }}">
-        </picture>
+        </picture> --}}
     @endif
 
     <x-form.boton-image-upload
         nombre="{{ $nombre }}"
         icono="{{ $icono }}"
     >
+        {{ $slot }}
     </x-form.boton-image-upload>
 
     <span id="{{ $nombre }}-filename" class="text-gray-400 @if(!$showFilename) hidden @endif"></span>

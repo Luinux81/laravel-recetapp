@@ -101,7 +101,8 @@
                 imagen="{{ old('imagen')?old('imagen'):$receta->imagen }}"
                 accept="image/*"                
             >
-
+                <x-fas-image style="width:40px;"> </x-fas-image>
+                <x-fas-plus class="icono-modificador" style="margin-left:-10px; margin-bottom:-25px;"> </x-fas-plus>
             </x-form.image-upload>
 
         </form>
