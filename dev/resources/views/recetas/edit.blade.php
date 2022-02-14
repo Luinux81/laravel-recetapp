@@ -101,7 +101,8 @@
                 imagen="{{ old('imagen')?old('imagen'):$receta->imagen }}"
                 accept="image/*"                
             >
-
+                <x-fas-image style="width:40px;"> </x-fas-image>
+                <x-fas-plus class="icono-modificador" style="margin-left:-10px; margin-bottom:-25px;"> </x-fas-plus>
             </x-form.image-upload>
 
         </form>
@@ -143,37 +144,10 @@
 
         </section>
 
-        <section class="seccion-pasos my-2">
+        <section class="seccion-pasos my-14">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pasos</h2>
             
-            <table>
-                <thead>
-                    <tr>
-                        <th>Orden</th><th>Texto</th><th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($receta->pasos()->get() as $p)
-                        <tr>
-                            <td class="text-center">{{ $p->orden }}</td>
-                            <td>{{ $p->texto }}</td>                            
-                            <td class="flex gap-3" style=>
-                                <a href="{{ route('recetas.paso.edit',['receta'=>$receta->id, 'paso'=>$p->id])}}" class="boton boton--gris">Editar</a>
-                                <x-form.boton-post
-                                    url="{{ route('recetas.paso.destroy', ['receta'=>$receta->id, 'paso'=>$p->id]) }}"
-                                    metodo="DELETE"
-                                    class="boton boton--rojo"
-                                    onclick="confirmarBorrado(event)"    
-                                >
-                                    Borrar
-                                </x-form.boton-post>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <a href="{{ route('recetas.paso.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
+            @livewire('lista-pasos-receta', ['receta' => $receta])
 
         </section>
 
@@ -186,7 +160,7 @@
 
     @push('custom-scripts')
         <script>
-            function confirmarBorrado(event)
+            function ___confirmarBorradoPaso(event)
             {
                 event.preventDefault();
 
@@ -202,16 +176,38 @@
                         cancelButtonAriaLabel: 'No'
                     }).then(function(value){                    
                         if(value.isConfirmed){
-                            event.target.parentNode.submit();
+                            const element = getParentForm(event.target);
+                            if(element){
+                                element.submit();
+                            }
                         }                    
                     });
                 }
                 else{
                     if(confirm("Seguro que quieres borrar el registro?")){
-                        event.target.parentNode.submit();
+                        const element = getParentForm(event.target);
+                        if(element){
+                            element.submit();
+                        }
                     }
                 }      
             }
+
+            function getParentForm(element){
+                if(element.tagName == "BODY"){
+                    return null;
+                }
+                else if(element.tagName == "FORM"){
+                    return element;
+                }
+                else{
+                    return getParentForm(element.parentNode);
+                }
+            }
         </script>
+
+
+        <script src="https://unpkg.com/@nextapps-be/livewire-sortablejs@0.1.1/dist/livewire-sortable.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script> --}}
     @endpush
 </x-app-layout>

@@ -12,8 +12,9 @@
 
         <!-- Styles -->
         <link rel="stylesheet" data-algo="algo" href="{{ url('/') . mix('css/app.css') }}">
+        
+        @stack('custom-styles')
 
-        <link>
         @livewireStyles
         @powerGridStyles
 
@@ -103,9 +104,7 @@
                     alert(msg);
                 }
             }
-        </script>
 
-        <script>
             function confirmarBorrado(event)
             {
                 event.preventDefault();

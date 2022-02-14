@@ -19,6 +19,11 @@ class Asset extends Model
     }
 
     public function borradoCompleto(){
+        // if($this->paso()->first()->receta()->esPublico()){
+        //     if(Storage::disk('public')->exists($this->ruta)){
+        //         Storage::disk('public')->delete($this->ruta);
+        //     }
+        // }
         if(Storage::exists($this->ruta)){
             Storage::delete($this->ruta);
         }

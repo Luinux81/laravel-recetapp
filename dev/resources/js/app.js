@@ -3,7 +3,6 @@ require('./bootstrap');
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
-
 Alpine.start();
 
 // Importación de sweet alert 2
