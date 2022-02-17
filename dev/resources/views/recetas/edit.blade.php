@@ -1,3 +1,14 @@
+@push('custom-styles')
+    @livewireStyles
+@endpush
+
+@push('custom-scripts')
+    @livewireScripts
+
+    <script src="https://unpkg.com/@nextapps-be/livewire-sortablejs@0.1.1/dist/livewire-sortable.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script> --}}
+@endpush
+
 <x-app-layout>
 
     <x-slot name="header">
@@ -108,23 +119,30 @@
         </form>
 
 
-        <section class="seccion-ingredientes my-2">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Ingredientes</h2>
+        <section class="seccion seccion-ingredientes my-14 p-8">
+            <h2 class="font-bold text-2xl text-gray-800 leading-tight mb-3">Ingredientes</h2>
             
-            <table>
+            <table class="w-full" style="border-collapse:separate;border-spacing:0 .3em;">
                 <thead>
                     <tr>
-                        <th>Nombre</th><th>Cantidad</th><th>Unidades</th><th>Acciones</th>
+                        <th class="w-1/12 text-center">Cantidad</th>
+                        <th class="w-1/12 text-center">Unidades</th>
+                        <th class="w-7/12 text-left">Nombre</th>
+                        <th class="w-3/12 text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($receta->ingredientes as $i)
-                        <tr>
-                            <td>{{ $i->nombre }}</td>
-                            <td class="text-center">{{ $i->pivot->cantidad }}</td>
-                            <td class="text-center">{{ $i->pivot->unidad_medida }}</td>
-                            <td class="flex gap-3">
-                                <a href="{{ route('recetas.ingrediente.edit',['receta'=>$receta->id, 'ingrediente'=>$i->id])}}" class="boton boton--gris">Editar</a>
+                        <tr class="bg-white py-3">
+                            <td class="text-right pr-3 border-b">{{ $i->pivot->cantidad }}</td>
+                            <td class="text-left pl-3 border-b">{{ $i->pivot->unidad_medida }}</td>
+                            <td class="text-left border-b">{{ $i->nombre }}</td>
+
+                            <td class="flex justify-center gap-3 p-4" style="margin-left:30px;">
+                                <a href="{{ route('recetas.ingrediente.edit',['receta'=>$receta->id, 'ingrediente'=>$i->id])}}" class="boton boton--gris">
+                                    <x-fas-edit style="width: 15px;"></x-fas-edit>
+                                    <span>Editar</span>
+                                </a>
 
                                 <x-form.boton-post
                                     url="{{ route('recetas.ingrediente.destroy', ['receta'=>$receta->id, 'ingrediente'=>$i->id]) }}"
@@ -132,82 +150,65 @@
                                     class="boton boton--rojo"
                                     onclick="confirmarBorrado(event)"
                                 >
-                                    Borrar
+                                    <x-fas-trash-alt style="width: 15px;"></x-fas-trash-alt>
+                                    <span>Borrar</span>
                                 </x-form.boton-post>
                             </td>
+
                         </tr>
                     @endforeach
+                    <tr id="new-ingrediente" class="invisible bg-gray-400">
+                        <td>
+                            <div class="flex flex-col justify-center">
+                                <label for="new-ingrediente-cantidad">Cantidad</label>
+                                <input id="new-ingrediente-cantidad" type="text" class="form-input bg-gray-200 rounded-md mb-3"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex flex-col justify-center">
+                                <label for="new-ingrediente-unidad">Unidades</label>
+                                <input id="new-ingrediente-unidad" type="text" class="form-input bg-gray-200 rounded-md mb-3"/>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="flex">
+                                <div class="flex flex-col grow" style="flex-grow:1;">
+                                    <label for="new-ingrediente-Nombre">Nombre</label>
+                                    <input id="new-ingrediente-Nombre" type="text" class="w-full form-input bg-gray-200 rounded-md mb-3"/>
+                                </div>
+                                <div class="flex items-center gap-3 mx-4">
+                                    <button class="boton boton--icono boton--verde">
+                                        <x-fas-check class="icono--boton-2"></x-fas-check>
+                                    </button>
+                                    <button class="boton boton--icono boton--rojo">
+                                        <x-fas-times class="icono--boton-2"></x-fas-times>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
-            <a href="{{ route('recetas.ingrediente.create',['receta'=>$receta->id]) }}" class="boton boton--gris">Añadir</a>
-
+            <a 
+                href="{{ route('recetas.ingrediente.create',['receta'=>$receta->id]) }}" 
+                class="boton boton--azul my-10 w-60"
+            >
+                <x-fas-plus class="icono--boton-1"></x-fas-plus>
+                <span>Añadir ingrediente</span>
+            </a>
         </section>
 
-        <section class="seccion-pasos my-14">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pasos</h2>
+        <section class="seccion seccion-pasos my-14 p-8">
+            <h2 class="font-bold text-2xl text-gray-800 leading-tight mb-3">Pasos</h2>
             
             @livewire('lista-pasos-receta', ['receta' => $receta])
-
         </section>
-
+        
         <div class="flex justify-center gap-5 m-6">
             <button class="boton boton--azul" onclick="document.getElementById('update_form_receta').submit();">Guardar</button>
             <a href="{{ route('recetas.index') }}" class="boton boton--rojo">Volver</a>
         </div>
 
     </x-content>
-
-    @push('custom-scripts')
-        <script>
-            function ___confirmarBorradoPaso(event)
-            {
-                event.preventDefault();
-
-                if(typeof window.Swal !== "undefined"){
-                    window.Swal.fire({
-                        title: 'Confirmar borrado',
-                        text: '¿Estás seguro/a de borrar el registro?',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText:'Si',
-                        confirmButtonAriaLabel: 'Yes',
-                        cancelButtonText:'No',
-                        cancelButtonAriaLabel: 'No'
-                    }).then(function(value){                    
-                        if(value.isConfirmed){
-                            const element = getParentForm(event.target);
-                            if(element){
-                                element.submit();
-                            }
-                        }                    
-                    });
-                }
-                else{
-                    if(confirm("Seguro que quieres borrar el registro?")){
-                        const element = getParentForm(event.target);
-                        if(element){
-                            element.submit();
-                        }
-                    }
-                }      
-            }
-
-            function getParentForm(element){
-                if(element.tagName == "BODY"){
-                    return null;
-                }
-                else if(element.tagName == "FORM"){
-                    return element;
-                }
-                else{
-                    return getParentForm(element.parentNode);
-                }
-            }
-        </script>
-
-
-        <script src="https://unpkg.com/@nextapps-be/livewire-sortablejs@0.1.1/dist/livewire-sortable.js"></script>
-        {{-- <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script> --}}
-    @endpush
 </x-app-layout>
