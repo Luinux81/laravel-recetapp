@@ -19,28 +19,12 @@
     gap: 10px;
 }
 
-.boton{
-    @apply flex justify-center items-center gap-2 px-4 py-2 rounded-md text-base font-medium text-center border-0 focus:outline-none focus:ring transition; 
-}
-
-.boton--gris{
-    @apply text-white bg-gray-500 disabled:bg-gray-300 hover:bg-gray-600 active:bg-gray-700 focus:ring-gray-300;
-}
-
-.boton--azul{
-    @apply text-white bg-blue-500 disabled:bg-gray-300 hover:bg-blue-600 active:bg-blue-700 focus:ring-blue-300;
-}
-
-.boton--rojo{
-    @apply text-white bg-red-500 disabled:bg-gray-300 hover:bg-red-600 active:bg-red-700 focus:ring-red-300;
-}
-
-.boton--verde{
-    @apply text-white bg-green-500 disabled:bg-gray-300 hover:bg-green-600 active:bg-green-700 focus:ring-green-300;
-}
-
 .invisible{
     display: none !important;
+}
+
+.seccion{
+    @apply bg-gray-300 rounded-xl;
 }
 
 .form-ingrediente{
