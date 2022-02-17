@@ -1,3 +1,20 @@
+@push('custom-styles')
+    @livewireStyles
+    @powerGridStyles
+@endpush
+
+@push('custom-scripts')
+    
+    @livewireScripts
+    @powerGridScripts
+
+    <script>
+        function filtrarPorCategoria(event){
+            location.href="{{ route('ingredientes.index') }}?filtro=categoria&valor_filtro="+event.target.value;
+        }
+    </script>
+@endpush
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-row justify-between">
@@ -11,14 +28,4 @@
     <x-content>
         <livewire:ingredientes-table/>
     </x-content>
-
-    @push('custom-scripts')
-
-    <script>
-        function filtrarPorCategoria(event){
-            location.href="{{ route('ingredientes.index') }}?filtro=categoria&valor_filtro="+event.target.value;
-        }
-    </script>
-    @endpush
-
 </x-app-layout>

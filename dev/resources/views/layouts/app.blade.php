@@ -11,12 +11,9 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
-        <link rel="stylesheet" data-algo="algo" href="{{ url('/') . mix('css/app.css') }}">
+        <link rel="stylesheet" href="{{ url('/') . mix('css/app.css') }}">
         
         @stack('custom-styles')
-
-        @livewireStyles
-        @powerGridStyles
 
         <!-- Scripts -->
         <script src="{{ url('/') . mix('js/app.js') }}" defer></script>
@@ -42,46 +39,17 @@
             </main>
         </div>
 
-        @stack('modals')
-        
-
-        @livewireScripts
-        @powerGridScripts
-        
+        @stack('modals')        
         @stack('custom-scripts')
 
         <script>
-            if(Livewire){
-                Livewire.on("msg-ok",(msg)=>{                    
-                    if(Notyf){
-                        Notyf.open({
-                            duration: 2500,
-                            position:{
-                                x: 'right',
-                                y: 'top'
-                            },
-                            type: 'info',
-                            message: msg,
-                        });
-                    }
-                });
-                Livewire.on("msg-err",(msg)=>{
-                    if(Notyf){
-                        Notyf.open({
-                            duration: 2500,
-                            position:{
-                                x: 'right',
-                                y: 'top'
-                            },
-                            type: 'error',
-                            message: msg,
-                        });
-                    }
-                });
-            }
-        </script>
+            window.addEventListener("msg-ok", (msg)=>{
+                notifica('info',msg);
+            });
+            window.addEventListener("msg-err", (msg)=>{
+                notifica('error',msg);
+            });
 
-        <script>
             @if(session('notificacion'))
                 window.addEventListener('DOMContentLoaded',(event)=>{
                     notifica('{{ session('notificacion')->tipo }}','{{ session('notificacion')->mensaje }}');
