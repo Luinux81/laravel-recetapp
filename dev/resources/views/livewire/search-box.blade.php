@@ -7,7 +7,7 @@
                     {{ $selectedModel["nombre"] }}
                 @else
                     <x-fas-times-circle class="icono--boton-md" style="color:red"/>
-                    Ningún ingrediente seleccionado
+                    Ningún elemento seleccionado
                 @endif
             </label>
         </div>
@@ -21,10 +21,12 @@
             </div>
         </div>
 
-        <div class="w-7/12">
+        <div class="w-7/12 flex">
+            <x-fas-search class="icono--boton-sm" style="margin-right:-2rem;z-index:10"/>
             <input
                 autocomplete="off"
                 class="form-input--text w-full"
+                style="padding-left: 2.5rem"
                 placeholder="Buscar ingredientes"
                 wire:model = "search"
                 wire:keydown = "activaBusqueda"
