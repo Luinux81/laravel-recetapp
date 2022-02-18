@@ -30,3 +30,17 @@
 .icono--boton-2{
     width: 20px;
 }
+
+.icono--boton{
+    &-xs{
+        width: 15px;
+    }
+
+    &-sm{
+        width: 20px;
+    }
+
+    &-md{
+        width: 35px;
+    }
+}
