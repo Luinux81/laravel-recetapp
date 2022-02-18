@@ -89,15 +89,35 @@
                         cancelButtonAriaLabel: 'No'
                     }).then(function(value){                    
                         if(value.isConfirmed){
-                            event.target.parentNode.submit();
+                            {{-- event.target.parentNode.submit(); --}}
+                            submitAntecesor(event.target);
                         }                    
                     });
                 }
                 else{
                     if(confirm("Seguro que quieres borrar el registro?")){
-                        event.target.parentNode.submit();
+                        {{-- event.target.parentNode.submit(); --}}
+                        submitAntecesor(event.target);
                     }
                 }      
+            }
+
+            function submitAntecesor(element)
+            {
+                const antecesor = getSubmitableParent(element);
+
+                if(antecesor != null){
+                    antecesor.submit();
+                }
+            }
+
+            function getSubmitableParent(element)
+            {
+                if(element.tagName == "FORM") return element;
+                
+                if(element.tagName == "BODY") return null;
+
+                return getSubmitableParent(element.parentNode);
             }
         </script>
     </body>
