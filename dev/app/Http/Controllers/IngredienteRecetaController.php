@@ -178,7 +178,7 @@ class IngredienteRecetaController extends Controller
             throw new Exception("El ingrediente no existe en la receta", 400);
         }
 
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($ingrediente, "public_edit");
 
 
         $receta->ingredientes()->detach($ingrediente);
