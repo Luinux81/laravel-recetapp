@@ -98,8 +98,14 @@
                             <label for="new-ingrediente-nombre">
                                 Nombre @error('new_ingrediente_id') <span style="color:red;">*</span> @enderror
                             </label>
-                            {{-- <input id="new-ingrediente-nombre" type="text" class="w-full form-input bg-gray-200 rounded-md mb-3"/> --}}
-                            @livewire('search-box',["clase"=>"ingrediente","nombre"=>"new-ingrediente-nombre"],key('new-search-box'))
+                            
+                            @livewire('search-box',[
+                                "clase"=>"ingrediente",
+                                "nombre"=>"new-ingrediente-nombre",
+                                "excluidos"=>$receta->ingredientes()->pluck('id')->toArray()
+                                ],
+                                key('new-search-box')
+                            )
                             
                         </div>
                         <div class="flex items-center gap-3 mx-4">
