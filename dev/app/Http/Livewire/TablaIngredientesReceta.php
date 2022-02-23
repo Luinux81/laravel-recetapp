@@ -15,9 +15,16 @@ class TablaIngredientesReceta extends Component
     public $new_ingrediente_unidad;
     public $new_ingrediente_id;
 
+    public $editando = false;
+    public $edit_ingrediente_cantidad;
+    public $edit_ingrediente_unidad;
+    public $edit_ingrediente_id;
+
     protected $listeners = [
         'refreshTabla' => '$refresh',
-        'addIngredienteReceta'=>'addIngredienteReceta',
+        'addIngredienteReceta',
+        'updateIngredienteReceta',
+        'deleteIngredienteReceta',
         'clearNewFormErrors'
     ];
 
@@ -66,5 +73,47 @@ class TablaIngredientesReceta extends Component
     public function setCreandoNew($valor)
     {
         $this->creando_new = $valor;
+    }
+
+
+    public function updateIngredienteReceta($payload)
+    {
+        $this->edit_ingrediente_cantidad = $payload["cantidad"];
+        $this->edit_ingrediente_unidad = $payload["unidad"];
+        $this->edit_ingrediente_id = $payload["ingrediente"];
+
+        $this->validate([
+            'edit_ingrediente_cantidad' => 'required|numeric',
+            'edit_ingrediente_unidad' => 'required',
+            'edit_ingrediente_id' => 'required'
+        ]);
+
+        $ingrediente = Ingrediente::find($this->edit_ingrediente_id);
+        
+        $this->receta->ingredientes()->detach($ingrediente);
+        $this->receta->ingredientes()->attach($ingrediente,[
+            'cantidad'=>$this->edit_ingrediente_cantidad,
+            'unidad_medida'=>$this->edit_ingrediente_unidad,
+        ]);
+        
+        $this->emitSelf('refreshTabla');
+    }
+
+
+    public function confirmacionBorrado($id)
+    {
+        $this->dispatchBrowserEvent('swalIngrediente:confirm',[
+            'type' => 'warning',
+            'title' => 'Confirmación de borrado',
+            'text' => 'Está seguro de eliminar el registro?',
+            'id' => $id,
+        ]);
+    }
+
+    public function deleteIngredienteReceta($payload)
+    {
+        // dd($payload);
+        $this->receta->ingredientes()->detach($payload["ingrediente"]);
+        $this->emitSelf('refreshTabla');
     }
 }

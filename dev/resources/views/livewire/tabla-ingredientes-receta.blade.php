@@ -28,10 +28,69 @@
             Livewire.emit('addIngredienteReceta',{cantidad:cantidad,unidad:unidad,ingrediente:id_ingrediente});
         }
 
+        function showEditorTablaIngredientesReceta(id){
+            const rowEdit = document.getElementById("rowEdit").content.cloneNode(true);
+            const row = document.querySelector("[data-ingrediente='" + id + "']");
+            
+            const cantidad = document.querySelector("[data-ingrediente='" + id + "'] [data-entry='cantidad']").innerHTML;
+            const unidades = document.querySelector("[data-ingrediente='" + id + "'] [data-entry='unidad']").innerHTML;
+            const nombre = document.querySelector("[data-ingrediente='" + id + "'] [data-entry='nombre']").innerHTML;
+
+            insertAfterRow(rowEdit, row);
+
+            const inputCantidad = document.getElementById("edit-ingrediente-receta-cantidad");
+            const inputUnidad = document.getElementById("edit-ingrediente-receta-unidad");
+            
+            inputCantidad.value = cantidad;
+            inputUnidad.value = unidades;
+            document.getElementById("edit-ingrediente-receta-ingrediente").innerHTML = nombre;
+
+            enableButtonsTablaIngredientes(false);
+
+            document.getElementById("edit-ingrediente-receta-btn-cancel").addEventListener("click",(e)=>{
+                document.getElementById('edit-ingrediente-receta-row').remove();
+                enableButtonsTablaIngredientes(true);
+            });
+
+            document.getElementById("edit-ingrediente-receta-btn-ok").addEventListener("click",(e)=>{
+                Livewire.emit('updateIngredienteReceta',{ingrediente:id, cantidad:inputCantidad.value, unidad:inputUnidad.value});
+            });
+        }
+
+
+        function insertAfterRow(newNode, referenceNode) {
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
+
+        function enableButtonsTablaIngredientes(valor){
+            const buttons = document.querySelectorAll(".table-ingredientes-receta button:not(.editando)").forEach((btn)=>{
+                btn.disabled = !valor;
+            });
+
+            document.getElementById('new-ingrediente-boton').disabled = !valor;
+        }
+
+        window.addEventListener('swalIngrediente:confirm', (e) => {
+            Swal.fire({
+                title: e.detail.title,
+                text: e.detail.text,
+                icon: e.detail.type,
+                showCancelButton: true,
+                confirmButtonText:'Si',
+                confirmButtonAriaLabel: 'Yes',
+                cancelButtonText:'No',
+                cancelButtonAriaLabel: 'No'
+            })
+            .then((willDelete) => {
+                if(willDelete.isConfirmed){
+                    window.livewire.emit('deleteIngredienteReceta', {ingrediente : e.detail.id})
+                }
+            });
+        });
     </script>
 @endpush
 
-<div class="relative">
+<div>
     <div class="full__overlay invisible" wire:loading.class.remove="invisible">
         <div class="loader">
             <span></span>
@@ -40,7 +99,7 @@
             <span></span>
         </div>
     </div>
-    <table class="w-full" style="border-collapse:separate;border-spacing:0 .3em;">
+    <table class="w-full table-ingredientes-receta" style="border-collapse:separate;border-spacing:0 .3em;">
         <thead>
             <tr>
                 <th class="w-1/12 text-center">Cantidad</th>
@@ -50,31 +109,37 @@
             </tr>
         </thead>
         <tbody>
+
             @foreach($receta->ingredientes->sortBy('nombre') as $i)
-                <tr class="bg-white py-3">
-                    <td class="text-right pr-3 border-b">{{ $i->pivot->cantidad }}</td>
-                    <td class="text-left pl-3 border-b">{{ $i->pivot->unidad_medida }}</td>
-                    <td class="text-left border-b">{{ $i->nombre }}</td>
+                <tr class="bg-white py-3" data-ingrediente="{{$i->id}}">
+
+                    <td class="text-right pr-3 border-b" data-entry="cantidad">{{ $i->pivot->cantidad }}</td>
+
+                    <td class="text-left pl-3 border-b" data-entry="unidad">{{ $i->pivot->unidad_medida }}</td>
+
+                    <td class="text-left border-b" data-entry="nombre">{{ $i->nombre }}</td>
 
                     <td class="flex justify-center gap-3 p-4" style="margin-left:30px;">
-                        <a href="{{ route('recetas.ingrediente.edit',['receta'=>$receta->id, 'ingrediente'=>$i->id])}}" class="boton boton--gris">
+                        <button
+                            class="boton boton--gris"
+                            onclick="showEditorTablaIngredientesReceta({{$i->id}})"
+                        >
                             <x-fas-edit style="width: 15px;"></x-fas-edit>
                             <span>Editar</span>
-                        </a>
+                        </button>
 
-                        <x-form.boton-post
-                            url="{{ route('recetas.ingrediente.destroy', ['receta'=>$receta->id, 'ingrediente'=>$i->id]) }}"
-                            metodo="DELETE"
+                        <button 
                             class="boton boton--rojo"
-                            onclick="confirmarBorrado(event)"
+                            wire:click="confirmacionBorrado({{ $i->id }})"
                         >
                             <x-fas-trash-alt style="width: 15px;"></x-fas-trash-alt>
                             <span>Borrar</span>
-                        </x-form.boton-post>
+                        </button>
                     </td>
 
                 </tr>
             @endforeach
+
             <tr id="new-ingrediente" class="@if($creando_new == false) invisible @endif bg-gray-400">
                 <td>
                     <div class="flex flex-col justify-start">
@@ -130,12 +195,59 @@
         </tbody>
     </table>
 
-    <button 
-        
+    <button         
+        id="new-ingrediente-boton"
         class="boton boton--azul my-10 w-60"        
         onclick="visibilizaNewIngrediente(true)"
     >
         <x-fas-plus class="icono--boton-1"></x-fas-plus>
         <span>Añadir ingrediente</span>
     </button>
+
+    <template id="rowEdit">
+        <tr id="edit-ingrediente-receta-row">
+            <td>
+                <div class="flex flex-col justify-start">
+                    <label for="edit-ingrediente-receta-cantidad">Cantidad</label>
+                    <input 
+                        id="edit-ingrediente-receta-cantidad" 
+                        wire:model="edit_ingrediente_cantidad" 
+                        class="form-input--text" 
+                        maxlength="6" size="6"/>
+                </div>
+            </td>
+            <td>
+                <div class="flex flex-col justify-start">
+                    <label for="edit-ingrediente-receta-unidad">Unidades</label>
+                    <input 
+                        id="edit-ingrediente-receta-unidad" 
+                        wire:model="edit_ingrediente_cantidad" 
+                        class="form-input--text" 
+                        maxlength="10" size="10"/>
+                </div>
+            </td>
+            <td>
+                <div class="flex flex-col justify-start">
+                    <label for="edit-ingrediente-receta-ingrediente">Nombre</label>
+                    <span id="edit-ingrediente-receta-ingrediente"> </span>
+                    <input 
+                        type="hidden" 
+                        id="edit-ingrediente-receta-id" 
+                        wire:model="edit_ingrediente_id"
+                        />
+                </div>
+                
+            </td>
+            <td>
+                <div class="flex gap-3">
+                    <button id="edit-ingrediente-receta-btn-ok" class="boton boton--verde editando" style="width:50px;">
+                        <x-fas-check style="height:20px"/>
+                    </button>
+                    <button id="edit-ingrediente-receta-btn-cancel" class="boton boton--rojo editando" style="width:50px;">
+                        <x-fas-times style="height:20px"/>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </template>
 </div>
