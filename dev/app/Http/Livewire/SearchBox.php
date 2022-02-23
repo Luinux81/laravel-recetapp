@@ -19,6 +19,10 @@ class SearchBox extends Component
     public $claseModelo;
     public $modelos;
 
+    protected $listeners = [
+        'clearSearchBox' => 'clearSearchBox'
+    ];
+
     public function mount($clase,$nombre)
     {
         $this->resetEstado();
@@ -35,15 +39,6 @@ class SearchBox extends Component
         }
     }
 
-    public function resetEstado()
-    {
-        $this->busquedaActiva = true;
-        $this->search = "";
-        $this->modelos = [];
-        $this->selectedIndex = 0;
-        // $this->selectedModel = null;
-        // $this->selectedModelId = null;
-    }
 
     public function updatedSearch()
     {
@@ -95,6 +90,23 @@ class SearchBox extends Component
 
         $this->busquedaActiva = false;
         $this->resetEstado();
+    }
+
+    public function resetEstado()
+    {
+        $this->busquedaActiva = true;
+        $this->search = "";
+        $this->modelos = [];
+        $this->selectedIndex = 0;
+        // $this->selectedModel = null;
+        // $this->selectedModelId = null;
+    }
+    
+    public function clearSearchBox()
+    {
+        $this->resetEstado();
+        $this->selectedModel = null;
+        $this->selectedModelId = null;
     }
 
     public function render()
