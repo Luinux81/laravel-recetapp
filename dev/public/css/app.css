@@ -1303,6 +1303,12 @@ video {
 .w-8\/12{
 	width: 66.666667%;
 }
+.w-2\/12{
+	width: 16.666667%;
+}
+.w-6\/12{
+	width: 50%;
+}
 .min-w-full{
 	min-width: 100%;
 }
@@ -2548,6 +2554,16 @@ img {
   justify-content: center;
   align-items: center;
   height: 20px;
+}
+
+.full__overlay {
+  background-color: rgba(0, 0, 0, 0.9);
+  inset: 0;
+  position: fixed;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
 }
 
 .loader {
