@@ -118,7 +118,7 @@
         </form>
 
 
-        <section class="seccion seccion-ingredientes my-14 p-8">
+        <section class="seccion seccion-ingredientes my-14 p-8 relative">
             <h2 class="font-bold text-2xl text-gray-800 leading-tight mb-3">Ingredientes</h2>
             
             @livewire('tabla-ingredientes-receta',['receta'=>$receta])

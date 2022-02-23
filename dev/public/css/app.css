@@ -2559,11 +2559,12 @@ img {
 .full__overlay {
   background-color: rgba(0, 0, 0, 0.9);
   inset: 0;
-  position: fixed;
+  position: absolute;
   display: flex !important;
   justify-content: center;
   align-items: center;
   z-index: 100;
+  border-radius: 20px;
 }
 
 .loader {
