@@ -18,15 +18,17 @@ class SearchBox extends Component
 
     public $claseModelo;
     public $modelos;
+    public $idExcluidos;
 
     protected $listeners = [
         'clearSearchBox' => 'clearSearchBox'
     ];
 
-    public function mount($clase,$nombre)
+    public function mount($clase,$nombre,$excluidos = [])
     {
         $this->resetEstado();
         $this->nombre = $nombre;
+        $this->idExcluidos = $excluidos;
 
         switch ($clase) {
             case 'ingrediente':
@@ -44,6 +46,7 @@ class SearchBox extends Component
     {
         if($this->busquedaActiva){
             $this->modelos = $this->claseModelo::where('nombre','like','%'. $this->search . '%')
+            ->whereNotIn('id',$this->idExcluidos)
             ->orderBy('nombre','ASC')
             ->get()
             ->toArray();
@@ -101,7 +104,7 @@ class SearchBox extends Component
         // $this->selectedModel = null;
         // $this->selectedModelId = null;
     }
-    
+
     public function clearSearchBox()
     {
         $this->resetEstado();
