@@ -26,7 +26,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function index(Receta $receta)
     {        
-        Tools::checkOrFail($receta);
+        Tools::checkOrFail($receta, "index");
 
         return $receta->ingredientes()->get();
     }
@@ -41,8 +41,8 @@ class IngredienteRecetaController extends Controller
      */
     protected function show(Receta $receta, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($receta);
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($receta, "show");
+        Tools::checkOrFail($ingrediente, "show");
 
         $res = $receta->ingredientes()->find($ingrediente);
         if(!$res){
@@ -63,7 +63,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function create(Request $request, Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $request->session()->flash('url_retorno', route('recetas.ingrediente.create', ['receta'=>$receta->id ]));
         
@@ -83,7 +83,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function store(Request $request, Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $data = $this->validate($request, $this->rules);
 
@@ -97,7 +97,7 @@ class IngredienteRecetaController extends Controller
             throw new Exception("El ingrediente ya existe en la receta", 400);
         }
 
-        Tools::checkOrFail($ingrediente, "public_index");
+        Tools::checkOrFail($ingrediente, "index");
 
 
         $receta->ingredientes()->attach($ingrediente, ['cantidad' => $data['cantidad'], 'unidad_medida' => $data['unidad_medida']]);
@@ -122,8 +122,8 @@ class IngredienteRecetaController extends Controller
      */
     protected function edit(Receta $receta, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($receta, "public_edit");
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($receta, "update");
+        Tools::checkOrFail($ingrediente, "show");
 
         return view('recetas.ingredientes.edit', compact(['receta','ingrediente']));
     }
@@ -139,7 +139,7 @@ class IngredienteRecetaController extends Controller
      */
     protected function update(Request $request, Receta $receta, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $data = $this->validate($request, $this->rules);
 
@@ -147,7 +147,7 @@ class IngredienteRecetaController extends Controller
             throw new Exception("El ingrediente no existe en la receta", 400);
         }
 
-        Tools::checkOrFail($ingrediente);
+        Tools::checkOrFail($ingrediente, "show");
 
         
         $receta->ingredientes()->detach($ingrediente);
@@ -172,13 +172,13 @@ class IngredienteRecetaController extends Controller
      */
     protected function destroy(Receta $receta, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
         
         if($receta->ingredientes()->find($ingrediente) == NULL){
             throw new Exception("El ingrediente no existe en la receta", 400);
         }
 
-        Tools::checkOrFail($ingrediente, "public_edit");
+        Tools::checkOrFail($ingrediente, "show");
 
 
         $receta->ingredientes()->detach($ingrediente);

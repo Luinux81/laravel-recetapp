@@ -91,7 +91,7 @@ class ListaPasosReceta extends Component
     {
         $res = true;
         try {
-            Tools::checkOrFail($this->receta);
+            Tools::checkOrFail($this->receta, "show");
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('msg-err',$th->getMessage());
             $res = false;

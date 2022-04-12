@@ -117,25 +117,25 @@ class ToolsTest extends TestCase
         $test = $this->actingAs($this->user);
 
         $test->assertTrue(Tools::checkOrFail($items["ingrediente"]["private"]));
-        $test->assertTrue(Tools::checkOrFail($items["ingrediente"]["public"], "public_index"));
-        $test->assertTrue(Tools::checkOrFail($items["ingrediente"]["public2"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["ingrediente"]["public"], "index"));
+        $test->assertTrue(Tools::checkOrFail($items["ingrediente"]["public2"], "index"));
 
         $test->assertTrue(Tools::checkOrFail($items["receta"]["private"]));
-        $test->assertTrue(Tools::checkOrFail($items["receta"]["public"], "public_index"));
-        $test->assertTrue(Tools::checkOrFail($items["receta"]["public2"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["receta"]["public"], "index"));
+        $test->assertTrue(Tools::checkOrFail($items["receta"]["public2"], "index"));
 
         $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["private"]));
-        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public"], "public_index"));
-        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public2"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public"], "index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_ingrediente"]["public2"], "index"));
 
         $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["private"]));
-        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public"], "public_index"));
-        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public2"], "public_index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public"], "index"));
+        $test->assertTrue(Tools::checkOrFail($items["cat_receta"]["public2"], "index"));
 
 
         $asset = new Asset();
         $this->expectExceptionCode(400);
-        Tools::checkOrFail($asset,"public_index");
+        Tools::checkOrFail($asset,"index");
     }
 
 
@@ -153,9 +153,13 @@ class ToolsTest extends TestCase
 
 
     private function check(User $user, object $model){
-        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_index"));
-        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_create"));
-        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_edit"));
-        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_destroy"));
+        // $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_index"));
+        // $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_create"));
+        // $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_edit"));
+        // $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"public_destroy"));
+        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"index"));
+        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"create"));
+        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"update"));
+        $this->actingAs($user)->assertTrue(Tools::checkOrFail($model,"delete"));
     }
 }

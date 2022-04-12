@@ -17,7 +17,7 @@ class PasoRecetaController extends Controller
 
     protected function index(Receta $receta)
     {
-        Tools::checkOrFail($receta);
+        Tools::checkOrFail($receta, "index");
 
         return $receta->pasos()->get();
     }
@@ -25,7 +25,7 @@ class PasoRecetaController extends Controller
 
     protected function show(Receta $receta, PasoReceta $paso)
     {
-        Tools::checkOrFail($receta);
+        Tools::checkOrFail($receta, "show");
 
         return $receta->pasos()->where("id",$paso->id)->first();
     }
@@ -33,7 +33,7 @@ class PasoRecetaController extends Controller
 
     protected function create(Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         return view('recetas.pasos.create', compact('receta'));
     }
@@ -49,7 +49,7 @@ class PasoRecetaController extends Controller
      */
     protected function store(Receta $receta, Request $request)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $max = $receta->pasos()->count() + 1;
         $this->rules['orden'] = $this->rules['orden'] . "|max:" . $max;
@@ -83,7 +83,7 @@ class PasoRecetaController extends Controller
      */
     protected function edit(Receta $receta, PasoReceta $paso)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $assets = $paso->assets()->get();
         
@@ -93,7 +93,7 @@ class PasoRecetaController extends Controller
 
     protected function update(Receta $receta, PasoReceta $paso, Request $request)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         if($receta->pasos()->find($paso->id) == NULL){
             throw new Exception("El paso no pertenece a la receta", 400);            
@@ -152,7 +152,7 @@ class PasoRecetaController extends Controller
 
     protected function destroy(Receta $receta, PasoReceta $paso)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         if($receta->pasos()->find($paso->id) == NULL){
             throw new Exception("El paso no pertenece a la receta", 400);            

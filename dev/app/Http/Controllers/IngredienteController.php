@@ -87,7 +87,7 @@ class IngredienteController extends Controller
 
     protected function show(Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente, "public_index");
+        Tools::checkOrFail($ingrediente, "index");
 
         return $ingrediente;
     }
@@ -155,7 +155,7 @@ class IngredienteController extends Controller
 
     protected function edit(Request $request, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente, "public_edit");
+        Tools::checkOrFail($ingrediente, "update");
 
         $categorias = $this->user()->categoriasIngrediente()->orderBy('nombre')->get();
 
@@ -169,7 +169,7 @@ class IngredienteController extends Controller
 
     protected function update(Request $request, Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente, "public_edit");
+        Tools::checkOrFail($ingrediente, "update");
 
         $data = $this->validate($request, $this->rules);
 
@@ -215,7 +215,7 @@ class IngredienteController extends Controller
 
     protected function destroy(Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente, "public_destroy");
+        Tools::checkOrFail($ingrediente, "delete");
         
         $ingrediente->borradoCompleto();
 
@@ -225,7 +225,7 @@ class IngredienteController extends Controller
 
     protected function publish(Ingrediente $ingrediente)
     {
-        Tools::checkOrFail($ingrediente, "public_edit");
+        Tools::checkOrFail($ingrediente, "update");
 
         if(!$ingrediente->esPublicable()) throw new Exception("El ingrediente no es publicable", 401);
 

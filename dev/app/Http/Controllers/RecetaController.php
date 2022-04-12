@@ -39,7 +39,7 @@ class RecetaController extends Controller
 
     protected function show(Receta $receta)
     {
-        Tools::checkOrFail($receta);
+        Tools::checkOrFail($receta, "show");
 
         return $receta;
     }
@@ -86,7 +86,7 @@ class RecetaController extends Controller
 
     protected function edit(Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $categorias = $this->user()->categoriasReceta()->get();
 
@@ -100,7 +100,7 @@ class RecetaController extends Controller
 
     public function update(Request $request, Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         $data = $this->validate($request, $this->rules);
         
@@ -132,7 +132,7 @@ class RecetaController extends Controller
 
     public function destroy(Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_destroy");
+        Tools::checkOrFail($receta, "delete");
 
         $receta->borradoCompleto();
 
@@ -159,7 +159,7 @@ class RecetaController extends Controller
 
     protected function publish(Receta $receta)
     {
-        Tools::checkOrFail($receta, "public_edit");
+        Tools::checkOrFail($receta, "update");
 
         if(!$receta->esPublicable()) throw new Exception("La receta no es publicable", 401);
 

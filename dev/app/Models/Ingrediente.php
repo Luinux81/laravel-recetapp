@@ -64,7 +64,7 @@ class Ingrediente extends Model
 
     public function setImagen(UploadedFile $imagen = null)
     {
-        Tools::checkOrFail($this, "public_edit");
+        Tools::checkOrFail($this, "update");
 
         if ($imagen != null){
             if($this->esPublico()){

@@ -28,7 +28,7 @@ class Tools{
     }
 
 
-    public static function checkOrFail(object $modelo, string $permiso = "") : bool
+    public static function checkOrFail(object $modelo, string $accion = "show") : bool
     {
         /** @var User */
         $user = auth()->user();
@@ -50,34 +50,82 @@ class Tools{
                 break;
             
             default:
-                throw new Exception("Acción no permitida", 400);
+                throw new Exception("Modelo no permitido", 400);
                 break;
         }
 
 
-        // Los modelos que se dejen pasar deben tener una propiedad publica user_id
-        if ($permiso){
-            if($temp->esPublico())
-            {
-                if(!$user->can($permiso)) 
-                    throw new Exception("No tiene permiso para realizar esta acción", 401);
-            }
-            else
-            {
-                if(($temp->user_id != $user->id) && !$user->can("private_access"))
-                    throw new Exception("No tiene permiso para realizar esta acción", 401);
-            }
+        switch ($accion){
+            case "show":
+            case "index":
+                $permiso = "public_index";
+                break;
+            case "create":
+                $permiso = "public_create";
+                break;
+            case "update":
+                $permiso = "public_edit";
+                break;
+            case "delete":
+                $permiso = "public_destroy";
+                break;
+            default:
+                throw new Exception("Acción no permitida", 400);
+                break;
+
         }
-        else{
-            if ($temp->esPublico()){
-                throw new Exception("No tiene permiso para realizar esta acción", 401);
+
+        // Los modelos que se dejen pasar deben tener una propiedad publica user_id
+        if($temp->user_id != $user->id){
+            // El usuario no es propietario del modelo, seguir comprobando ....
+            if($temp->esPublico()){
+                // El modelo es público, comprobar permiso
+                if(!$user->can($permiso)){
+                    throw new Exception("No tiene permiso para realizar esta acción en un recurso público", 401);
+                }
             }
             else{
-                if (($temp->user_id != $user->id) && !$user->can("private_access")){
-                    throw new Exception("No tiene permiso para realizar esta acción", 401);
+                // El modelo es privado y el usuario no es el propietario, comprobar permiso private_access
+                if(!$user->can("private_access")){
+                    throw new Exception("No tiene permiso para realizar esta acción sobre un recurso ajeno", 401);
                 }
             }
         }
+
+        // if($temp->esPublico())
+        // {
+        //     if(!$user->can($permiso)) 
+        //         throw new Exception("No tiene permiso para realizar esta acción", 401);
+        // }
+        // else
+        // {
+        //     if(($temp->user_id != $user->id) && !$user->can("private_access"))
+        //         throw new Exception("No tiene permiso para realizar esta acción", 401);
+        // }
+
+
+        // if ($permiso){
+        //     if($temp->esPublico())
+        //     {
+        //         if(!$user->can($permiso)) 
+        //             throw new Exception("No tiene permiso para realizar esta acción", 401);
+        //     }
+        //     else
+        //     {
+        //         if(($temp->user_id != $user->id) && !$user->can("private_access"))
+        //             throw new Exception("No tiene permiso para realizar esta acción", 401);
+        //     }
+        // }
+        // else{
+        //     if ($temp->esPublico()){
+        //         throw new Exception("No tiene permiso para realizar esta acción", 401);
+        //     }
+        //     else{
+        //         if (($temp->user_id != $user->id) && !$user->can("private_access")){
+        //             throw new Exception("No tiene permiso para realizar esta acción", 401);
+        //         }
+        //     }
+        // }
         
 
         return true;

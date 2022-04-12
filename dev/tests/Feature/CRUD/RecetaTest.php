@@ -164,7 +164,7 @@ class RecetaTest extends TestCase
             'raciones' => $receta->raciones,
             'tiempo' => $receta->tiempo,
             'categoria' => $receta->categoria,
-            'imagen' => UploadedFile::fake()->image('imagen.jpg'), // para usar image hay que activar en php.ini la extension gd
+            // 'imagen' => UploadedFile::fake()->image('imagen.jpg'), // para usar image hay que activar en php.ini la extension gd
         ]
         , $overrides);
     }

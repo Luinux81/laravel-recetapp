@@ -30,7 +30,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function show(CategoriaIngrediente $categoria)
     {
-        Tools::checkOrFail($categoria);
+        Tools::checkOrFail($categoria, "show");
 
         return $categoria;
     }
@@ -69,7 +69,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function edit(CategoriaIngrediente $categoria)
     {
-        Tools::checkOrFail($categoria,"public_edit");
+        Tools::checkOrFail($categoria,"update");
 
         $categoriasHija = $categoria->hijos(true);
 
@@ -79,7 +79,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function update(Request $request,CategoriaIngrediente $categoria)
     {
-        Tools::checkOrFail($categoria, "public_edit");
+        Tools::checkOrFail($categoria, "update");
 
         $data = $this->validate($request, $this->rules);
 
@@ -111,7 +111,7 @@ class CategoriaIngredienteController extends Controller
 
     protected function destroy(CategoriaIngrediente $categoria)
     {        
-        Tools::checkOrFail($categoria, "public_destroy");
+        Tools::checkOrFail($categoria, "delete");
 
         $categoria->borradoCompleto();
         
